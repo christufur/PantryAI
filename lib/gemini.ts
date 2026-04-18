@@ -204,6 +204,7 @@ export type Recipe = {
   ingredients: string[];
   steps: string[];
   timeMinutes: number;
+  saves: string[]; // subset of input ingredients actually used
 };
 
 const recipeSchema = {
@@ -213,15 +214,23 @@ const recipeSchema = {
     ingredients: { type: Type.ARRAY, items: { type: Type.STRING } },
     steps: { type: Type.ARRAY, items: { type: Type.STRING } },
     timeMinutes: { type: Type.INTEGER },
+    saves: {
+      type: Type.ARRAY,
+      items: { type: Type.STRING },
+      description:
+        "Subset of the input pantry ingredients that this recipe actually consumes. Names must match the input list exactly.",
+    },
   },
-  required: ["title", "ingredients", "steps", "timeMinutes"],
+  required: ["title", "ingredients", "steps", "timeMinutes", "saves"],
 };
 
 export async function generateRecipe(ingredients: string[]): Promise<Recipe> {
   const ai = client();
 
-  const prompt = `Give me one simple home-cook recipe that uses these ingredients plus common pantry staples (salt, pepper, oil, basic spices):
+  const prompt = `Give me one simple home-cook recipe that uses these pantry ingredients plus common staples (salt, pepper, oil, basic spices):
 ${ingredients.join(", ")}
+
+Use AS MANY of the listed pantry ingredients as reasonably possible — they're going bad. In the "saves" field, return the exact subset of the input list that the recipe actually consumes (names must match the input strings exactly).
 
 Keep it achievable in under 45 minutes for a weeknight dinner. Return strict JSON.`;
 

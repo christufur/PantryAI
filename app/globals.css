@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Lora:wght@400;500&family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap');
+
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
@@ -48,7 +50,16 @@
 }
 
 :root {
-    --background: oklch(1 0 0);
+  --paper: #ffffff;
+  --paper-2: #fafaf9;
+  --ink: #1a1a1a;
+  --black: #000000;
+  --caption: #757575;
+  --disabled: #999999;
+  --hairline: #e2e8f0;
+  --link: #057dbc;
+  --dying: #c8102e;
+  --background: oklch(1 0 0);
     --foreground: oklch(0.145 0 0);
     --card: oklch(1 0 0);
     --card-foreground: oklch(0.145 0 0);
@@ -114,6 +125,13 @@
     --sidebar-accent-foreground: oklch(0.985 0 0);
     --sidebar-border: oklch(1 0 0 / 10%);
     --sidebar-ring: oklch(0.556 0 0);
+}
+
+body {
+  background: var(--paper) !important;
+  color: var(--ink) !important;
+  font-family: 'Lora', Georgia, serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 @layer base {
