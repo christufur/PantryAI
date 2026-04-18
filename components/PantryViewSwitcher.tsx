@@ -257,7 +257,7 @@ export default function PantryViewSwitcher({ items }: { items: PlainItem[] }) {
               const dLabel = d < 0 ? "EXPIRED" : `${d}D`;
               const isChecked = selectedIds.has(item.id);
               return (
-                <div key={item.id} style={{
+                <div key={item.id} className="pantry-item-row" style={{
                   borderBottom: "1px solid var(--hairline)",
                   padding: "12px 0",
                   display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16,
@@ -290,9 +290,9 @@ export default function PantryViewSwitcher({ items }: { items: PlainItem[] }) {
                       </div>
                     )}
                   </div>
-                  <div style={{ display: "flex", gap: 8, flexShrink: 0, flexWrap: "wrap", justifyContent: "flex-end" }}>
-                    <Link href={`/recipe?ingredients=${encodeURIComponent(item.name)}`} style={{ fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: 11, textTransform: "uppercase", letterSpacing: "0.05em", padding: "6px 12px", border: "2px solid #000", color: isDying ? "#fff" : "#000", background: isDying ? "#000" : "#fff", textDecoration: "none", whiteSpace: "nowrap" }}>RECIPE</Link>
-                    <Link href={`/donate?item_id=${item.id}`} style={{ fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: 11, textTransform: "uppercase", letterSpacing: "0.05em", padding: "6px 12px", border: "2px solid #000", color: "#000", background: "#fff", textDecoration: "none", whiteSpace: "nowrap" }}>DONATE</Link>
+                  <div className="item-actions" style={{ display: "flex", gap: 6, flexShrink: 0, flexWrap: "wrap", justifyContent: "flex-end" }}>
+                    <Link href={`/recipe?ingredients=${encodeURIComponent(item.name)}`} style={{ fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: 11, textTransform: "uppercase", letterSpacing: "0.05em", padding: "6px 10px", border: "2px solid #000", color: isDying ? "#fff" : "#000", background: isDying ? "#000" : "#fff", textDecoration: "none", whiteSpace: "nowrap" }}>RECIPE</Link>
+                    <Link href={`/donate?item_id=${item.id}`} style={{ fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: 11, textTransform: "uppercase", letterSpacing: "0.05em", padding: "6px 10px", border: "2px solid #000", color: "#000", background: "#fff", textDecoration: "none", whiteSpace: "nowrap" }}>DONATE</Link>
                     <EditItemDialog id={item.id} name={item.name} qty={item.qty} unit={item.unit} storageLocation={item.storageLocation} expiryDate={item.expiryDate} />
                     <DeleteItemButton id={item.id} name={item.name} />
                   </div>
@@ -355,6 +355,10 @@ export default function PantryViewSwitcher({ items }: { items: PlainItem[] }) {
             .page-grid { grid-template-columns: 1fr !important; gap: 0 !important; }
             .sidebar { position: static !important; }
             .page-grid-outer { padding: 20px 16px 0 !important; }
+          }
+          @media (max-width: 600px) {
+            .pantry-item-row { flex-wrap: wrap !important; }
+            .item-actions { width: 100% !important; justify-content: flex-start !important; margin-top: 6px; }
           }
         `}</style>
       </div>
