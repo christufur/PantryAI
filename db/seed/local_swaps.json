@@ -1,0 +1,114 @@
+[
+  {
+    "genericName": "bread",
+    "localProducer": "Sage Bakehouse",
+    "product": "Artisan sourdough & rustic loaves",
+    "whereToBuy": "La Montañita Co-op, Sage Bakehouse (ABQ)",
+    "notes": "Family-run ABQ bakery"
+  },
+  {
+    "genericName": "tortillas",
+    "localProducer": "Bueno Foods",
+    "product": "Flour & corn tortillas",
+    "whereToBuy": "Most ABQ grocers",
+    "notes": "Made in Albuquerque since 1951"
+  },
+  {
+    "genericName": "chile_green",
+    "localProducer": "Hatch / Lemitar growers",
+    "product": "Fresh & roasted NM green chile",
+    "whereToBuy": "Downtown Growers' Market, Rail Yards Market (seasonal)",
+    "notes": "Keep stat in mind: 98% of ABQ food is out-of-state — chile is the exception"
+  },
+  {
+    "genericName": "tomato",
+    "localProducer": "Skarsgard Farms",
+    "product": "Heirloom tomatoes (seasonal)",
+    "whereToBuy": "Skarsgard Farms CSA, La Montañita Co-op",
+    "notes": "ABQ-based CSA, home delivery available"
+  },
+  {
+    "genericName": "lettuce",
+    "localProducer": "Skarsgard Farms",
+    "product": "Mixed greens",
+    "whereToBuy": "Skarsgard Farms CSA, farmers markets",
+    "notes": ""
+  },
+  {
+    "genericName": "leafy_greens",
+    "localProducer": "Skarsgard Farms",
+    "product": "Spinach, kale, chard",
+    "whereToBuy": "Skarsgard Farms CSA",
+    "notes": ""
+  },
+  {
+    "genericName": "eggs",
+    "localProducer": "Pollo Real",
+    "product": "Pasture-raised eggs",
+    "whereToBuy": "La Montañita Co-op, farmers markets",
+    "notes": "NM-raised"
+  },
+  {
+    "genericName": "dairy_milk",
+    "localProducer": "Rasband Dairy",
+    "product": "Local milk (glass bottles)",
+    "whereToBuy": "La Montañita Co-op",
+    "notes": ""
+  },
+  {
+    "genericName": "dairy_cheese_hard",
+    "localProducer": "Old Windmill Dairy",
+    "product": "Aged goat cheeses",
+    "whereToBuy": "La Montañita Co-op, farmers markets",
+    "notes": "Estancia, NM"
+  },
+  {
+    "genericName": "dairy_cheese_soft",
+    "localProducer": "Old Windmill Dairy",
+    "product": "Fresh goat chèvre",
+    "whereToBuy": "La Montañita Co-op",
+    "notes": ""
+  },
+  {
+    "genericName": "honey",
+    "localProducer": "Los Poblanos",
+    "product": "NM wildflower honey",
+    "whereToBuy": "Los Poblanos Farm Shop, La Montañita Co-op",
+    "notes": "Los Ranchos de Albuquerque"
+  },
+  {
+    "genericName": "beans_dry",
+    "localProducer": "NM heirloom growers",
+    "product": "Bolita & Anasazi beans",
+    "whereToBuy": "Downtown Growers' Market, La Montañita Co-op",
+    "notes": "Traditional Rio Grande varieties"
+  },
+  {
+    "genericName": "apple",
+    "localProducer": "Dixon / Velarde orchards",
+    "product": "NM apples (seasonal)",
+    "whereToBuy": "Farmers markets (fall)",
+    "notes": "Northern NM orchards"
+  },
+  {
+    "genericName": "meat_raw_beef",
+    "localProducer": "NM ranchers via Talus Wind",
+    "product": "Grass-fed beef",
+    "whereToBuy": "La Montañita Co-op",
+    "notes": ""
+  },
+  {
+    "genericName": "lavender",
+    "localProducer": "Los Poblanos",
+    "product": "Culinary lavender",
+    "whereToBuy": "Los Poblanos Farm Shop",
+    "notes": ""
+  },
+  {
+    "genericName": "flour",
+    "localProducer": "Valencia Flour Mill",
+    "product": "Stone-ground NM flour",
+    "whereToBuy": "La Montañita Co-op",
+    "notes": "Jarales, NM"
+  }
+]

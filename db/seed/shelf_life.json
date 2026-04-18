@@ -1,0 +1,73 @@
+[
+  { "category": "leafy_greens", "storageLocation": "fridge", "days": 5 },
+  { "category": "leafy_greens", "storageLocation": "freezer", "days": 240 },
+
+  { "category": "berries", "storageLocation": "fridge", "days": 5 },
+  { "category": "berries", "storageLocation": "freezer", "days": 300 },
+
+  { "category": "apple", "storageLocation": "fridge", "days": 42 },
+  { "category": "apple", "storageLocation": "pantry", "days": 7 },
+
+  { "category": "banana", "storageLocation": "pantry", "days": 5 },
+  { "category": "citrus", "storageLocation": "fridge", "days": 21 },
+  { "category": "citrus", "storageLocation": "pantry", "days": 10 },
+
+  { "category": "tomato", "storageLocation": "pantry", "days": 5 },
+  { "category": "tomato", "storageLocation": "fridge", "days": 10 },
+
+  { "category": "avocado", "storageLocation": "fridge", "days": 5 },
+  { "category": "avocado", "storageLocation": "pantry", "days": 3 },
+
+  { "category": "onion", "storageLocation": "pantry", "days": 60 },
+  { "category": "potato", "storageLocation": "pantry", "days": 60 },
+  { "category": "garlic", "storageLocation": "pantry", "days": 90 },
+  { "category": "carrot", "storageLocation": "fridge", "days": 30 },
+  { "category": "bell_pepper", "storageLocation": "fridge", "days": 10 },
+  { "category": "cucumber", "storageLocation": "fridge", "days": 7 },
+  { "category": "broccoli", "storageLocation": "fridge", "days": 5 },
+  { "category": "mushroom", "storageLocation": "fridge", "days": 7 },
+  { "category": "chile_green", "storageLocation": "fridge", "days": 10 },
+  { "category": "chile_green", "storageLocation": "freezer", "days": 365 },
+
+  { "category": "dairy_milk", "storageLocation": "fridge", "days": 7 },
+  { "category": "dairy_yogurt", "storageLocation": "fridge", "days": 14 },
+  { "category": "dairy_cheese_hard", "storageLocation": "fridge", "days": 42 },
+  { "category": "dairy_cheese_soft", "storageLocation": "fridge", "days": 7 },
+  { "category": "dairy_butter", "storageLocation": "fridge", "days": 90 },
+  { "category": "eggs", "storageLocation": "fridge", "days": 35 },
+
+  { "category": "meat_raw_chicken", "storageLocation": "fridge", "days": 2 },
+  { "category": "meat_raw_chicken", "storageLocation": "freezer", "days": 270 },
+  { "category": "meat_raw_beef", "storageLocation": "fridge", "days": 3 },
+  { "category": "meat_raw_beef", "storageLocation": "freezer", "days": 365 },
+  { "category": "meat_ground", "storageLocation": "fridge", "days": 2 },
+  { "category": "meat_ground", "storageLocation": "freezer", "days": 120 },
+  { "category": "meat_deli", "storageLocation": "fridge", "days": 5 },
+  { "category": "fish_raw", "storageLocation": "fridge", "days": 2 },
+  { "category": "fish_raw", "storageLocation": "freezer", "days": 180 },
+
+  { "category": "bread", "storageLocation": "pantry", "days": 5 },
+  { "category": "bread", "storageLocation": "freezer", "days": 90 },
+  { "category": "tortillas", "storageLocation": "fridge", "days": 14 },
+  { "category": "tortillas", "storageLocation": "pantry", "days": 7 },
+
+  { "category": "rice_dry", "storageLocation": "pantry", "days": 730 },
+  { "category": "rice_cooked", "storageLocation": "fridge", "days": 5 },
+  { "category": "pasta_dry", "storageLocation": "pantry", "days": 730 },
+  { "category": "pasta_cooked", "storageLocation": "fridge", "days": 5 },
+  { "category": "beans_dry", "storageLocation": "pantry", "days": 730 },
+  { "category": "beans_canned", "storageLocation": "pantry", "days": 1095 },
+
+  { "category": "canned_vegetable", "storageLocation": "pantry", "days": 1095 },
+  { "category": "canned_fruit", "storageLocation": "pantry", "days": 730 },
+  { "category": "canned_soup", "storageLocation": "pantry", "days": 730 },
+  { "category": "cereal", "storageLocation": "pantry", "days": 365 },
+  { "category": "flour", "storageLocation": "pantry", "days": 365 },
+  { "category": "sugar", "storageLocation": "pantry", "days": 730 },
+  { "category": "oil_olive", "storageLocation": "pantry", "days": 730 },
+
+  { "category": "leftovers", "storageLocation": "fridge", "days": 4 },
+  { "category": "unknown", "storageLocation": "fridge", "days": 7 },
+  { "category": "unknown", "storageLocation": "pantry", "days": 30 },
+  { "category": "unknown", "storageLocation": "freezer", "days": 90 }
+]

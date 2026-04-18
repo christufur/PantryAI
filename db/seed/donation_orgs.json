@@ -1,0 +1,47 @@
+[
+  {
+    "name": "Roadrunner Food Bank",
+    "address": "5840 Office Blvd NE, Albuquerque, NM 87109",
+    "phone": "(505) 247-2052",
+    "hours": "Mon–Fri 8am–4pm",
+    "acceptsPerishable": true,
+    "acceptsOpened": false,
+    "notes": "Largest food bank in NM. Distributes to 450+ partner agencies. Unopened, in-date shelf-stable items preferred; perishable donations coordinated in advance."
+  },
+  {
+    "name": "The Storehouse New Mexico",
+    "address": "106 Broadway Blvd SE, Albuquerque, NM 87102",
+    "phone": "(505) 842-6491",
+    "hours": "Mon, Wed, Fri 9am–2pm",
+    "acceptsPerishable": true,
+    "acceptsOpened": false,
+    "notes": "Downtown food pantry. Accepts unopened groceries and fresh produce."
+  },
+  {
+    "name": "Joy Junction",
+    "address": "4500 2nd St SW, Albuquerque, NM 87105",
+    "phone": "(505) 877-6967",
+    "hours": "Daily, call ahead for food donations",
+    "acceptsPerishable": true,
+    "acceptsOpened": false,
+    "notes": "Homeless shelter. Prepared food donations welcome — call first."
+  },
+  {
+    "name": "Good Shepherd Center",
+    "address": "601 Gold Ave SW, Albuquerque, NM 87102",
+    "phone": "(505) 243-2527",
+    "hours": "Mon–Sat, varies",
+    "acceptsPerishable": false,
+    "acceptsOpened": false,
+    "notes": "Shelter + meal program. Non-perishable donations preferred."
+  },
+  {
+    "name": "Compost ABQ (fallback)",
+    "address": "Various drop-off sites, Albuquerque",
+    "phone": null,
+    "hours": "Varies",
+    "acceptsPerishable": true,
+    "acceptsOpened": true,
+    "notes": "If food is past donation use, compost at Soilutions or municipal green-bin program. Keeps organics out of landfill."
+  }
+]
