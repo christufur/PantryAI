@@ -48,7 +48,7 @@ If pantry is empty, tell them to snap a photo first.`;
   try {
     const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-3.1-flash-lite-preview",
       contents: [
         ...history.map((h) => ({
           role: h.role === "assistant" ? "model" : "user",
