@@ -15,10 +15,13 @@ export async function GET(request: NextRequest) {
   }
 
   const hash = ingredientsHash(ingredients);
-  const cached = db.select().from(recipesCache).where(eq(recipesCache.ingredientsHash, hash)).get();
+  const bust = request.nextUrl.searchParams.get("bust") === "1";
 
-  if (cached) {
-    return NextResponse.json(JSON.parse(cached.recipeJson));
+  if (!bust) {
+    const cached = db.select().from(recipesCache).where(eq(recipesCache.ingredientsHash, hash)).get();
+    if (cached) {
+      return NextResponse.json(JSON.parse(cached.recipeJson));
+    }
   }
 
   const recipe = await generateRecipe(ingredients);

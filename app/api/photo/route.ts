@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db, ensureSqliteSchema, getSqlitePath } from "@/lib/db";
-import { pantryItems, shelfLife } from "@/db/schema";
+import { pantryItems, shelfLife, localSwaps } from "@/db/schema";
 import { and, eq } from "drizzle-orm";
 import { identifyPantryItems } from "@/lib/gemini";
 
@@ -46,11 +46,49 @@ export async function POST(request: NextRequest) {
   const identified = await identifyPantryItems(buffer, file.type);
 
   try {
+    // Pre-fetch for matching (avoids N+1 queries in the loop)
+    const allSwaps = db.select().from(localSwaps).all();
+    const existingItems = db
+      .select({ id: pantryItems.id, name: pantryItems.name, qty: pantryItems.qty, expiryDate: pantryItems.expiryDate })
+      .from(pantryItems)
+      .all();
+
     const inserted = [];
 
     for (const item of identified) {
       const storageLocation: StorageLocation =
         userLocation ?? inferStorageLocation(item.category);
+
+      const itemNameLower = item.name.toLowerCase();
+
+      // Match against NM local producer list (contains check both ways)
+      const matchedSwap = allSwaps.find(
+        (s) =>
+          itemNameLower.includes(s.genericName.toLowerCase()) ||
+          s.genericName.toLowerCase().includes(itemNameLower)
+      );
+
+      // Deduplicate: if an item with the same name already exists, increment qty
+      const duplicate = existingItems.find((e) => e.name.toLowerCase() === itemNameLower);
+
+      if (duplicate) {
+        const newQty = duplicate.qty + item.qty;
+        db.update(pantryItems).set({ qty: newQty }).where(eq(pantryItems.id, duplicate.id)).run();
+        const expiry =
+          duplicate.expiryDate instanceof Date
+            ? duplicate.expiryDate
+            : new Date((duplicate.expiryDate as number) * 1000);
+        inserted.push({
+          id: duplicate.id,
+          name: item.name,
+          category: item.category,
+          qty: newQty,
+          unit: item.unit,
+          storageLocation,
+          expiryDate: expiry.toISOString(),
+        });
+        continue;
+      }
 
       let expiryDate: Date;
       if (item.printedDate) {
@@ -80,6 +118,7 @@ export async function POST(request: NextRequest) {
           unit: item.unit,
           storageLocation,
           expiryDate,
+          isLocal: !!matchedSwap,
         })
         .run();
 
@@ -91,6 +130,7 @@ export async function POST(request: NextRequest) {
         unit: item.unit,
         storageLocation,
         expiryDate: expiryDate.toISOString(),
+        isLocal: !!matchedSwap,
       });
     }
 
