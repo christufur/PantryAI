@@ -58,7 +58,7 @@ export default function ExpiryColumn({ items }: { items: ColumnItem[] }) {
         {/* Vertical axis line — absolutely behind the rows */}
         <div style={{
           position: "absolute",
-          left: 52,
+          left: 76,
           top: 0, bottom: 0,
           width: 2,
           background: "#000",
@@ -104,7 +104,7 @@ export default function ExpiryColumn({ items }: { items: ColumnItem[] }) {
             >
               {/* Day label column — fixed width, right-aligned up to axis */}
               <div style={{
-                width: 52,
+                width: 72,
                 flexShrink: 0,
                 paddingRight: 12,
                 paddingTop: 14,
@@ -215,7 +215,7 @@ export default function ExpiryColumn({ items }: { items: ColumnItem[] }) {
             zIndex: 2,
             marginBottom: 8,
           }}>
-            <div style={{ width: 52, flexShrink: 0 }} />
+            <div style={{ width: 72, flexShrink: 0 }} />
             <div style={{ width: 2, flexShrink: 0 }} />
             <div style={{
               flex: 1,
