@@ -5,11 +5,12 @@
   "scripts": {
     "dev": "node scripts/dev.mjs",
     "wsl:portproxy-path": "wslpath -w scripts/wsl-portproxy.ps1",
+    "wsl:portproxy-diagnose-path": "wslpath -w scripts/wsl-portproxy-diagnose.ps1",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate",
+    "db:migrate": "drizzle-kit up:sqlite",
     "db:studio": "drizzle-kit studio",
     "db:seed": "tsx db/seed.ts",
     "db:seed:demo": "tsx db/seed-demo.ts"
@@ -38,6 +39,7 @@
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.13",
-    "drizzle-kit": "^0.18.1"
+    "drizzle-kit": "^0.18.1",
+    "tsx": "^4.19.4"
   }
 }

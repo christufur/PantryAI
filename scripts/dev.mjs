@@ -122,7 +122,8 @@ function printHints() {
 
      powershell.exe -ExecutionPolicy Bypass -File ${fileArg} -Port ${port}${altLine}
 
-  Or in this repo on WSL run: npm run wsl:portproxy-path  (copies a path you can paste after -File)
+  Or in this repo on WSL: npm run wsl:portproxy-path (path for -File)
+  If it still fails from another device: npm run wsl:portproxy-diagnose-path, run that .ps1 on Windows.
 
   Then on the other device open your Windows Wi‑Fi/Ethernet IP from ipconfig, e.g. ${lanHint}
 `);
