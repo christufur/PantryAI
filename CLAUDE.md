@@ -8,18 +8,38 @@ Next.js + TypeScript web application built for the DesertDev Hackathon.
 
 ## Commands
 
-> Update these once the project is scaffolded.
-
 ```bash
-npm run dev       # Start dev server
-npm run build     # Production build
-npm run lint      # Lint
-npm test          # Run tests
+npm run dev          # Start dev server (localhost:3000)
+npm run build        # Production build
+npm run lint         # ESLint
+
+npm run db:generate  # Generate migrations from schema changes
+npm run db:migrate   # Apply migrations to sqlite.db
+npm run db:studio    # Open Drizzle Studio (visual DB browser)
 ```
+
+Add a shadcn component: `npx shadcn@latest add <component>` (e.g. `card`, `dialog`, `input`)
 
 ## Architecture
 
-> Fill in once structure is established (routing, data layer, API routes, etc.).
+```
+app/              # Next.js App Router — pages and API routes
+  layout.tsx      # Root layout (Geist font, globals.css)
+  page.tsx        # Home page
+  api/            # Server-side API routes (add here)
+components/
+  ui/             # shadcn/ui components (auto-generated, edit freely)
+db/
+  schema.ts       # Drizzle table definitions — edit this to add tables
+  migrations/     # Auto-generated SQL migrations (don't edit manually)
+lib/
+  db.ts           # Single db instance — import `db` from here
+  utils.ts        # shadcn cn() utility
+```
+
+**Data flow:** Define tables in `db/schema.ts` → run `db:generate` → run `db:migrate` → import `db` from `lib/db.ts` in Server Components or API routes.
+
+**Server vs Client components:** All components are Server Components by default. Add `"use client"` only when you need `useState`, `useEffect`, event handlers, or browser APIs.
 
 ---
 
