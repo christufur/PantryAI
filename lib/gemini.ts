@@ -1,10 +1,10 @@
 // Single Gemini client + three task-specific functions.
 // Uses @google/genai (the current SDK; @google/generative-ai is deprecated).
-// Model: gemini-2.5-flash — fast, multimodal, cheap, supports responseSchema.
+// Model: gemini-3.1-flash-lite-preview — low-cost multimodal model with higher rate limits.
 
 import { GoogleGenAI, Type } from "@google/genai";
 
-const MODEL = "gemini-2.5-flash";
+const MODEL = "gemini-3.1-flash-lite-preview";
 
 function client() {
   const apiKey = process.env.GEMINI_API_KEY;
