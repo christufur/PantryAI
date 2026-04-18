@@ -17,9 +17,11 @@ export async function POST(req: NextRequest) {
       ? "The pantry is empty — no items have been scanned yet."
       : items
           .map((item) => {
-            const days = Math.floor(
-              (item.expiryDate.getTime() - now) / 86400000
-            );
+            const expiryMs =
+              item.expiryDate instanceof Date
+                ? item.expiryDate.getTime()
+                : (item.expiryDate as number) * 1000;
+            const days = Math.floor((expiryMs - now) / 86400000);
             const status =
               days < 0
                 ? "EXPIRED"
