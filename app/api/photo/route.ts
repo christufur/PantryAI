@@ -1,10 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/lib/db";
+import { db, ensureSqliteSchema, getSqlitePath } from "@/lib/db";
 import { pantryItems, shelfLife } from "@/db/schema";
 import { and, eq } from "drizzle-orm";
 import { identifyPantryItems } from "@/lib/gemini";
 
+export const runtime = "nodejs";
+
 type StorageLocation = "fridge" | "freezer" | "pantry";
+
+function sqliteMissingTableHint(e: unknown): boolean {
+  return e instanceof Error && e.message.includes("no such table");
+}
 
 const VALID_LOCATIONS: ReadonlySet<StorageLocation> = new Set([
   "fridge",
@@ -20,6 +26,7 @@ function inferStorageLocation(category: string): StorageLocation {
 }
 
 export async function POST(request: NextRequest) {
+  ensureSqliteSchema();
   const form = await request.formData();
   const file = form.get("file") as File | null;
   const rawLocation = form.get("storageLocation");
@@ -38,53 +45,67 @@ export async function POST(request: NextRequest) {
   const buffer = Buffer.from(await file.arrayBuffer());
   const identified = await identifyPantryItems(buffer, file.type);
 
-  const inserted = [];
+  try {
+    const inserted = [];
 
-  for (const item of identified) {
-    const storageLocation: StorageLocation =
-      userLocation ?? inferStorageLocation(item.category);
+    for (const item of identified) {
+      const storageLocation: StorageLocation =
+        userLocation ?? inferStorageLocation(item.category);
 
-    let expiryDate: Date;
-    if (item.printedDate) {
-      expiryDate = new Date(item.printedDate);
-    } else {
-      const shelfRow = db
-        .select()
-        .from(shelfLife)
-        .where(
-          and(
-            eq(shelfLife.category, item.category),
-            eq(shelfLife.storageLocation, storageLocation)
+      let expiryDate: Date;
+      if (item.printedDate) {
+        expiryDate = new Date(item.printedDate);
+      } else {
+        const shelfRow = db
+          .select()
+          .from(shelfLife)
+          .where(
+            and(
+              eq(shelfLife.category, item.category),
+              eq(shelfLife.storageLocation, storageLocation)
+            )
           )
-        )
-        .get();
+          .get();
 
-      const shelfDays = shelfRow?.days ?? 7;
-      expiryDate = new Date(Date.now() + shelfDays * 86400000);
-    }
+        const shelfDays = shelfRow?.days ?? 7;
+        expiryDate = new Date(Date.now() + shelfDays * 86400000);
+      }
 
-    const result = db
-      .insert(pantryItems)
-      .values({
+      const result = db
+        .insert(pantryItems)
+        .values({
+          name: item.name,
+          category: item.category,
+          qty: item.qty,
+          unit: item.unit,
+          storageLocation,
+          expiryDate,
+        })
+        .run();
+
+      inserted.push({
+        id: Number(result.lastInsertRowid),
         name: item.name,
         category: item.category,
         qty: item.qty,
         unit: item.unit,
         storageLocation,
-        expiryDate,
-      })
-      .run();
+        expiryDate: expiryDate.toISOString(),
+      });
+    }
 
-    inserted.push({
-      id: Number(result.lastInsertRowid),
-      name: item.name,
-      category: item.category,
-      qty: item.qty,
-      unit: item.unit,
-      storageLocation,
-      expiryDate: expiryDate.toISOString(),
-    });
+    return NextResponse.json({ items: inserted });
+  } catch (e) {
+    if (sqliteMissingTableHint(e)) {
+      return NextResponse.json(
+        {
+          error: (e as Error).message,
+          sqlitePath: getSqlitePath(),
+          hint: "Stop the dev server, run from project root: npm run db:seed (optional data). If this persists: rm sqlite.db && restart npm run dev (schema is auto-created from db/migrations/0000_*.sql).",
+        },
+        { status: 500 }
+      );
+    }
+    throw e;
   }
-
-  return NextResponse.json({ items: inserted });
 }
