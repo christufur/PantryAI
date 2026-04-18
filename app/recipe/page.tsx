@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { db } from "@/lib/db";
-import { pantryItems, recipesCache } from "@/db/schema";
+import { pantryItems, recipesCache, localSwaps as localSwapsTable } from "@/db/schema";
 import { asc, eq } from "drizzle-orm";
 import { ingredientsHash, generateRecipe } from "@/lib/gemini";
 import IngredientPicker, { type PickerItem } from "@/components/IngredientPicker";
@@ -8,9 +8,9 @@ import IngredientPicker, { type PickerItem } from "@/components/IngredientPicker
 export default async function RecipePage({
   searchParams,
 }: {
-  searchParams: Promise<{ ingredients?: string }>;
+  searchParams: Promise<{ ingredients?: string; bust?: string }>;
 }) {
-  const { ingredients: ingredientParam } = await searchParams;
+  const { ingredients: ingredientParam, bust } = await searchParams;
 
   if (!ingredientParam) {
     let pantry: (typeof pantryItems.$inferSelect)[] = [];
@@ -110,20 +110,36 @@ export default async function RecipePage({
   const ingredients = ingredientParam.split(",").map((s) => s.trim()).filter(Boolean);
 
   const hash = ingredientsHash(ingredients);
-  const cached = db.select().from(recipesCache).where(eq(recipesCache.ingredientsHash, hash)).all();
 
   let recipe;
-  if (cached[0]) {
-    recipe = JSON.parse(cached[0].recipeJson);
-  } else {
+  const forceRefresh = bust === "1";
+  if (!forceRefresh) {
+    const cached = db.select().from(recipesCache).where(eq(recipesCache.ingredientsHash, hash)).get();
+    if (cached) recipe = JSON.parse(cached.recipeJson);
+  }
+  if (!recipe) {
     recipe = await generateRecipe(ingredients);
-    db.insert(recipesCache).values({
-      ingredientsHash: hash,
-      recipeJson: JSON.stringify(recipe),
-    }).run();
+    db.insert(recipesCache)
+      .values({ ingredientsHash: hash, recipeJson: JSON.stringify(recipe) })
+      .onConflictDoUpdate({ target: recipesCache.ingredientsHash, set: { recipeJson: JSON.stringify(recipe) } })
+      .run();
   }
 
   const savedItems: string[] = recipe.saves ?? ingredients.slice(0, 3);
+
+  // Match saved ingredients against NM local producers
+  const allSwaps = db.select().from(localSwapsTable).all();
+  const buyLocal = savedItems.flatMap((name: string) => {
+    const nameLower = name.toLowerCase();
+    const match = allSwaps.find(
+      (s) =>
+        nameLower.includes(s.genericName.toLowerCase()) ||
+        s.genericName.toLowerCase().includes(nameLower)
+    );
+    return match
+      ? [{ ingredient: name, producer: match.localProducer, product: match.product, store: match.whereToBuy }]
+      : [];
+  });
   const itemsSaved = savedItems.length;
 
   return (
@@ -242,6 +258,41 @@ export default async function RecipePage({
                 color: 'var(--dying)',
               }}>
                 SAVES: {savedItems.join(', ')}
+              </div>
+            )}
+
+            {/* Buy Local — NM producers for ingredients in this recipe */}
+            {buyLocal.length > 0 && (
+              <div style={{
+                marginTop: 24,
+                border: '2px solid #057dbc',
+                padding: '16px 20px',
+              }}>
+                <div style={{
+                  fontFamily: "'JetBrains Mono', monospace",
+                  fontSize: 10, fontWeight: 700,
+                  textTransform: 'uppercase', letterSpacing: '0.12em',
+                  color: '#057dbc', marginBottom: 12,
+                }}>
+                  ◉ BUY LOCAL · NEW MEXICO PRODUCERS
+                </div>
+                {buyLocal.map((s, i) => (
+                  <div key={i} style={{
+                    borderBottom: i < buyLocal.length - 1 ? '1px solid #d1e9f5' : 'none',
+                    padding: '8px 0',
+                    fontFamily: 'Lora, serif',
+                    fontSize: 14,
+                    color: '#1a1a1a',
+                  }}>
+                    <span style={{ fontWeight: 700 }}>{s.ingredient}</span>
+                    {' → '}
+                    <span style={{ fontWeight: 700 }}>{s.producer}</span>
+                    {' · '}
+                    {s.product}
+                    {' at '}
+                    <span style={{ fontWeight: 700 }}>{s.store}</span>
+                  </div>
+                ))}
               </div>
             )}
           </div>

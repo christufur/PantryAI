@@ -348,7 +348,7 @@ export default function ExpiryColumn({ items }: { items: ColumnItem[] }) {
               textDecoration: "none", textAlign: "center",
             }}
           >
-            ASK CLAUDE → SAVE {above.length}
+            ASK PEPPER → SAVE {above.length}
           </Link>
         ) : (
           <button
@@ -361,7 +361,7 @@ export default function ExpiryColumn({ items }: { items: ColumnItem[] }) {
               background: "#fff", color: "var(--disabled)", cursor: "not-allowed",
             }}
           >
-            ASK CLAUDE →
+            ASK PEPPER →
           </button>
         )}
       </aside>

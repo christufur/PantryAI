@@ -6,7 +6,9 @@ import { useRouter } from "next/navigation";
 import ExpiryColumn from "@/components/ExpiryColumn";
 import PhotoUploadDialog from "@/components/PhotoUploadDialog";
 import DeleteItemButton from "@/components/DeleteItemButton";
+<<<<<<< HEAD
 import ShelvesDragGrid from "@/components/ShelvesDragGrid";
+import EditItemDialog from "@/components/EditItemDialog";
 
 export type PlainItem = {
   id: number;
@@ -17,6 +19,7 @@ export type PlainItem = {
   storageLocation: string;
   expiryDate: number; // unix seconds
   isLocal: boolean;
+  localSwap?: { localProducer: string; product: string; whereToBuy: string } | null;
 };
 
 type View = "list" | "column" | "shelves";
@@ -281,9 +284,16 @@ export default function PantryViewSwitcher({ items }: { items: PlainItem[] }) {
                     <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "var(--caption)", letterSpacing: "0.08em", marginTop: 2 }}>
                       {item.qty} {item.unit} · {item.storageLocation.toUpperCase()}
                     </div>
+                    {item.localSwap && (
+                      <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#057dbc", letterSpacing: "0.06em", marginTop: 4 }}>
+                        ◉ NM LOCAL: {item.localSwap.localProducer} · {item.localSwap.product} at {item.localSwap.whereToBuy}
+                      </div>
+                    )}
                   </div>
-                  <div style={{ display: "flex", gap: 8, flexShrink: 0, alignItems: "center" }}>
+                  <div style={{ display: "flex", gap: 8, flexShrink: 0, flexWrap: "wrap", justifyContent: "flex-end" }}>
                     <Link href={`/recipe?ingredients=${encodeURIComponent(item.name)}`} style={{ fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: 11, textTransform: "uppercase", letterSpacing: "0.05em", padding: "6px 12px", border: "2px solid #000", color: isDying ? "#fff" : "#000", background: isDying ? "#000" : "#fff", textDecoration: "none", whiteSpace: "nowrap" }}>RECIPE</Link>
+                    <Link href={`/donate?item_id=${item.id}`} style={{ fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: 11, textTransform: "uppercase", letterSpacing: "0.05em", padding: "6px 12px", border: "2px solid #000", color: "#000", background: "#fff", textDecoration: "none", whiteSpace: "nowrap" }}>DONATE</Link>
+                    <EditItemDialog id={item.id} name={item.name} qty={item.qty} unit={item.unit} storageLocation={item.storageLocation} expiryDate={item.expiryDate} />
                     <DeleteItemButton id={item.id} name={item.name} />
                   </div>
                 </div>
@@ -363,7 +373,7 @@ export default function PantryViewSwitcher({ items }: { items: PlainItem[] }) {
           <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--caption)", marginBottom: 4 }}>EXPIRES IN</div>
           <h2 style={{ fontFamily: "'Source Serif 4', serif", fontWeight: 600, fontSize: 56, lineHeight: 0.95, letterSpacing: "-0.025em", margin: "0 0 8px" }} className="column-title">This Week</h2>
           <div style={{ fontFamily: "Lora, serif", fontSize: 15, color: "var(--caption)", marginBottom: 32, maxWidth: 560 }}>
-            Today at top, safe at the bottom. Slide the threshold to define <em>dying</em>, then ask Claude for one recipe that uses everything above the line.
+            Today at top, safe at the bottom. Slide the threshold to define <em>dying</em>, then ask Pepper for one recipe that uses everything above the line.
           </div>
         </div>
         <ExpiryColumn items={columnItems} />

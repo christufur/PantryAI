@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { pantryItems, localSwaps, mealsPlanned } from "@/db/schema";
 import { generateWeeklyPlan, type PantrySnapshot } from "@/lib/gemini";
+import { fetchNearbyLocalOutlets } from "@/lib/usda";
+
+// TODO: user-configurable zip in later pass
+const DEFAULT_ZIP = "87102";
 
 export async function POST(request: NextRequest) {
   const { meals, weekStart } = await request.json();
@@ -21,7 +25,11 @@ export async function POST(request: NextRequest) {
           : new Date(item.expiryDate * 1000).toISOString().split("T")[0],
     }));
 
-  const plan = await generateWeeklyPlan(meals, pantry);
+  // Run plan generation and outlets fetch in parallel
+  const [plan, nearbyOutlets] = await Promise.all([
+    generateWeeklyPlan(meals, pantry),
+    fetchNearbyLocalOutlets(DEFAULT_ZIP),
+  ]);
 
   const allSwaps = db.select().from(localSwaps).all();
 
@@ -50,5 +58,5 @@ export async function POST(request: NextRequest) {
       .run();
   }
 
-  return NextResponse.json({ ...plan, shoppingList: enrichedList });
+  return NextResponse.json({ ...plan, shoppingList: enrichedList, nearbyOutlets });
 }

@@ -83,7 +83,7 @@ export default function ColumnPage() {
           }}
         >
           Today at top, safe at the bottom. Slide the threshold to define <em>dying</em>, then ask
-          Claude for one recipe that uses everything above the line.
+          Pepper for one recipe that uses everything above the line.
         </div>
 
         <ExpiryColumn items={data} />

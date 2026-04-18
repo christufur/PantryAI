@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { pantryItems } from "@/db/schema";
+import { pantryItems, localSwaps as localSwapsTable } from "@/db/schema";
 import { asc } from "drizzle-orm";
 import PantryViewSwitcher, { type PlainItem } from "@/components/PantryViewSwitcher";
 
@@ -7,19 +7,32 @@ export default function Home() {
   let items: PlainItem[] = [];
   try {
     const rows = db.select().from(pantryItems).orderBy(asc(pantryItems.expiryDate)).all();
-    items = rows.map(r => ({
-      id:              r.id,
-      name:            r.name,
-      category:        r.category,
-      qty:             r.qty,
-      unit:            r.unit,
-      storageLocation: r.storageLocation,
-      // expiryDate is a Date from Drizzle's timestamp mode; convert to unix seconds
-      expiryDate:      r.expiryDate instanceof Date
-                         ? Math.floor(r.expiryDate.getTime() / 1000)
-                         : Number(r.expiryDate),
-      isLocal:         r.isLocal,
-    }));
+    const allSwaps = db.select().from(localSwapsTable).all();
+
+    items = rows.map(r => {
+      const nameLower = r.name.toLowerCase();
+      const swap = allSwaps.find(
+        s =>
+          nameLower.includes(s.genericName.toLowerCase()) ||
+          s.genericName.toLowerCase().includes(nameLower)
+      );
+      return {
+        id:              r.id,
+        name:            r.name,
+        category:        r.category,
+        qty:             r.qty,
+        unit:            r.unit,
+        storageLocation: r.storageLocation,
+        // expiryDate is a Date from Drizzle's timestamp mode; convert to unix seconds
+        expiryDate:      r.expiryDate instanceof Date
+                           ? Math.floor(r.expiryDate.getTime() / 1000)
+                           : Number(r.expiryDate),
+        isLocal:         r.isLocal,
+        localSwap:       swap
+          ? { localProducer: swap.localProducer, product: swap.product, whereToBuy: swap.whereToBuy }
+          : null,
+      };
+    });
   } catch {}
 
   const dying  = items.filter(i => Math.floor((i.expiryDate * 1000 - Date.now()) / 86_400_000) <= 3);

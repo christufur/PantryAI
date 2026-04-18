@@ -78,3 +78,36 @@ export async function DELETE(
 
   return NextResponse.json({ ok: true });
 }
+
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
+  const itemId = Number(id);
+  if (!Number.isFinite(itemId)) {
+    return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+  }
+
+  const body: { qty?: number; unit?: string; storageLocation?: string; expiryDate?: string } =
+    await req.json();
+
+  const updates = {
+    ...(body.qty !== undefined && { qty: Number(body.qty) }),
+    ...(body.unit !== undefined && { unit: body.unit }),
+    ...(body.storageLocation !== undefined && { storageLocation: body.storageLocation }),
+    ...(body.expiryDate !== undefined && { expiryDate: new Date(body.expiryDate) }),
+  };
+
+  if (Object.keys(updates).length === 0) {
+    return NextResponse.json({ error: "No fields to update" }, { status: 400 });
+  }
+
+  const result = db.update(pantryItems).set(updates).where(eq(pantryItems.id, itemId)).run();
+
+  if (result.changes === 0) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+
+  return NextResponse.json({ ok: true });
+}

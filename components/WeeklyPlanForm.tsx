@@ -27,9 +27,25 @@ type ShoppingItem = {
   };
 };
 
+type LocalOutlet = {
+  name: string;
+  website?: string;
+  city: string;
+  zip: string;
+};
+
+type NearbyOutlets = {
+  csa: LocalOutlet[];
+  farmersMarket: LocalOutlet[];
+  foodHub: LocalOutlet[];
+  onFarmMarket: LocalOutlet[];
+  agritourism: LocalOutlet[];
+};
+
 type WeeklyPlanResponse = {
   days: DayPlan[];
   shoppingList: ShoppingItem[];
+  nearbyOutlets?: NearbyOutlets;
 };
 
 function getMondayISO(): string {
@@ -47,6 +63,7 @@ export default function WeeklyPlanForm() {
   const [loading, setLoading] = useState(false);
   const [plan, setPlan] = useState<WeeklyPlanResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [outletOpen, setOutletOpen] = useState(true);
 
   function updateMeal(index: number, field: keyof MealSlot, value: string | number) {
     setMeals((prev) =>
@@ -422,6 +439,114 @@ export default function WeeklyPlanForm() {
                 </div>
               </div>
             )}
+
+            {/* Local Outlets Near You */}
+            {plan.nearbyOutlets && (() => {
+              const o = plan.nearbyOutlets!;
+              const sections: { label: string; items: LocalOutlet[] }[] = [
+                { label: "CSAs",            items: o.csa },
+                { label: "Farmers Markets", items: o.farmersMarket },
+                { label: "Food Hubs",       items: o.foodHub },
+                { label: "On-Farm Markets", items: o.onFarmMarket },
+                { label: "Agritourism",     items: o.agritourism },
+              ].filter((s) => s.items.length > 0);
+
+              if (sections.length === 0) return null;
+
+              return (
+                <div>
+                  {/* Collapsible header */}
+                  <button
+                    type="button"
+                    onClick={() => setOutletOpen((v) => !v)}
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      background: "#000",
+                      color: "#fff",
+                      padding: "14px 20px",
+                      fontFamily: "'JetBrains Mono', monospace",
+                      fontSize: 13,
+                      fontWeight: 700,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.12em",
+                      border: "none",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <span>◉ LOCAL OUTLETS NEAR YOU · ABQ</span>
+                    <span style={{ fontSize: 16, lineHeight: 1 }}>{outletOpen ? "−" : "+"}</span>
+                  </button>
+
+                  {outletOpen && (
+                    <div style={{ border: "2px solid #000", borderTop: "none", padding: "20px 20px 8px" }}>
+                      <p style={{
+                        fontFamily: "Lora, serif",
+                        fontSize: 13,
+                        color: "#757575",
+                        margin: "0 0 20px",
+                      }}>
+                        Real-time directory from USDA Local Food Portal — farmers markets, CSAs, and food hubs within 30 miles of downtown ABQ.
+                      </p>
+                      {sections.map((section) => (
+                        <div key={section.label} style={{ marginBottom: 20 }}>
+                          <div style={{
+                            fontFamily: "'JetBrains Mono', monospace",
+                            fontSize: 10,
+                            fontWeight: 700,
+                            textTransform: "uppercase",
+                            letterSpacing: "0.12em",
+                            color: "#057dbc",
+                            marginBottom: 8,
+                          }}>
+                            {section.label} · {section.items.length}
+                          </div>
+                          {section.items.map((outlet, i) => (
+                            <div
+                              key={i}
+                              style={{
+                                borderBottom: "1px solid #e2e8f0",
+                                padding: "8px 0",
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "baseline",
+                                gap: 12,
+                              }}
+                            >
+                              <span style={{ fontFamily: "'Source Serif 4', serif", fontSize: 15, fontWeight: 600, color: "#1a1a1a" }}>
+                                {outlet.website ? (
+                                  <a
+                                    href={outlet.website}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{ color: "#1a1a1a", textDecoration: "underline", textUnderlineOffset: 3 }}
+                                  >
+                                    {outlet.name}
+                                  </a>
+                                ) : outlet.name}
+                              </span>
+                              <span style={{
+                                fontFamily: "'JetBrains Mono', monospace",
+                                fontSize: 10,
+                                color: "#757575",
+                                textTransform: "uppercase",
+                                letterSpacing: "0.05em",
+                                whiteSpace: "nowrap",
+                                flexShrink: 0,
+                              }}>
+                                {outlet.city || "NM"}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })()}
           </div>
         )}
       </div>
