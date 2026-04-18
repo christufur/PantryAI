@@ -41,7 +41,8 @@ export default function PhotoUploadDialog() {
   const [storageLocation, setStorageLocation] = useState("fridge");
   const [identifiedItems, setIdentifiedItems] = useState<IdentifiedItem[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const fileRef = useRef<HTMLInputElement>(null);
+  const galleryInputRef = useRef<HTMLInputElement>(null);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
 
   function resetState() {
     setFile(null);
@@ -49,7 +50,15 @@ export default function PhotoUploadDialog() {
     setDialogState("pick");
     setIdentifiedItems([]);
     setError(null);
-    if (fileRef.current) fileRef.current.value = "";
+    if (galleryInputRef.current) galleryInputRef.current.value = "";
+    if (cameraInputRef.current) cameraInputRef.current.value = "";
+  }
+
+  function onImageChosen(e: React.ChangeEvent<HTMLInputElement>) {
+    const next = e.target.files?.[0] ?? null;
+    setFile(next);
+    setError(null);
+    e.target.value = "";
   }
 
   async function handleSubmit() {
@@ -181,16 +190,16 @@ export default function PhotoUploadDialog() {
                 marginTop: 4,
               }}
             >
-              Upload a photo and Gemini Vision will identify items and estimate expiry dates.
+              Add a fridge photo from your library or use the camera, then Gemini returns structured
+              JSON (items with categories and dates) that we turn into pantry rows.
             </DialogDescription>
           </DialogHeader>
 
           {/* STATE 1: Pick file */}
           {dialogState === "pick" && (
             <div style={{ display: "flex", flexDirection: "column", gap: 16, paddingTop: 8 }}>
-              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                <label
-                  htmlFor="photo-file"
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                <span
                   style={{
                     fontFamily: "'JetBrains Mono', monospace",
                     fontSize: 10,
@@ -200,24 +209,82 @@ export default function PhotoUploadDialog() {
                     display: "block",
                   }}
                 >
-                  PHOTO
-                </label>
+                  PHOTO SOURCE
+                </span>
                 <input
-                  ref={fileRef}
-                  id="photo-file"
+                  ref={galleryInputRef}
                   type="file"
                   accept="image/*"
-                  style={{
-                    border: "2px solid #000",
-                    padding: 10,
-                    fontFamily: "Inter, sans-serif",
-                    fontSize: 13,
-                    width: "100%",
-                    background: "#ffffff",
-                    boxSizing: "border-box",
-                  }}
-                  onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+                  className="sr-only"
+                  tabIndex={-1}
+                  aria-label="Choose image from photo library or files"
+                  onChange={onImageChosen}
                 />
+                <input
+                  ref={cameraInputRef}
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  className="sr-only"
+                  tabIndex={-1}
+                  aria-label="Take a photo with camera"
+                  onChange={onImageChosen}
+                />
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                  <button
+                    type="button"
+                    onClick={() => galleryInputRef.current?.click()}
+                    style={{
+                      flex: "1 1 140px",
+                      background: "#fff",
+                      color: "#1a1a1a",
+                      border: "2px solid #000",
+                      fontFamily: "Inter, sans-serif",
+                      fontWeight: 700,
+                      fontSize: 12,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.05em",
+                      padding: "10px 14px",
+                      borderRadius: 0,
+                      cursor: "pointer",
+                    }}
+                  >
+                    From photos
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => cameraInputRef.current?.click()}
+                    style={{
+                      flex: "1 1 140px",
+                      background: "#fff",
+                      color: "#1a1a1a",
+                      border: "2px solid #000",
+                      fontFamily: "Inter, sans-serif",
+                      fontWeight: 700,
+                      fontSize: 12,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.05em",
+                      padding: "10px 14px",
+                      borderRadius: 0,
+                      cursor: "pointer",
+                    }}
+                  >
+                    Use camera
+                  </button>
+                </div>
+                {file && (
+                  <p
+                    style={{
+                      fontFamily: "Inter, sans-serif",
+                      fontSize: 12,
+                      color: "#1a1a1a",
+                      margin: 0,
+                      wordBreak: "break-all",
+                    }}
+                  >
+                    Selected: {file.name}
+                  </p>
+                )}
               </div>
 
               <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
@@ -382,12 +449,12 @@ export default function PhotoUploadDialog() {
                   ─── INVENTORY · {new Date().toLocaleDateString("en-US", { month: "short", day: "numeric" }).toUpperCase()} ───
                 </div>
 
-                {identifiedItems.map((item) => {
+                {identifiedItems.map((item, idx) => {
                   const d = getExpiryDays(item);
                   const dying = d <= 3;
                   return (
                     <div
-                      key={item.name}
+                      key={item.id ?? `${item.name}-${idx}`}
                       style={{
                         display: "flex",
                         justifyContent: "space-between",

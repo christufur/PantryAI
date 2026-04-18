@@ -9,7 +9,7 @@ Next.js + TypeScript web application built for the DesertDev Hackathon.
 ## Commands
 
 ```bash
-npm run dev          # Start dev server (localhost:3000)
+npm run dev          # Start dev server (listens on 0.0.0.0:3000)
 npm run build        # Production build
 npm run lint         # ESLint
 
@@ -19,6 +19,22 @@ npm run db:studio    # Open Drizzle Studio (visual DB browser)
 ```
 
 Add a shadcn component: `npx shadcn@latest add <component>` (e.g. `card`, `dialog`, `input`)
+
+## Dev server on WSL2
+
+Next.js prints a **Network** URL using the Linux VM’s address (often `172.x.x.x`). That address is **not** your PC’s LAN IP, so phones and other computers usually cannot open it.
+
+- **From Windows on the same machine:** open `http://localhost:3000` (or `http://127.0.0.1:3000`). Do not rely on the `172…` URL in the browser on Windows.
+- **From another device on your Wi‑Fi (phone, tablet, another PC):** either:
+  1. **Mirrored networking (Windows 11, recommended):** create or edit `%UserProfile%\.wslconfig`:
+     ```ini
+     [wsl2]
+     networkingMode=mirrored
+     ```
+     Then run `wsl --shutdown` in PowerShell and start WSL again. Use your Windows machine’s **Wi‑Fi/LAN IP** (e.g. `http://192.168.1.42:3000`). You may need a Windows Firewall **inbound** rule allowing TCP port **3000** on Private networks.
+  2. **Stay on default NAT:** set up **port forwarding** from Windows to the WSL IP (the first address from `wsl hostname -I`). This is more brittle because the WSL IP can change after restarts.
+
+If `localhost:3000` fails from Windows while the dev server is running in WSL, update WSL (`wsl --update`) and try mirrored mode above.
 
 ## Architecture
 

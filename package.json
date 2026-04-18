@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "node scripts/dev.mjs",
+    "wsl:portproxy-path": "wslpath -w scripts/wsl-portproxy.ps1",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -37,6 +38,6 @@
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.13",
-    "drizzle-kit": "^0.31.10"
+    "drizzle-kit": "^0.18.1"
   }
 }
