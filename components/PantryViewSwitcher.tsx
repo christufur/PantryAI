@@ -101,9 +101,9 @@ export default function PantryViewSwitcher({ items }: { items: PlainItem[] }) {
     </div>
   );
 
-  const mobileSnapBar = (
-    <div className="mobile-snap-bar">
-      <div className="mobile-snap-bar-inner">
+  const topSnapBar = (
+    <div className="pantry-snap-bar">
+      <div className="pantry-snap-bar-inner">
         <PhotoUploadDialog fullWidthTrigger />
       </div>
     </div>
@@ -114,13 +114,6 @@ export default function PantryViewSwitcher({ items }: { items: PlainItem[] }) {
   // ─────────────────────────────────────────────────────────────────────────
   const sidebar = (
     <div style={{ position: "sticky", top: 16 }} className="sidebar">
-      <div className="sidebar-add-snap" style={{ border: "2px solid #000", padding: 20, marginBottom: 24 }}>
-        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--caption)", marginBottom: 10 }}>
-          ADD ITEMS
-        </div>
-        <PhotoUploadDialog />
-      </div>
-
       {dying.length > 0 && (
         <div style={{ border: "2px solid #c8102e", padding: 16, marginBottom: 24 }}>
           <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "#c8102e", marginBottom: 10 }}>
@@ -192,13 +185,10 @@ export default function PantryViewSwitcher({ items }: { items: PlainItem[] }) {
     return (
       <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 32px" }} className="page-grid-outer">
         {toggleBar}
-        {mobileSnapBar}
+        {topSnapBar}
         <div style={{ padding: "60px 0", textAlign: "center" }}>
           <div style={{ fontFamily: "'Source Serif 4', serif", fontSize: 32, fontWeight: 600, marginBottom: 8 }}>Nothing here yet.</div>
           <div style={{ fontFamily: "Lora, serif", fontSize: 16, color: "var(--caption)", marginBottom: 32 }}>Snap your fridge to get started.</div>
-          <div className="empty-state-desktop-snap" style={{ display: "inline-block" }}>
-            <PhotoUploadDialog />
-          </div>
         </div>
       </div>
     );
@@ -216,7 +206,7 @@ export default function PantryViewSwitcher({ items }: { items: PlainItem[] }) {
         padding: selectionCount > 0 ? "32px 32px 96px" : "32px 32px 0",
       }} className="page-grid-outer">
         {toggleBar}
-        {mobileSnapBar}
+        {topSnapBar}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 300px", gap: 40, alignItems: "start" }} className="page-grid">
           <div>
             {/* Select-all header */}
@@ -358,7 +348,7 @@ export default function PantryViewSwitcher({ items }: { items: PlainItem[] }) {
     return (
       <div style={{ maxWidth: 1200, margin: "0 auto", padding: "32px 32px 0" }} className="page-grid-outer">
         {toggleBar}
-        {mobileSnapBar}
+        {topSnapBar}
         <div style={{ marginBottom: 8 }}>
           <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--caption)", marginBottom: 4 }}>EXPIRES IN</div>
           <h2 style={{ fontFamily: "'Source Serif 4', serif", fontWeight: 600, fontSize: 56, lineHeight: 0.95, letterSpacing: "-0.025em", margin: "0 0 8px" }} className="column-title">This Week</h2>
@@ -383,7 +373,7 @@ export default function PantryViewSwitcher({ items }: { items: PlainItem[] }) {
   return (
     <div style={{ maxWidth: 1200, margin: "0 auto", padding: "32px 32px 0" }} className="page-grid-outer">
       {toggleBar}
-      {mobileSnapBar}
+      {topSnapBar}
       <div style={{ marginBottom: 32 }}>
         <h2 style={{ fontFamily: "'Source Serif 4', serif", fontWeight: 600, fontSize: 56, lineHeight: 0.95, letterSpacing: "-0.025em", margin: "0 0 8px" }} className="shelves-title">Shelves</h2>
         <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--caption)" }}>
@@ -395,9 +385,6 @@ export default function PantryViewSwitcher({ items }: { items: PlainItem[] }) {
 
       {dying.length > 0 && (
         <div style={{ marginTop: 24, borderTop: "1px solid var(--hairline)", paddingTop: 20, display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 40 }}>
-          <div className="desktop-only-snap-aux">
-            <PhotoUploadDialog />
-          </div>
           <Link href={`/recipe?ingredients=${encodeURIComponent(dying.map(i => i.name).join(","))}`} style={{ fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: "0.05em", padding: "10px 18px", border: "2px solid #000", background: "#000", color: "#fff", textDecoration: "none" }}>
             COOK → SAVE {dying.length} DYING
           </Link>
