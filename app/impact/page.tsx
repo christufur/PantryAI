@@ -36,10 +36,10 @@ export default function ImpactPage() {
         <span style={{ fontWeight: 400, opacity: 0.7, fontSize: 10 }}>ZERO WASTE. NEW MEXICO.</span>
       </div>
 
-      <div style={{ maxWidth: 900, margin: "0 auto", padding: "40px 32px 64px" }} className="impact-container">
+      <div style={{ maxWidth: 900, margin: "0 auto", padding: "24px 32px 32px" }} className="impact-container">
 
         {/* ── Hero stat ──────────────────────────────────────────────── */}
-        <section style={{ borderBottom: "2px solid #000", paddingBottom: 36, marginBottom: 0 }}>
+        <section style={{ borderBottom: "2px solid #000", paddingBottom: 20, marginBottom: 0 }}>
 
           <div style={{
             fontFamily: "'JetBrains Mono', monospace", fontSize: 11, fontWeight: 700,
@@ -51,7 +51,7 @@ export default function ImpactPage() {
 
           <div style={{
             fontFamily: "'Source Serif 4', serif", fontWeight: 700,
-            fontSize: 128, lineHeight: 0.85, letterSpacing: "-0.04em",
+            fontSize: 96, lineHeight: 0.85, letterSpacing: "-0.04em",
             color: "#c8102e", marginBottom: 20,
           }} className="impact-hero-num">
             {fmt(totals.itemsRescued)}
@@ -79,7 +79,7 @@ export default function ImpactPage() {
               <div
                 key={s.label}
                 style={{
-                  padding: "28px 28px 24px",
+                  padding: "18px 24px 16px",
                   borderRight: i % 2 === 0 ? "1px solid var(--hairline)" : "none",
                   borderBottom: i < 2 ? "1px solid var(--hairline)" : "none",
                 }}
@@ -112,7 +112,7 @@ export default function ImpactPage() {
         </section>
 
         {/* ── Lede ───────────────────────────────────────────────────── */}
-        <section style={{ borderTop: "none", paddingTop: 32 }}>
+        <section style={{ borderTop: "none", paddingTop: 20 }}>
           <p style={{
             fontFamily: "Lora, serif",
             fontSize: 15, lineHeight: 1.8,
@@ -135,11 +135,11 @@ export default function ImpactPage() {
           grid-template-columns: 1fr 1fr;
         }
         @media (max-width: 640px) {
-          .impact-hero-num   { font-size: 88px !important; }
-          .impact-stat-num   { font-size: 34px !important; }
-          .impact-stats-grid { grid-template-columns: 1fr !important; }
-          .impact-stat-cell  { border-right: none !important; }
-          .impact-container  { padding: 28px 16px 48px !important; }
+          .impact-hero-num   { font-size: 72px !important; }
+          .impact-stat-num   { font-size: 30px !important; }
+          .impact-stats-grid { grid-template-columns: 1fr 1fr !important; }
+          .impact-stat-cell  { padding: 14px 14px 12px !important; }
+          .impact-container  { padding: 16px 16px 24px !important; }
           .impact-ribbon     { padding: 10px 16px !important; }
         }
       `}</style>
