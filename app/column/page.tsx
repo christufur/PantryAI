@@ -29,8 +29,8 @@ export default function ColumnPage() {
           background: "#000",
           color: "#fff",
           padding: "10px 32px",
-          fontFamily: "'JetBrains Mono', monospace",
-          fontSize: 12,
+          fontFamily: "var(--font-ui)",
+          fontSize: "var(--text-ribbon)",
           fontWeight: 700,
           textTransform: "uppercase",
           letterSpacing: "0.12em",
@@ -50,7 +50,7 @@ export default function ColumnPage() {
         {/* Heading */}
         <div
           style={{
-            fontFamily: "'JetBrains Mono', monospace",
+            fontFamily: "var(--font-ui)",
             fontSize: 11,
             textTransform: "uppercase",
             letterSpacing: "0.12em",
@@ -62,9 +62,9 @@ export default function ColumnPage() {
         </div>
         <h1
           style={{
-            fontFamily: "'Source Serif 4', serif",
+            fontFamily: "var(--font-display)",
             fontWeight: 600,
-            fontSize: 64,
+            fontSize: "var(--text-title)",
             lineHeight: 0.95,
             letterSpacing: "-0.025em",
             margin: "0 0 8px",
@@ -75,7 +75,7 @@ export default function ColumnPage() {
         </h1>
         <div
           style={{
-            fontFamily: "Lora, serif",
+            fontFamily: "var(--font-body)",
             fontSize: 16,
             color: "var(--caption)",
             marginBottom: 32,

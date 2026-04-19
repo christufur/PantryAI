@@ -137,7 +137,7 @@ export default function WeekGrid({
                 fontFamily: "inherit",
               }}
             >
-              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", opacity: isToday ? 0.9 : 0.6 }}>
+              <div style={{ fontFamily: "var(--font-ui)", fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", opacity: isToday ? 0.9 : 0.6 }}>
                 {label}{day?.date ? ` · ${day.date}` : ""}
               </div>
               {day ? (
@@ -146,7 +146,7 @@ export default function WeekGrid({
                     <div key={mi} style={{ display: "flex", gap: 6, alignItems: "baseline" }}>
                       <span style={{ fontSize: 11, opacity: 0.75, flexShrink: 0 }}>{EMOJI[m.mealType] ?? "·"}</span>
                       <span style={{
-                        fontFamily: "'Source Serif 4', serif",
+                        fontFamily: "var(--font-display)",
                         fontSize: 12,
                         lineHeight: 1.2,
                         fontWeight: 600,
@@ -158,13 +158,13 @@ export default function WeekGrid({
                     </div>
                   ))}
                   {doneCount > 0 && (
-                    <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: isToday ? "rgba(255,255,255,0.5)" : "var(--caption)", marginTop: 2 }}>
+                    <div style={{ fontFamily: "var(--font-ui)", fontSize: 9, color: isToday ? "rgba(255,255,255,0.5)" : "var(--caption)", marginTop: 2 }}>
                       {doneCount}/{day.meals.length} DONE
                     </div>
                   )}
                 </>
               ) : (
-                <div style={{ fontFamily: "Lora, serif", fontSize: 12, fontStyle: "italic", color: isToday ? "rgba(255,255,255,0.6)" : "var(--caption)" }}>
+                <div style={{ fontFamily: "var(--font-body)", fontSize: 12, fontStyle: "italic", color: isToday ? "rgba(255,255,255,0.6)" : "var(--caption)" }}>
                   —
                 </div>
               )}
@@ -186,7 +186,7 @@ export default function WeekGrid({
           >
             {/* Header */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 20 }}>
-              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", color: "var(--caption)" }}>
+              <div style={{ fontFamily: "var(--font-ui)", fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", color: "var(--caption)" }}>
                 {DAY_LABELS[current.dayIndex]} · {current.date}
               </div>
               <button onClick={closeModal} style={{ border: "none", background: "transparent", cursor: "pointer", fontSize: 20, fontFamily: "monospace", lineHeight: 1 }}>×</button>
@@ -194,7 +194,7 @@ export default function WeekGrid({
 
             {/* Meal list */}
             {current.meals.length === 0 && !adding && (
-              <p style={{ fontFamily: "Lora, serif", fontSize: 14, color: "var(--caption)", marginBottom: 16 }}>No meals planned. Add one below.</p>
+              <p style={{ fontFamily: "var(--font-body)", fontSize: 14, color: "var(--caption)", marginBottom: 16 }}>No meals planned. Add one below.</p>
             )}
 
             {current.meals.map((m) => {
@@ -223,11 +223,11 @@ export default function WeekGrid({
 
                   {/* Meal info */}
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: "var(--caption)", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 3 }}>
+                    <div style={{ fontFamily: "var(--font-ui)", fontSize: 9, color: "var(--caption)", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 3 }}>
                       {EMOJI[m.mealType] ?? "·"} {m.mealType}
                     </div>
                     <div style={{
-                      fontFamily: "'Source Serif 4', serif",
+                      fontFamily: "var(--font-display)",
                       fontSize: 16, fontWeight: 600,
                       textDecoration: done ? "line-through" : "none",
                       opacity: done ? 0.4 : 1,
@@ -238,17 +238,17 @@ export default function WeekGrid({
                       <div style={{ display: "flex", gap: 20, flexWrap: "wrap", marginTop: 6 }}>
                         {m.usesFromPantry.length > 0 && (
                           <div>
-                            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: "var(--link)", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 2 }}>FROM PANTRY</div>
+                            <div style={{ fontFamily: "var(--font-ui)", fontSize: 9, color: "var(--link)", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 2 }}>FROM PANTRY</div>
                             {m.usesFromPantry.map((item) => (
-                              <div key={item.name} style={{ fontFamily: "Lora, serif", fontSize: 12 }}>✓ {item.name}</div>
+                              <div key={item.name} style={{ fontFamily: "var(--font-body)", fontSize: 12 }}>✓ {item.name}</div>
                             ))}
                           </div>
                         )}
                         {m.needsToBuy.length > 0 && (
                           <div>
-                            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: "var(--caption)", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 2 }}>TO BUY</div>
+                            <div style={{ fontFamily: "var(--font-ui)", fontSize: 9, color: "var(--caption)", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 2 }}>TO BUY</div>
                             {m.needsToBuy.map((item) => (
-                              <div key={item.name} style={{ fontFamily: "Lora, serif", fontSize: 12, color: "var(--caption)" }}>○ {item.name}</div>
+                              <div key={item.name} style={{ fontFamily: "var(--font-body)", fontSize: 12, color: "var(--caption)" }}>○ {item.name}</div>
                             ))}
                           </div>
                         )}
@@ -275,7 +275,7 @@ export default function WeekGrid({
                 <select
                   value={newType}
                   onChange={(e) => setNewType(e.target.value as typeof newType)}
-                  style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, textTransform: "uppercase", border: "2px solid #000", padding: "6px 10px", background: "#fff", cursor: "pointer" }}
+                  style={{ fontFamily: "var(--font-ui)", fontSize: 11, textTransform: "uppercase", border: "2px solid #000", padding: "6px 10px", background: "#fff", cursor: "pointer" }}
                 >
                   {MEAL_TYPES.map((t) => (
                     <option key={t} value={t}>{EMOJI[t]} {t}</option>
@@ -287,19 +287,19 @@ export default function WeekGrid({
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleAdd()}
-                  style={{ fontFamily: "Lora, serif", fontSize: 15, border: "none", borderBottom: "2px solid #000", outline: "none", padding: "6px 0", background: "transparent" }}
+                  style={{ fontFamily: "var(--font-body)", fontSize: 15, border: "none", borderBottom: "2px solid #000", outline: "none", padding: "6px 0", background: "transparent" }}
                 />
                 <div style={{ display: "flex", gap: 8 }}>
                   <button
                     onClick={handleAdd}
                     disabled={!newName.trim() || saving}
-                    style={{ flex: 1, background: "#000", color: "#fff", border: "2px solid #000", fontFamily: "'JetBrains Mono', monospace", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", padding: "10px 0", cursor: "pointer", opacity: (!newName.trim() || saving) ? 0.4 : 1 }}
+                    style={{ flex: 1, background: "#000", color: "#fff", border: "2px solid #000", fontFamily: "var(--font-ui)", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", padding: "10px 0", cursor: "pointer", opacity: (!newName.trim() || saving) ? 0.4 : 1 }}
                   >
                     {saving ? "ADDING…" : "ADD"}
                   </button>
                   <button
                     onClick={() => { setAdding(false); setNewName(""); }}
-                    style={{ background: "#fff", color: "#000", border: "2px solid #000", fontFamily: "'JetBrains Mono', monospace", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", padding: "10px 16px", cursor: "pointer" }}
+                    style={{ background: "#fff", color: "#000", border: "2px solid #000", fontFamily: "var(--font-ui)", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", padding: "10px 16px", cursor: "pointer" }}
                   >
                     CANCEL
                   </button>
@@ -308,7 +308,7 @@ export default function WeekGrid({
             ) : (
               <button
                 onClick={() => setAdding(true)}
-                style={{ marginTop: 16, width: "100%", border: "2px dashed #aaa", background: "transparent", fontFamily: "'JetBrains Mono', monospace", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--caption)", padding: "12px 0", cursor: "pointer" }}
+                style={{ marginTop: 16, width: "100%", border: "2px dashed #aaa", background: "transparent", fontFamily: "var(--font-ui)", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--caption)", padding: "12px 0", cursor: "pointer" }}
               >
                 + ADD MEAL
               </button>

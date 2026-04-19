@@ -80,7 +80,7 @@ export default function RootLayout({
           background: '#000', color: '#fff',
           padding: '14px 40px',
           display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-          fontFamily: "'JetBrains Mono', monospace",
+          fontFamily: "var(--font-ui)",
           fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.10em'
         }}>
           <Link
@@ -136,7 +136,7 @@ export default function RootLayout({
               <rect x="38" y="52" width="2.5" height="48" rx="1.25" fill="#fafaf7"/>
             </svg>
             <div className="masthead-name" style={{
-              fontFamily: "'JetBrains Mono', monospace",
+              fontFamily: "var(--font-ui)",
               fontWeight: 700, fontSize: 72, lineHeight: 0.9,
               letterSpacing: '-0.03em', color: '#000'
             }}>
@@ -144,7 +144,7 @@ export default function RootLayout({
             </div>
           </Link>
           <div className="masthead-tagline" style={{
-            fontFamily: "'JetBrains Mono', monospace",
+            fontFamily: "var(--font-ui)",
             fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.12em',
             color: 'var(--caption)', lineHeight: 1.9, textAlign: 'right'
           }}>

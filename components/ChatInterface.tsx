@@ -76,8 +76,8 @@ export default function ChatInterface() {
                 background: "#000",
                 color: "#fff",
                 padding: "10px 14px",
-                fontFamily: "Lora, serif",
-                fontSize: 15,
+                fontFamily: "var(--font-body)",
+                fontSize: "var(--text-sm)",
                 lineHeight: 1.45,
                 maxWidth: "75%",
               }}>
@@ -92,7 +92,7 @@ export default function ChatInterface() {
                 width: 32, height: 32,
                 background: "#1a3a4a",
                 display: "flex", alignItems: "center", justifyContent: "center",
-                fontFamily: "'JetBrains Mono', monospace",
+                fontFamily: "var(--font-ui)",
                 fontSize: 14, color: "#4fc3f7",
                 marginTop: 2,
               }}>
@@ -103,8 +103,8 @@ export default function ChatInterface() {
                 background: ICE_BG,
                 color: ICE_TEXT,
                 padding: "10px 14px",
-                fontFamily: "Lora, serif",
-                fontSize: 15,
+                fontFamily: "var(--font-body)",
+                fontSize: "var(--text-sm)",
                 lineHeight: 1.45,
                 maxWidth: "75%",
               }}>
@@ -131,7 +131,7 @@ export default function ChatInterface() {
               padding: "10px 14px",
             }}>
               <span style={{
-                fontFamily: "'JetBrains Mono', monospace",
+                fontFamily: "var(--font-ui)",
                 fontSize: 11,
                 color: "#4fc3f7",
                 letterSpacing: "0.12em",
@@ -157,7 +157,7 @@ export default function ChatInterface() {
               key={p}
               onClick={() => setInput(p)}
               style={{
-                fontFamily: "'JetBrains Mono', monospace",
+                fontFamily: "var(--font-ui)",
                 fontWeight: 700,
                 fontSize: 10,
                 textTransform: "uppercase",
@@ -196,8 +196,8 @@ export default function ChatInterface() {
             flex: 1,
             border: `2px solid #1a3a4a`,
             padding: "10px 14px",
-            fontFamily: "Lora, serif",
-            fontSize: 15,
+            fontFamily: "var(--font-body)",
+            fontSize: "var(--text-sm)",
             background: ICE_BG,
             color: ICE_TEXT,
             outline: "none",
@@ -208,7 +208,7 @@ export default function ChatInterface() {
           onClick={handleSend}
           disabled={loading || !input.trim()}
           style={{
-            fontFamily: "'JetBrains Mono', monospace",
+            fontFamily: "var(--font-ui)",
             fontWeight: 700,
             fontSize: 11,
             textTransform: "uppercase",

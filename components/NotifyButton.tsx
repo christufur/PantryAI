@@ -6,7 +6,7 @@ const LAST_NOTIFIED_KEY = "fridgey_last_notified";
 const THROTTLE_MS = 8 * 60 * 60 * 1000; // 8 hours
 
 const mono: React.CSSProperties = {
-  fontFamily: "'JetBrains Mono', monospace",
+  fontFamily: "var(--font-ui)",
   fontSize: 11, fontWeight: 700,
   textTransform: "uppercase", letterSpacing: "0.08em",
 };
@@ -122,7 +122,7 @@ export default function NotifyButton({ compact = false }: { compact?: boolean })
     <div style={{ width: 280 }}>
       <div style={{ border: "2px solid #000", padding: "20px 20px" }}>
         <div style={{ ...mono, fontSize: 10, color: "var(--caption)", marginBottom: 8 }}>FRIDGEY ALERTS</div>
-        <div style={{ fontFamily: "Lora, serif", fontSize: 14, color: "var(--ink)", marginBottom: 16, lineHeight: 1.5 }}>
+        <div style={{ fontFamily: "var(--font-body)", fontSize: 14, color: "var(--ink)", marginBottom: 16, lineHeight: 1.5 }}>
           {permission === "granted"
             ? "Fridgey will notify you when food is about to die."
             : "Get notified when items are about to expire."}

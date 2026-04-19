@@ -83,7 +83,7 @@ export default function ImpactDownloadButton({ totals }: { totals: ImpactTotals 
     <button
       onClick={handleDownload}
       style={{
-        fontFamily: "'JetBrains Mono', monospace",
+        fontFamily: "var(--font-ui)",
         fontSize: 11, fontWeight: 700,
         textTransform: "uppercase", letterSpacing: "0.08em",
         padding: "10px 16px",

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { pantryItems, localSwaps, mealsPlanned } from "@/db/schema";
-import { generateWeeklyPlan, type PantrySnapshot } from "@/lib/gemini";
+import { GEMINI_MODEL_RESPONSE_HEADER, generateWeeklyPlan, type PantrySnapshot } from "@/lib/gemini";
 import { desc, sql } from "drizzle-orm";
 import { fetchNearbyLocalOutlets } from "@/lib/usda";
 
@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
           : new Date((item.expiryDate as unknown as number) * 1000).toISOString().split("T")[0],
     }));
 
-  const [plan, nearbyOutlets] = await Promise.all([
+  const [{ plan, model: geminiModel }, nearbyOutlets] = await Promise.all([
     generateWeeklyPlan(numDays ?? 7, calorieTarget ?? 2000, pantry, mealIdeas ?? []),
     fetchNearbyLocalOutlets(DEFAULT_ZIP),
   ]);
@@ -66,7 +66,10 @@ export async function POST(request: NextRequest) {
     }
   }
 
-  return NextResponse.json({ planId, ...plan, shoppingList: enrichedList, nearbyOutlets });
+  return NextResponse.json(
+    { planId, geminiModel, ...plan, shoppingList: enrichedList, nearbyOutlets },
+    { headers: { [GEMINI_MODEL_RESPONSE_HEADER]: geminiModel } }
+  );
 }
 
 export async function GET() {

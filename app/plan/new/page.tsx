@@ -59,7 +59,7 @@ export default function NewPlanPage() {
     border: `2px solid ${active ? "#000" : "#e2e8f0"}`,
     background: active ? "#000" : "#fff",
     color: active ? "#fff" : "#1a1a1a",
-    fontFamily: "'JetBrains Mono', monospace",
+    fontFamily: "var(--font-ui)",
     fontSize: 13,
     fontWeight: 700,
     padding: "10px 20px",
@@ -71,7 +71,7 @@ export default function NewPlanPage() {
   const nextBtn: React.CSSProperties = {
     background: "#000", color: "#fff",
     border: "2px solid #000",
-    fontFamily: "'JetBrains Mono', monospace",
+    fontFamily: "var(--font-ui)",
     fontSize: 12, fontWeight: 700,
     textTransform: "uppercase", letterSpacing: "0.08em",
     padding: "12px 28px", cursor: "pointer", borderRadius: 0,
@@ -79,26 +79,26 @@ export default function NewPlanPage() {
   };
 
   const label: React.CSSProperties = {
-    fontFamily: "'JetBrains Mono', monospace",
+    fontFamily: "var(--font-ui)",
     fontSize: 10, textTransform: "uppercase",
     letterSpacing: "0.12em", color: "#757575",
     marginBottom: 16, display: "block",
   };
 
   const heading: React.CSSProperties = {
-    fontFamily: "'Source Serif 4', Georgia, serif",
-    fontSize: 28, fontWeight: 700,
+    fontFamily: "var(--font-display)",
+    fontSize: "var(--text-subtitle)", fontWeight: 700,
     color: "#1a1a1a", marginBottom: 8,
   };
 
   // ─── Step: days ──────────────────────────────────────────────────────────────
   if (step === "days") return (
     <main style={{ maxWidth: 560, margin: "0 auto", padding: "48px 24px" }}>
-      <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.12em", color: "#757575", marginBottom: 8 }}>
+      <div style={{ fontFamily: "var(--font-ui)", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.12em", color: "#757575", marginBottom: 8 }}>
         STEP 1 OF 3
       </div>
       <h1 style={heading}>How many days do you want to plan for?</h1>
-      <p style={{ fontFamily: "Lora, serif", fontSize: 15, color: "#757575", marginBottom: 32 }}>
+      <p style={{ fontFamily: "var(--font-body)", fontSize: 15, color: "#757575", marginBottom: 32 }}>
         We&apos;ll generate breakfast, lunch, and dinner for each day.
       </p>
 
@@ -119,7 +119,7 @@ export default function NewPlanPage() {
         onChange={(e) => { setCustomDays(e.target.value); setNumDays(null); }}
         style={{
           border: "2px solid #000", padding: "10px 14px",
-          fontFamily: "'JetBrains Mono', monospace", fontSize: 14,
+          fontFamily: "var(--font-ui)", fontSize: 14,
           width: 120, background: "#fff", color: "#1a1a1a",
           borderRadius: 0, outline: "none",
         }}
@@ -133,7 +133,7 @@ export default function NewPlanPage() {
         >
           NEXT →
         </button>
-        <Link href="/plan" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: "#757575", textDecoration: "none", marginTop: 32 }}>
+        <Link href="/plan" style={{ fontFamily: "var(--font-ui)", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: "#757575", textDecoration: "none", marginTop: 32 }}>
           CANCEL
         </Link>
       </div>
@@ -143,11 +143,11 @@ export default function NewPlanPage() {
   // ─── Step: calories ───────────────────────────────────────────────────────────
   if (step === "calories") return (
     <main style={{ maxWidth: 560, margin: "0 auto", padding: "48px 24px" }}>
-      <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.12em", color: "#757575", marginBottom: 8 }}>
+      <div style={{ fontFamily: "var(--font-ui)", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.12em", color: "#757575", marginBottom: 8 }}>
         STEP 2 OF 3
       </div>
       <h1 style={heading}>Daily calorie target?</h1>
-      <p style={{ fontFamily: "Lora, serif", fontSize: 15, color: "#757575", marginBottom: 32 }}>
+      <p style={{ fontFamily: "var(--font-body)", fontSize: 15, color: "#757575", marginBottom: 32 }}>
         Meals will be balanced across breakfast (~25%), lunch (~35%), dinner (~40%).
       </p>
 
@@ -168,7 +168,7 @@ export default function NewPlanPage() {
         onChange={(e) => { setCustomCal(e.target.value); setCalorieTarget(null); }}
         style={{
           border: "2px solid #000", padding: "10px 14px",
-          fontFamily: "'JetBrains Mono', monospace", fontSize: 14,
+          fontFamily: "var(--font-ui)", fontSize: 14,
           width: 140, background: "#fff", color: "#1a1a1a",
           borderRadius: 0, outline: "none",
         }}
@@ -192,21 +192,21 @@ export default function NewPlanPage() {
   // ─── Step: meal ideas ─────────────────────────────────────────────────────────
   return (
     <main style={{ maxWidth: 560, margin: "0 auto", padding: "48px 24px" }}>
-      <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.12em", color: "#757575", marginBottom: 8 }}>
+      <div style={{ fontFamily: "var(--font-ui)", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.12em", color: "#757575", marginBottom: 8 }}>
         STEP 3 OF 3
       </div>
       <h1 style={heading}>Any meal ideas?</h1>
-      <p style={{ fontFamily: "Lora, serif", fontSize: 15, color: "#757575", marginBottom: 8 }}>
+      <p style={{ fontFamily: "var(--font-body)", fontSize: 15, color: "#757575", marginBottom: 8 }}>
         Optional — leave blank and AI will plan everything from your pantry.
       </p>
-      <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#757575", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 32 }}>
+      <p style={{ fontFamily: "var(--font-ui)", fontSize: 10, color: "#757575", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 32 }}>
         {resolvedDays} DAYS · {resolvedCal?.toLocaleString()} CAL/DAY
       </p>
 
       <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
         {mealIdeas.map((idea, i) => (
           <div key={i} style={{ borderBottom: "1px solid #e2e8f0", display: "flex", alignItems: "center", gap: 12 }}>
-            <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#757575", width: 24, flexShrink: 0 }}>
+            <span style={{ fontFamily: "var(--font-ui)", fontSize: 10, color: "#757575", width: 24, flexShrink: 0 }}>
               {i + 1}
             </span>
             <input
@@ -219,7 +219,7 @@ export default function NewPlanPage() {
               }}
               style={{
                 flex: 1, border: "none", padding: "12px 0",
-                fontFamily: "Lora, serif", fontSize: 16,
+                fontFamily: "var(--font-body)", fontSize: 16,
                 background: "transparent", outline: "none", color: "#1a1a1a",
               }}
             />
@@ -239,7 +239,7 @@ export default function NewPlanPage() {
       </div>
 
       {error && (
-        <p style={{ fontFamily: "Lora, serif", fontSize: 14, color: "#c8102e", border: "1px solid #c8102e", padding: "8px 12px", marginTop: 24 }}>
+        <p style={{ fontFamily: "var(--font-body)", fontSize: 14, color: "#c8102e", border: "1px solid #c8102e", padding: "8px 12px", marginTop: 24 }}>
           {error}
         </p>
       )}
@@ -257,7 +257,7 @@ export default function NewPlanPage() {
             {loading ? "GENERATING…" : "◎ GENERATE PLAN"}
           </button>
           {loading && (
-            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#757575", textTransform: "uppercase", letterSpacing: "0.08em", marginTop: 10 }}>
+            <div style={{ fontFamily: "var(--font-ui)", fontSize: 10, color: "#757575", textTransform: "uppercase", letterSpacing: "0.08em", marginTop: 10 }}>
               This takes ~20–30 seconds…
             </div>
           )}

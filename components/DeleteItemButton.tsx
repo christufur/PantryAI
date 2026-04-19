@@ -46,7 +46,7 @@ export default function DeleteItemButton({
   }
 
   const btnBase: CSSProperties = {
-    fontFamily: "Inter, sans-serif",
+    fontFamily: "var(--font-ui)",
     fontWeight: 700,
     fontSize: 12,
     textTransform: "uppercase",
@@ -68,7 +68,7 @@ export default function DeleteItemButton({
         aria-haspopup="dialog"
         aria-expanded={open}
         style={{
-          fontFamily: "Inter, sans-serif",
+          fontFamily: "var(--font-ui)",
           fontWeight: 700,
           fontSize: 11,
           textTransform: "uppercase",
@@ -123,7 +123,7 @@ export default function DeleteItemButton({
             <div
               id="delete-item-title"
               style={{
-                fontFamily: "'JetBrains Mono', monospace",
+                fontFamily: "var(--font-ui)",
                 fontSize: 10,
                 fontWeight: 700,
                 textTransform: "uppercase",
@@ -136,7 +136,7 @@ export default function DeleteItemButton({
             </div>
             <p
               style={{
-                fontFamily: "'Source Serif 4', serif",
+                fontFamily: "var(--font-display)",
                 fontSize: 20,
                 fontWeight: 600,
                 color: "#000",
@@ -149,7 +149,7 @@ export default function DeleteItemButton({
             {error && (
               <p
                 style={{
-                  fontFamily: "Lora, serif",
+                  fontFamily: "var(--font-body)",
                   fontSize: 14,
                   color: "#c8102e",
                   border: "1px solid #c8102e",
