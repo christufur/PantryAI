@@ -552,9 +552,7 @@ export default function PantryKitchenBoard({
           </div>
 
           {/* Impact card */}
-          <div style={{ border: "2px solid #000", padding: "18px 20px", background: "var(--paper)" }}>
-            <ImpactCard totals={impact} />
-          </div>
+          <ImpactCard totals={impact} />
         </div>
       </header>
 
