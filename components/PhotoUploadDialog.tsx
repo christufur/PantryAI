@@ -37,9 +37,12 @@ type LoadingSource = "photo" | "barcode";
 
 export default function PhotoUploadDialog({
   fullWidthTrigger = false,
+  triggerVariant = "solid",
 }: {
   /** Wider tap target on narrow screens (e.g. top-of-page mobile CTA). */
   fullWidthTrigger?: boolean;
+  /** `outline` reads on `--paper` and avoids stacking two solid black bars under the ribbon. */
+  triggerVariant?: "solid" | "outline";
 } = {}) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -79,7 +82,18 @@ export default function PhotoUploadDialog({
       form.append("file", file);
       form.append("storageLocation", storageLocation);
       const res = await fetch("/api/photo", { method: "POST", body: form });
-      const data: ApiResponse | IdentifiedItem[] = await res.json();
+      let data: ApiResponse | IdentifiedItem[];
+      try {
+        data = await res.json();
+      } catch {
+        setError(
+          res.ok
+            ? "Unexpected response from the server."
+            : "Something went wrong. Please try again."
+        );
+        setDialogState("pick");
+        return;
+      }
       if (!res.ok) {
         const err = !Array.isArray(data) ? data.error : undefined;
         setError(err ?? "Something went wrong. Please try again.");
@@ -168,11 +182,23 @@ export default function PhotoUploadDialog({
 
       {/* Trigger button */}
       <button
-        onClick={() => { resetState(); setOpen(true); }}
+        type="button"
+        onClick={() => {
+          resetState();
+          setOpen(true);
+        }}
         style={{
-          background: "#000",
-          color: "#fff",
-          border: "2px solid #000",
+          ...(triggerVariant === "outline"
+            ? {
+                background: "var(--paper)",
+                color: "#000",
+                border: "2px solid #000",
+              }
+            : {
+                background: "#000",
+                color: "#fff",
+                border: "2px solid #000",
+              }),
           fontFamily: "Inter, sans-serif",
           fontWeight: 700,
           fontSize: 13,
