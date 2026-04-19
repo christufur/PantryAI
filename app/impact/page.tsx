@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import { impactEvents } from "@/db/schema";
 import { computeImpact } from "@/lib/impact";
+import ImpactCard from "@/components/ImpactCard";
 
 export default function ImpactPage() {
   let totals = { itemsRescued: 0, dollarsSaved: 0, lbsSaved: 0, co2Lbs: 0, gallonsSaved: 0 };
@@ -109,6 +110,11 @@ export default function ImpactPage() {
               </div>
             ))}
           </div>
+        </section>
+
+        {/* ── Shareable card ─────────────────────────────────────────── */}
+        <section style={{ paddingTop: 20 }}>
+          <ImpactCard totals={totals} />
         </section>
 
         {/* ── Lede ───────────────────────────────────────────────────── */}
