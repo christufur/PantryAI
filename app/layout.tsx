@@ -4,6 +4,7 @@ import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
+import MobileBottomNav from "@/components/MobileBottomNav";
 
 const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -28,7 +29,9 @@ export default function RootLayout({
           fontFamily: "'JetBrains Mono', monospace",
           fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.10em'
         }}>
-          <Link href="/" style={{ color: '#fff', textDecoration: 'none' }}>PANTRYOS.APP</Link>
+          <Link href="/" style={{ color: '#fff', textDecoration: 'none', fontWeight: 700 }}>
+            pantry<span style={{ color: '#888', fontWeight: 400 }}>.ai</span>
+          </Link>
           <div className="util-nav" style={{ display: 'flex', gap: 28 }}>
             <Link href="/" style={{ color: '#fff', textDecoration: 'none' }}>HOME</Link>
             <Link href="/wall" style={{ color: '#fff', textDecoration: 'none' }}>WALL</Link>
@@ -38,7 +41,7 @@ export default function RootLayout({
           </div>
         </div>
 
-        {/* Masthead */}
+        {/* Masthead — desktop only */}
         <div className="masthead" style={{
           padding: '48px 40px 36px',
           borderBottom: '2px solid #000',
@@ -64,13 +67,36 @@ export default function RootLayout({
           </div>
         </div>
 
-        {children}
+        {/* Page content — add bottom padding on mobile for the tab bar */}
+        <div className="page-content">
+          {children}
+        </div>
 
         <ScrollToTopButton />
+        <MobileBottomNav />
 
         <style>{`
+          .mobile-bottom-nav { display: none !important; }
+
           .mobile-snap-bar { display: none; }
+
           @media (max-width: 768px) {
+            /* Show bottom nav, hide desktop util-nav links */
+            .mobile-bottom-nav { display: flex !important; }
+            .util-nav { display: none !important; }
+
+            /* Slim top bar — just the logo */
+            .utility-bar {
+              padding: 12px 16px !important;
+              justify-content: center !important;
+            }
+
+            /* Hide masthead entirely on mobile — logo is in top bar */
+            .masthead { display: none !important; }
+
+            /* Push page content above the fixed bottom nav */
+            .page-content { padding-bottom: 72px; }
+
             .mobile-snap-bar {
               display: flex !important;
               justify-content: center;
@@ -85,24 +111,6 @@ export default function RootLayout({
             .sidebar-add-snap { display: none !important; }
             .empty-state-desktop-snap { display: none !important; }
             .desktop-only-snap-aux { display: none !important; }
-            .utility-bar {
-              flex-wrap: wrap !important;
-              align-items: flex-start !important;
-              gap: 12px !important;
-              padding: 12px 16px !important;
-            }
-            .util-nav {
-              display: flex !important;
-              flex-wrap: wrap !important;
-              justify-content: flex-end !important;
-              gap: 12px 16px !important;
-              font-size: 11px !important;
-              letter-spacing: 0.08em !important;
-              max-width: 100% !important;
-            }
-            .masthead-name { font-size: 36px !important; }
-            .masthead-tagline { display: none !important; }
-            .masthead { padding: 20px 16px 16px !important; }
           }
         `}</style>
       </body>

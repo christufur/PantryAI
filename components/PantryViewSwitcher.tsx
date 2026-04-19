@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import ExpiryColumn from "@/components/ExpiryColumn";
 import PhotoUploadDialog from "@/components/PhotoUploadDialog";
 import DeleteItemButton from "@/components/DeleteItemButton";
-<<<<<<< HEAD
 import ShelvesDragGrid from "@/components/ShelvesDragGrid";
 import EditItemDialog from "@/components/EditItemDialog";
 
