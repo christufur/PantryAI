@@ -19,20 +19,42 @@ export default function MobileBottomNav() {
   const [visualBottomGap, setVisualBottomGap] = useState(0);
 
   useLayoutEffect(() => {
+    // --- Visual viewport: keeps nav above Android soft keyboard ---
     const vv = window.visualViewport;
-    if (!vv) return;
-    const sync = () => {
-      // Clamp offsetTop to >=0 so iOS overscroll bounce (negative offsetTop) doesn't push the nav up
-      const gap = window.innerHeight - vv.height - Math.max(0, vv.offsetTop);
-      setVisualBottomGap(Math.max(0, gap));
-    };
-    sync();
-    vv.addEventListener("resize", sync);
-    vv.addEventListener("scroll", sync);
-    return () => {
-      vv.removeEventListener("resize", sync);
-      vv.removeEventListener("scroll", sync);
-    };
+    if (vv) {
+      const sync = () => {
+        // Clamp offsetTop to >=0: iOS rubber-band bounce makes offsetTop negative,
+        // which would otherwise push the nav upward.
+        const gap = window.innerHeight - vv.height - Math.max(0, vv.offsetTop);
+        setVisualBottomGap(Math.max(0, gap));
+      };
+      sync();
+      vv.addEventListener("resize", sync);
+      vv.addEventListener("scroll", sync);
+      const cleanup = () => {
+        vv.removeEventListener("resize", sync);
+        vv.removeEventListener("scroll", sync);
+      };
+
+      // --- touchmove guard: iOS 15 and older don't support overscroll-behavior.
+      //     Prevent the rubber-band bounce by cancelling touchmove when already
+      //     at the top of the page and the user is still pulling down. ---
+      let lastY = 0;
+      const onTouchStart = (e: TouchEvent) => { lastY = e.touches[0].clientY; };
+      const onTouchMove = (e: TouchEvent) => {
+        const dy = e.touches[0].clientY - lastY;
+        const atTop = window.scrollY === 0;
+        if (atTop && dy > 0 && e.cancelable) e.preventDefault();
+      };
+      document.addEventListener("touchstart", onTouchStart, { passive: true });
+      document.addEventListener("touchmove", onTouchMove, { passive: false });
+
+      return () => {
+        cleanup();
+        document.removeEventListener("touchstart", onTouchStart);
+        document.removeEventListener("touchmove", onTouchMove);
+      };
+    }
   }, []);
 
   return (

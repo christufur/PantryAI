@@ -114,9 +114,6 @@ export default function RootLayout({
         <RegisterServiceWorker />
 
         <style>{`
-          /* Prevent iOS/Android overscroll bounce from shifting fixed elements */
-          html, body { overscroll-behavior-y: none; }
-
           .mobile-bottom-nav { display: none !important; }
 
           .pantry-snap-bar {
