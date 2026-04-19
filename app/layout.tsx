@@ -60,7 +60,7 @@ export default function RootLayout({
             pantry<span style={{ color: '#888', fontWeight: 400 }}>.ai</span>
           </Link>
           <div className="util-nav" style={{ display: 'flex', gap: 28 }}>
-            <Link href="/wall" style={{ color: '#fff', textDecoration: 'none' }}>WALL</Link>
+            <Link href="/wall" style={{ color: '#fff', textDecoration: 'none' }}>PLAN</Link>
             <Link href="/recipe" style={{ color: '#fff', textDecoration: 'none' }}>COOK</Link>
             <Link href="/donate" style={{ color: '#fff', textDecoration: 'none' }}>DONATE</Link>
             <Link href="/chat" style={{ color: '#fff', textDecoration: 'none' }}>ASK THE FRIDGE</Link>
