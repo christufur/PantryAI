@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const DAY_OPTIONS = [3, 5, 7, 10, 14];
 const CAL_OPTIONS = [1000, 1200, 1500, 2000, 2500, 3000];
@@ -46,8 +47,7 @@ export default function NewPlanPage() {
       });
       if (!res.ok) throw new Error(await res.text());
       await res.json();
-      // Go straight to the wall (avoids /plan/:id → redirect RSC abort + dev Performance.measure bug).
-      router.push("/wall");
+      router.push("/plan");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
       setLoading(false);
@@ -125,7 +125,7 @@ export default function NewPlanPage() {
         }}
       />
 
-      <div>
+      <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
         <button
           style={{ ...nextBtn, opacity: resolvedDays ? 1 : 0.4, cursor: resolvedDays ? "pointer" : "default" }}
           disabled={!resolvedDays}
@@ -133,6 +133,9 @@ export default function NewPlanPage() {
         >
           NEXT →
         </button>
+        <Link href="/plan" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: "#757575", textDecoration: "none", marginTop: 32 }}>
+          CANCEL
+        </Link>
       </div>
     </main>
   );
@@ -245,13 +248,20 @@ export default function NewPlanPage() {
         <button style={{ ...nextBtn, background: "#fff", color: "#000" }} onClick={() => setStep("calories")}>
           ← BACK
         </button>
-        <button
-          style={{ ...nextBtn, opacity: loading ? 0.5 : 1, cursor: loading ? "default" : "pointer" }}
-          disabled={loading}
-          onClick={handleGenerate}
-        >
-          {loading ? "GENERATING…" : "◎ GENERATE PLAN"}
-        </button>
+        <div>
+          <button
+            style={{ ...nextBtn, opacity: loading ? 0.5 : 1, cursor: loading ? "default" : "pointer" }}
+            disabled={loading}
+            onClick={handleGenerate}
+          >
+            {loading ? "GENERATING…" : "◎ GENERATE PLAN"}
+          </button>
+          {loading && (
+            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#757575", textTransform: "uppercase", letterSpacing: "0.08em", marginTop: 10 }}>
+              This takes ~20–30 seconds…
+            </div>
+          )}
+        </div>
       </div>
     </main>
   );

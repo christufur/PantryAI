@@ -23,12 +23,17 @@ export default function ShoppingPage() {
   const { planId } = useParams<{ planId: string }>();
   const [items, setItems] = useState<ShoppingItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [tab, setTab] = useState<Tab>("stores");
 
   useEffect(() => {
     fetch(`/api/plan/${planId}`)
-      .then((r) => r.json())
-      .then((data) => { setItems(data.shoppingList ?? []); setLoading(false); });
+      .then((r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return r.json();
+      })
+      .then((data) => { setItems(data.shoppingList ?? []); setLoading(false); })
+      .catch((e) => { setError(e.message ?? "Failed to load"); setLoading(false); });
   }, [planId]);
 
   const localItems = items.filter((i) => i.localAlternative);
@@ -55,10 +60,21 @@ export default function ShoppingPage() {
     </main>
   );
 
+  if (error) return (
+    <main style={{ maxWidth: 720, margin: "0 auto", padding: "48px 24px" }}>
+      <Link href="/plan" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.08em", color: "#757575", textDecoration: "none", display: "block", marginBottom: 32 }}>
+        ← BACK TO PLAN
+      </Link>
+      <p style={{ fontFamily: "Lora, serif", fontSize: 16, color: "#c8102e", border: "2px solid #c8102e", padding: "14px 20px" }}>
+        Couldn&apos;t load shopping list: {error}
+      </p>
+    </main>
+  );
+
   return (
     <main style={{ maxWidth: 720, margin: "0 auto", padding: "32px 24px" }}>
       {/* Back link */}
-      <Link href="/wall" style={{
+      <Link href="/plan" style={{
         fontFamily: "'JetBrains Mono', monospace", fontSize: 11,
         textTransform: "uppercase", letterSpacing: "0.08em",
         color: "#757575", textDecoration: "none", display: "block", marginBottom: 32,
@@ -79,7 +95,7 @@ export default function ShoppingPage() {
       <div style={{ border: "2px solid #000", borderTop: "none", padding: "16px 20px", marginBottom: 32 }}>
         <p style={{ fontFamily: "Lora, serif", fontSize: 14, color: "#757575", margin: 0 }}>
           Check the{" "}
-          <Link href="/wall" style={{ color: "#057dbc" }}>pantry wall</Link>
+          <Link href="/plan" style={{ color: "#057dbc" }}>plan</Link>
           {" "}for items already in stock — they appear in each meal&apos;s &quot;From Pantry&quot; list.
         </p>
       </div>

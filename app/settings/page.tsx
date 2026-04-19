@@ -76,20 +76,25 @@ export default function SettingsPage() {
 
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
-    await fetch("/api/profile", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        dietary: dietary.join(","),
-        allergies,
-        nutritionalGoals: nutritionalGoals.join(","),
-        householdSize,
-        cookingSkill,
-        aboutMe,
-      }),
-    });
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2500);
+    try {
+      const res = await fetch("/api/profile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          dietary: dietary.join(","),
+          allergies,
+          nutritionalGoals: nutritionalGoals.join(","),
+          householdSize,
+          cookingSkill,
+          aboutMe,
+        }),
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2500);
+    } catch (err) {
+      alert(`Save failed: ${err instanceof Error ? err.message : "Unknown error"}`);
+    }
   }
 
   const inputStyle: React.CSSProperties = {
@@ -100,7 +105,25 @@ export default function SettingsPage() {
     resize: "vertical",
   };
 
-  if (loading) return null;
+  if (loading) return (
+    <div style={{ maxWidth: 680, margin: "0 auto", padding: "48px 32px 80px" }}>
+      <div style={{ borderBottom: "2px solid #000", marginBottom: 40, paddingBottom: 20 }}>
+        <div style={{ width: 220, height: 10, background: "#e8e8e8", marginBottom: 10, animation: "pulse 1.4s ease-in-out infinite" }} />
+        <div style={{ width: 160, height: 48, background: "#e8e8e8", animation: "pulse 1.4s ease-in-out infinite" }} />
+      </div>
+      {[1, 2, 3].map((i) => (
+        <div key={i} style={{ marginBottom: 36 }}>
+          <div style={{ width: 140, height: 10, background: "#e8e8e8", marginBottom: 14, animation: "pulse 1.4s ease-in-out infinite" }} />
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            {[80, 100, 90, 110, 85].map((w, j) => (
+              <div key={j} style={{ width: w, height: 34, background: "#e8e8e8", animation: "pulse 1.4s ease-in-out infinite" }} />
+            ))}
+          </div>
+        </div>
+      ))}
+      <style>{`@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }`}</style>
+    </div>
+  );
 
   return (
     <div style={{ maxWidth: 680, margin: "0 auto", padding: "48px 32px 80px" }}>
