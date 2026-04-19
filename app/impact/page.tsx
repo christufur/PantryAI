@@ -1,8 +1,6 @@
 import { db } from "@/lib/db";
 import { impactEvents } from "@/db/schema";
 import { computeImpact } from "@/lib/impact";
-import ImpactDownloadButton from "@/components/ImpactDownloadButton";
-import NotifyButton from "@/components/NotifyButton";
 
 export default function ImpactPage() {
   let totals = { itemsRescued: 0, dollarsSaved: 0, lbsSaved: 0, co2Lbs: 0, gallonsSaved: 0 };
@@ -15,10 +13,10 @@ export default function ImpactPage() {
     n.toLocaleString("en-US", { maximumFractionDigits: decimals });
 
   const secondaryStats = [
-    { label: "Money saved",       value: `$${fmt(totals.dollarsSaved, 2)}`, unit: "USD"       },
-    { label: "Food from landfill",value: fmt(totals.lbsSaved, 1),           unit: "lbs"       },
-    { label: "CO₂ prevented",     value: fmt(totals.co2Lbs, 1),             unit: "lbs CO₂e"  },
-    { label: "Water saved",       value: fmt(totals.gallonsSaved, 0),       unit: "gallons"   },
+    { label: "Money saved",        value: `$${fmt(totals.dollarsSaved, 2)}`, unit: "USD"      },
+    { label: "Food from landfill", value: fmt(totals.lbsSaved, 1),           unit: "lbs"      },
+    { label: "CO₂ prevented",      value: fmt(totals.co2Lbs, 1),             unit: "lbs CO₂e" },
+    { label: "Water saved",        value: fmt(totals.gallonsSaved, 0),       unit: "gallons"  },
   ];
 
   return (
@@ -38,81 +36,45 @@ export default function ImpactPage() {
         <span style={{ fontWeight: 400, opacity: 0.7, fontSize: 10 }}>ZERO WASTE. NEW MEXICO.</span>
       </div>
 
-      <div style={{ maxWidth: 900, margin: "0 auto", padding: "32px 32px 64px" }} className="impact-container">
-
-        {/* ── Action bar ─────────────────────────────────────────────── */}
-        <section style={{
-          display: "flex", justifyContent: "space-between", alignItems: "center",
-          marginBottom: 32, gap: 16, flexWrap: "wrap",
-        }}>
-          <div style={{
-            fontFamily: "'JetBrains Mono', monospace", fontSize: 12, fontWeight: 700,
-            letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--caption)",
-          }}>
-            LIFETIME IMPACT
-          </div>
-          <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
-            <ImpactDownloadButton totals={totals} />
-            <NotifyButton compact />
-          </div>
-        </section>
-
-        {/* ── Editorial lede ─────────────────────────────────────────── */}
-        <section style={{ borderTop: "2px solid #000", borderBottom: "2px solid #000", padding: "28px 0" }}>
-          <p style={{
-            fontFamily: "Lora, serif",
-            fontSize: 17, lineHeight: 1.75,
-            color: "var(--ink)", margin: 0,
-            maxWidth: 680,
-          }}>
-            The average American household wastes{" "}
-            <strong>~$1,600</strong> of food per year.
-            Roughly <strong>30–40%</strong> of the US food supply ends up in the landfill —
-            releasing the equivalent of{" "}
-            <strong>170 million metric tons of CO₂e</strong> annually.
-            In New Mexico, <strong>98% of food</strong> is sourced from out of state.
-            Every item you rescue matters.
-          </p>
-        </section>
+      <div style={{ maxWidth: 900, margin: "0 auto", padding: "40px 32px 64px" }} className="impact-container">
 
         {/* ── Hero stat ──────────────────────────────────────────────── */}
-        <section style={{ padding: "40px 0 0" }}>
+        <section style={{ borderBottom: "2px solid #000", paddingBottom: 36, marginBottom: 0 }}>
+
           <div style={{
             fontFamily: "'JetBrains Mono', monospace", fontSize: 11, fontWeight: 700,
             textTransform: "uppercase", letterSpacing: "0.14em", color: "#c8102e",
-            marginBottom: 14,
+            marginBottom: 16,
           }}>
             LIFETIME RESCUES
           </div>
 
-          <div style={{ display: "flex", alignItems: "baseline", gap: 20, flexWrap: "wrap", marginBottom: 40 }}>
-            <span style={{
-              fontFamily: "'Source Serif 4', serif", fontWeight: 700,
-              fontSize: 112, lineHeight: 0.88, letterSpacing: "-0.04em",
-              color: "#c8102e",
-            }} className="impact-hero-num">
-              {fmt(totals.itemsRescued)}
-            </span>
-            <div>
-              <div style={{
-                fontFamily: "'JetBrains Mono', monospace", fontSize: 13, fontWeight: 700,
-                textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--ink)",
-              }}>
-                ITEMS SAVED
-              </div>
-              <div style={{ fontFamily: "Lora, serif", fontSize: 15, color: "var(--caption)", marginTop: 4 }}>
-                rescued from your pantry before expiry
-              </div>
-              {totals.itemsRescued === 0 && (
-                <div style={{ fontFamily: "Lora, serif", fontSize: 14, color: "var(--caption)", marginTop: 12, fontStyle: "italic" }}>
-                  Start tracking: delete items you&apos;ve used before they expire.
-                </div>
-              )}
-            </div>
+          <div style={{
+            fontFamily: "'Source Serif 4', serif", fontWeight: 700,
+            fontSize: 128, lineHeight: 0.85, letterSpacing: "-0.04em",
+            color: "#c8102e", marginBottom: 20,
+          }} className="impact-hero-num">
+            {fmt(totals.itemsRescued)}
           </div>
 
-          {/* ── Stats grid ─────────────────────────────────────────────── */}
-          <div style={{ border: "2px solid #000" }} className="impact-stats-grid">
+          <div style={{
+            fontFamily: "'JetBrains Mono', monospace", fontSize: 13, fontWeight: 700,
+            textTransform: "uppercase", letterSpacing: "0.10em", color: "var(--ink)",
+            marginBottom: 6,
+          }}>
+            ITEMS SAVED
+          </div>
+          <div style={{ fontFamily: "Lora, serif", fontSize: 16, color: "var(--caption)", lineHeight: 1.5 }}>
+            {totals.itemsRescued === 0
+              ? "Start tracking: delete items you've used before they expire."
+              : "Rescued from your pantry before expiry."}
+          </div>
+
+        </section>
+
+        {/* ── Stats grid ─────────────────────────────────────────────── */}
+        <section style={{ marginBottom: 0 }}>
+          <div style={{ border: "2px solid #000", borderTop: "none" }} className="impact-stats-grid">
             {secondaryStats.map((s, i) => (
               <div
                 key={s.label}
@@ -149,6 +111,23 @@ export default function ImpactPage() {
           </div>
         </section>
 
+        {/* ── Lede ───────────────────────────────────────────────────── */}
+        <section style={{ borderTop: "none", paddingTop: 32 }}>
+          <p style={{
+            fontFamily: "Lora, serif",
+            fontSize: 15, lineHeight: 1.8,
+            color: "var(--caption)", margin: 0,
+            maxWidth: 640,
+          }}>
+            The average American household wastes <strong style={{ color: "var(--ink)" }}>~$1,600</strong> of food
+            per year. Roughly <strong style={{ color: "var(--ink)" }}>30–40%</strong> of the US food supply ends
+            up in the landfill — releasing the equivalent of{" "}
+            <strong style={{ color: "var(--ink)" }}>170 million metric tons of CO₂e</strong> annually.
+            In New Mexico, <strong style={{ color: "var(--ink)" }}>98% of food</strong> is sourced
+            from out of state. Every item you rescue matters.
+          </p>
+        </section>
+
       </div>
 
       <style>{`
@@ -157,11 +136,11 @@ export default function ImpactPage() {
           grid-template-columns: 1fr 1fr;
         }
         @media (max-width: 640px) {
-          .impact-hero-num  { font-size: 80px !important; }
-          .impact-stat-num  { font-size: 34px !important; }
+          .impact-hero-num   { font-size: 88px !important; }
+          .impact-stat-num   { font-size: 34px !important; }
           .impact-stats-grid { grid-template-columns: 1fr !important; }
           .impact-stat-cell  { border-right: none !important; }
-          .impact-container  { padding: 24px 16px 48px !important; }
+          .impact-container  { padding: 28px 16px 48px !important; }
           .impact-ribbon     { padding: 10px 16px !important; }
         }
       `}</style>
