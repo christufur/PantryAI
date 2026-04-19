@@ -98,7 +98,17 @@ export default function WeekGrid({
 
   return (
     <>
-      {/* Week grid tiles */}
+      {/* Scroll container: keeps 7-column min width from widening the page (Android + fixed chrome bugs). */}
+      <div
+        style={{
+          width: "100%",
+          maxWidth: "100%",
+          minWidth: 0,
+          overflowX: "auto",
+          overscrollBehaviorX: "contain",
+          WebkitOverflowScrolling: "touch",
+        }}
+      >
       <div
         style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", border: "2px solid #000" }}
         className="week-grid"
@@ -162,12 +172,13 @@ export default function WeekGrid({
           );
         })}
       </div>
+      </div>
 
       {/* Day modal */}
       {current && (
         <div
           onClick={closeModal}
-          style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.4)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 100, padding: 24 }}
+          style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.4)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 100000, padding: 24 }}
         >
           <div
             onClick={(e) => e.stopPropagation()}
