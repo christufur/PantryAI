@@ -1,7 +1,25 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
-  <rect width="120" height="120" rx="22" fill="#fafaf7"/>
-  <rect x="30" y="12" width="60" height="96" rx="12" fill="#0a0a0a"/>
-  <rect x="30" y="46" width="60" height="2" fill="#fafaf7"/>
-  <rect x="38" y="20" width="2.5" height="22" rx="1.25" fill="#fafaf7"/>
-  <rect x="38" y="52" width="2.5" height="48" rx="1.25" fill="#fafaf7"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Pantry.ai — black tile + white “P” (editorial / JetBrains-mono stack).
+       Legible as P: full-height stem + closed upper bowl; no diagonal (that reads as R). -->
+  <rect width="512" height="512" rx="96" fill="#000"/>
+  <path
+    fill="#fff"
+    fill-rule="evenodd"
+    d="
+      M 96 416
+      L 96 96
+      L 200 96
+      C 336 96 416 152 416 244
+      C 416 312 352 348 216 348
+      L 200 348
+      L 200 416
+      Z
+      M 232 156
+      C 312 156 348 188 348 232
+      C 348 276 296 300 224 300
+      C 160 300 132 264 132 220
+      C 132 176 172 156 232 156
+      Z
+    "
+  />
 </svg>
