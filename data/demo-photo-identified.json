@@ -1,51 +1,30 @@
 [
   {
-    "name": "Whole milk",
-    "category": "dairy_milk",
+    "name": "POWER UP PREMIUM TRAIL MIX",
+    "category": "cereal",
     "qty": 1,
     "unit": "each",
-    "printedDate": null
+    "printedDate": "2026-04-26"
   },
   {
-    "name": "Greek yogurt",
-    "category": "dairy_yogurt",
-    "qty": 2,
-    "unit": "each",
-    "printedDate": "2026-04-24"
-  },
-  {
-    "name": "Eggs",
-    "category": "eggs",
-    "qty": 12,
-    "unit": "each",
-    "printedDate": null
-  },
-  {
-    "name": "Baby spinach",
-    "category": "leafy_greens",
+    "name": "CELSIUS TROPICAL VIBE",
+    "category": "unknown",
     "qty": 1,
     "unit": "each",
-    "printedDate": "2026-04-21"
+    "printedDate": "2026-04-25"
   },
   {
-    "name": "Cherry tomatoes",
-    "category": "tomato",
+    "name": "KIRKLAND SIGNATURE PURIFIED WATER",
+    "category": "unknown",
     "qty": 1,
     "unit": "each",
-    "printedDate": null
+    "printedDate": "2026-04-26"
   },
   {
-    "name": "Sharp cheddar",
-    "category": "dairy_cheese_hard",
-    "qty": 8,
-    "unit": "oz",
-    "printedDate": "2026-05-10"
-  },
-  {
-    "name": "Sourdough loaf",
-    "category": "bread",
+    "name": "BANANA",
+    "category": "banana",
     "qty": 1,
     "unit": "each",
-    "printedDate": null
+    "printedDate": "2026-04-25"
   }
 ]
