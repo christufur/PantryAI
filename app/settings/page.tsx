@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import NotifyButton from "@/components/NotifyButton";
 
 const DIETARY_OPTIONS = [
   "Vegetarian", "Vegan", "Gluten-Free", "Dairy-Free",
@@ -240,6 +241,11 @@ export default function SettingsPage() {
           {saved ? "✓ SAVED" : "SAVE PROFILE"}
         </button>
       </form>
+
+      {/* Notifications */}
+      <div style={{ marginTop: 48, paddingTop: 32, borderTop: "2px solid #000" }}>
+        <NotifyButton />
+      </div>
 
       <style>{`
         @media (max-width: 600px) {
