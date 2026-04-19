@@ -7,6 +7,7 @@ import type { PlainItem } from "@/components/pantry-types";
 import PhotoUploadDialog from "@/components/PhotoUploadDialog";
 import EditItemDialog from "@/components/EditItemDialog";
 import DeleteItemButton from "@/components/DeleteItemButton";
+import DonateModal from "@/components/DonateModal";
 
 const SHELF_ORDER = ["fridge", "freezer", "pantry", "other"] as const;
 const SCALE_MAX = 14;
@@ -31,6 +32,7 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
   const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
   const [localItems, setLocalItems] = useState(items);
   const [dragOverKey, setDragOverKey] = useState<string | null>(null);
+  const [donateOpen, setDonateOpen] = useState(false);
   const dragEndedRef = useRef(false);
 
   useEffect(() => {
@@ -267,8 +269,8 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
             />
             <div
               style={{
-                display: "flex",
-                justifyContent: "space-between",
+                position: "relative",
+                height: 20,
                 marginTop: 8,
                 fontFamily: "'JetBrains Mono', monospace",
                 fontSize: 10,
@@ -284,6 +286,9 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
                     type="button"
                     onClick={() => setThreshold(v)}
                     style={{
+                      position: "absolute",
+                      left: `${(v / SCALE_MAX) * 100}%`,
+                      transform: v === 0 ? "none" : v === SCALE_MAX ? "translateX(-100%)" : "translateX(-50%)",
                       background: "transparent",
                       border: "none",
                       padding: 0,
@@ -349,25 +354,49 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
               </div>
             </div>
             {urgentInHorizon.length > 0 ? (
-              <Link
-                href={rescueRecipeHref}
-                style={{
-                  display: "block",
-                  textAlign: "center",
-                  fontFamily: "Inter, sans-serif",
-                  fontWeight: 700,
-                  fontSize: 12,
-                  textTransform: "uppercase",
-                  letterSpacing: "0.06em",
-                  padding: "12px 14px",
-                  border: "2px solid #000",
-                  background: "#000",
-                  color: "#fff",
-                  textDecoration: "none",
-                }}
-              >
-                Cook what&apos;s in the window ({urgentInHorizon.length}) →
-              </Link>
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                <Link
+                  href={rescueRecipeHref}
+                  style={{
+                    display: "block",
+                    textAlign: "center",
+                    fontFamily: "Inter, sans-serif",
+                    fontWeight: 700,
+                    fontSize: 12,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.06em",
+                    padding: "12px 14px",
+                    border: "2px solid #000",
+                    background: "#000",
+                    color: "#fff",
+                    textDecoration: "none",
+                  }}
+                >
+                  Cook what&apos;s in the window ({urgentInHorizon.length}) →
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => setDonateOpen(true)}
+                  style={{
+                    display: "block",
+                    width: "100%",
+                    textAlign: "center",
+                    fontFamily: "Inter, sans-serif",
+                    fontWeight: 700,
+                    fontSize: 12,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.06em",
+                    padding: "10px 14px",
+                    border: "2px solid #057dbc",
+                    background: "#fff",
+                    color: "#057dbc",
+                    cursor: "pointer",
+                    borderRadius: 0,
+                  }}
+                >
+                  ◉ Donate to community
+                </button>
+              </div>
             ) : (
               <div
                 style={{
@@ -670,6 +699,10 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
           .kitchen-board-outer { padding: 16px 16px 96px !important; }
         }
       `}</style>
+
+      {donateOpen && urgentInHorizon.length > 0 && (
+        <DonateModal items={urgentInHorizon} onClose={() => setDonateOpen(false)} />
+      )}
     </div>
   );
 }

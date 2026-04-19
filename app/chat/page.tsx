@@ -18,12 +18,12 @@ export default function ChatPage() {
         <span style={{ fontWeight: 400, opacity: 0.7, fontSize: 10 }}>YOUR FRIDGE, PERSONIFIED</span>
       </div>
 
-      <div style={{ maxWidth: 680, margin: "0 auto", padding: "40px 32px", flex: 1, display: "flex", flexDirection: "column", width: "100%" }} className="chat-container">
+      <div style={{ maxWidth: 680, margin: "0 auto", padding: "20px 32px", flex: 1, display: "flex", flexDirection: "column", width: "100%" }} className="chat-container">
         {/* Header */}
         <div style={{
           borderBottom: "2px solid #1a3a4a",
-          paddingBottom: 24,
-          marginBottom: 32,
+          paddingBottom: 14,
+          marginBottom: 18,
         }}>
           <div style={{
             fontFamily: "'JetBrains Mono', monospace",
@@ -57,8 +57,8 @@ export default function ChatPage() {
 
       <style>{`
         @media (max-width: 768px) {
-          .chat-page { height: 100dvh; }
-          .chat-container { padding: 16px 16px 0 !important; flex: 1; min-height: 0; }
+          .chat-page { height: 100svh; }
+          .chat-container { padding: 10px 16px 0 !important; flex: 1; min-height: 0; }
         }
         @media (min-width: 769px) {
           .ribbon { padding: 10px 32px; }

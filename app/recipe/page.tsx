@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { pantryItems, recipesCache, localSwaps as localSwapsTable } from "@/db/schema";
 import { asc, eq } from "drizzle-orm";
 import { ingredientsHash, generateRecipe } from "@/lib/gemini";
+import { loadProfile, profileHash, profilePromptContext } from "@/lib/profile";
 import IngredientPicker, { type PickerItem } from "@/components/IngredientPicker";
 
 export default async function RecipePage({
@@ -109,7 +110,9 @@ export default async function RecipePage({
 
   const ingredients = ingredientParam.split(",").map((s) => s.trim()).filter(Boolean);
 
-  const hash = ingredientsHash(ingredients);
+  const profile = loadProfile();
+  const pHash = profileHash(profile);
+  const hash = ingredientsHash(ingredients) + (pHash ? `:${pHash}` : "");
 
   let recipe;
   const forceRefresh = bust === "1";
@@ -118,7 +121,7 @@ export default async function RecipePage({
     if (cached) recipe = JSON.parse(cached.recipeJson);
   }
   if (!recipe) {
-    recipe = await generateRecipe(ingredients);
+    recipe = await generateRecipe(ingredients, profilePromptContext(profile));
     db.insert(recipesCache)
       .values({ ingredientsHash: hash, recipeJson: JSON.stringify(recipe) })
       .onConflictDoUpdate({ target: recipesCache.ingredientsHash, set: { recipeJson: JSON.stringify(recipe) } })
@@ -169,6 +172,7 @@ export default async function RecipePage({
         }}>
           SAVES {itemsSaved} PANTRY {itemsSaved === 1 ? 'ITEM' : 'ITEMS'}
           {recipe.timeMinutes ? ` · ${recipe.timeMinutes} MIN` : ''}
+          {recipe.caloriesMin && recipe.caloriesMax ? ` · ~${recipe.caloriesMin}–${recipe.caloriesMax} CAL / SERVING` : ''}
         </div>
 
         {/* Title */}
