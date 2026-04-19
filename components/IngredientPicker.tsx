@@ -86,7 +86,7 @@ export default function IngredientPicker({
       {/* Selection counter */}
       <div
         style={{
-          fontFamily: "'JetBrains Mono', monospace",
+          fontFamily: "var(--font-ui)",
           fontSize: 11,
           fontWeight: 700,
           textTransform: "uppercase",
@@ -139,7 +139,7 @@ export default function IngredientPicker({
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div
                   style={{
-                    fontFamily: "'JetBrains Mono', monospace",
+                    fontFamily: "var(--font-ui)",
                     fontSize: 10,
                     fontWeight: 700,
                     textTransform: "uppercase",
@@ -152,8 +152,8 @@ export default function IngredientPicker({
                 </div>
                 <div
                   style={{
-                    fontFamily: "'Source Serif 4', serif",
-                    fontSize: 17,
+                    fontFamily: "var(--font-display)",
+                    fontSize: "var(--text-md)",
                     fontWeight: isDying ? 600 : 400,
                     color: "#000",
                     lineHeight: 1.2,
@@ -167,7 +167,7 @@ export default function IngredientPicker({
                   {item.isLocal && (
                     <span
                       style={{
-                        fontFamily: "'JetBrains Mono', monospace",
+                        fontFamily: "var(--font-ui)",
                         fontSize: 9,
                         fontWeight: 700,
                         textTransform: "uppercase",
@@ -210,7 +210,7 @@ export default function IngredientPicker({
             background: selected.size === 0 ? "#e2e8f0" : "#000",
             color: selected.size === 0 ? "#757575" : "#fff",
             border: "2px solid #000",
-            fontFamily: "Inter, sans-serif",
+            fontFamily: "var(--font-ui)",
             fontWeight: 700,
             fontSize: 13,
             textTransform: "uppercase",
@@ -229,7 +229,7 @@ export default function IngredientPicker({
 
 function chipStyle(primary: boolean): React.CSSProperties {
   return {
-    fontFamily: "Inter, sans-serif",
+    fontFamily: "var(--font-ui)",
     fontWeight: 700,
     fontSize: 11,
     textTransform: "uppercase",

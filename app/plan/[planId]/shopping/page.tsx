@@ -141,7 +141,7 @@ export default function ShoppingPage() {
     flex: 1, padding: "12px 0",
     border: "none", borderBottom: `3px solid ${active ? "#000" : "transparent"}`,
     background: "transparent",
-    fontFamily: "'JetBrains Mono', monospace",
+    fontFamily: "var(--font-ui)",
     fontSize: 11, fontWeight: 700,
     textTransform: "uppercase" as const, letterSpacing: "0.1em",
     color: active ? "#000" : "#757575",
@@ -150,7 +150,7 @@ export default function ShoppingPage() {
 
   if (loading) return (
     <main style={{ maxWidth: 720, margin: "0 auto", padding: "48px 24px", textAlign: "center" }}>
-      <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, color: "#757575", textTransform: "uppercase", letterSpacing: "0.1em" }}>
+      <p style={{ fontFamily: "var(--font-ui)", fontSize: 12, color: "#757575", textTransform: "uppercase", letterSpacing: "0.1em" }}>
         LOADING…
       </p>
     </main>
@@ -158,10 +158,10 @@ export default function ShoppingPage() {
 
   if (error) return (
     <main style={{ maxWidth: 720, margin: "0 auto", padding: "48px 24px" }}>
-      <Link href="/plan" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.08em", color: "#757575", textDecoration: "none", display: "block", marginBottom: 32 }}>
+      <Link href="/plan" style={{ fontFamily: "var(--font-ui)", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.08em", color: "#757575", textDecoration: "none", display: "block", marginBottom: 32 }}>
         ← BACK TO PLAN
       </Link>
-      <p style={{ fontFamily: "Lora, serif", fontSize: 16, color: "#c8102e", border: "2px solid #c8102e", padding: "14px 20px" }}>
+      <p style={{ fontFamily: "var(--font-body)", fontSize: 16, color: "#c8102e", border: "2px solid #c8102e", padding: "14px 20px" }}>
         Couldn&apos;t load shopping list: {error}
       </p>
     </main>
@@ -174,13 +174,14 @@ export default function ShoppingPage() {
   return (
     <main style={{ maxWidth: 720, margin: "0 auto", padding: "32px 24px" }}>
       <Link href="/plan" style={{
-        fontFamily: "'JetBrains Mono', monospace", fontSize: 11,
+        fontFamily: "var(--font-ui)", fontSize: 11,
         textTransform: "uppercase", letterSpacing: "0.08em",
         color: "#757575", textDecoration: "none", display: "block", marginBottom: 24,
       }}>
         ← BACK TO PLAN
       </Link>
 
+<<<<<<< HEAD
       <div style={{ marginBottom: 8, fontFamily: "'JetBrains Mono', monospace", fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "#757575" }}>
         SHOPPING LIST
       </div>
@@ -221,6 +222,39 @@ export default function ShoppingPage() {
       </div>
 
       <div style={{ display: "flex", border: "2px solid #000", marginBottom: 0 }}>
+=======
+      {/* Section: Current Stock */}
+      <div style={{
+        background: "#000", color: "#fff",
+        padding: "14px 20px", marginBottom: 0,
+        fontFamily: "var(--font-ui)",
+        fontSize: 13, fontWeight: 700,
+        textTransform: "uppercase", letterSpacing: "0.12em",
+      }}>
+        CURRENT (USABLE FROM PANTRY)
+      </div>
+      <div style={{ border: "2px solid #000", borderTop: "none", padding: "16px 20px", marginBottom: 32 }}>
+        <p style={{ fontFamily: "var(--font-body)", fontSize: 14, color: "#757575", margin: 0 }}>
+          Check the{" "}
+          <Link href="/plan" style={{ color: "#057dbc" }}>plan</Link>
+          {" "}for items already in stock — they appear in each meal&apos;s &quot;From Pantry&quot; list.
+        </p>
+      </div>
+
+      {/* Section: Need to Buy */}
+      <div style={{
+        background: "#000", color: "#fff",
+        padding: "14px 20px",
+        fontFamily: "var(--font-ui)",
+        fontSize: 13, fontWeight: 700,
+        textTransform: "uppercase", letterSpacing: "0.12em",
+      }}>
+        NEED TO BUY ({items.length} ITEMS)
+      </div>
+
+      {/* Tabs */}
+      <div style={{ display: "flex", borderBottom: "1px solid #e2e8f0", marginBottom: 24, border: "2px solid #000", borderTop: "none" }}>
+>>>>>>> 9ccb2acbcbf2f620324df75cf69fb1a765498a84
         <button style={tabBtn(tab === "stores")} onClick={() => setTab("stores")}>
           ANY GROCER ({storeItems.length})
         </button>
@@ -230,12 +264,17 @@ export default function ShoppingPage() {
       </div>
 
       {displayed.length === 0 ? (
+<<<<<<< HEAD
         <p style={{ fontFamily: "Lora, serif", fontSize: 15, color: "#757575", padding: "32px 0", textAlign: "center" }}>
+=======
+        <p style={{ fontFamily: "var(--font-body)", fontSize: 15, color: "#757575", padding: "24px 0" }}>
+>>>>>>> 9ccb2acbcbf2f620324df75cf69fb1a765498a84
           {tab === "local"
             ? "No local NM alternatives found for items in this plan."
             : "All items have local alternatives — switch to the Buy Local tab!"}
         </p>
       ) : (
+<<<<<<< HEAD
         <div style={{ marginTop: 24 }}>
           {grouped.map(({ category, items: catItems }) => (
             <div key={category} style={{ marginBottom: 28 }}>
@@ -336,6 +375,70 @@ export default function ShoppingPage() {
                   </div>
                 );
               })}
+=======
+        <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+          {/* Table header */}
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: tab === "local" ? "1fr 1fr 1fr" : "1fr 80px",
+            borderBottom: "2px solid #000",
+            padding: "8px 0",
+          }}>
+            <span style={{ fontFamily: "var(--font-ui)", fontSize: 9, textTransform: "uppercase", letterSpacing: "0.1em", color: "#757575" }}>ITEM</span>
+            {tab === "local" && <>
+              <span style={{ fontFamily: "var(--font-ui)", fontSize: 9, textTransform: "uppercase", letterSpacing: "0.1em", color: "#757575" }}>PRODUCER</span>
+              <span style={{ fontFamily: "var(--font-ui)", fontSize: 9, textTransform: "uppercase", letterSpacing: "0.1em", color: "#757575" }}>WHERE TO BUY</span>
+            </>}
+            {tab === "stores" && (
+              <span style={{ fontFamily: "var(--font-ui)", fontSize: 9, textTransform: "uppercase", letterSpacing: "0.1em", color: "#757575", textAlign: "right" }}>QTY</span>
+            )}
+          </div>
+
+          {displayed.map((item, i) => (
+            <div
+              key={i}
+              style={{
+                display: "grid",
+                gridTemplateColumns: tab === "local" ? "1fr 1fr 1fr" : "1fr 80px",
+                borderBottom: "1px solid #e2e8f0",
+                padding: "14px 0",
+                alignItems: "start",
+              }}
+            >
+              <div>
+                <div style={{ fontFamily: "var(--font-display)", fontSize: 16, fontWeight: 600, color: "#1a1a1a" }}>
+                  {item.name}
+                </div>
+                {tab === "stores" && (
+                  <div style={{ fontFamily: "var(--font-ui)", fontSize: 10, color: "#757575", marginTop: 2 }}>
+                    Available at most grocers
+                  </div>
+                )}
+              </div>
+
+              {tab === "local" && item.localAlternative && <>
+                <div>
+                  <div style={{ fontFamily: "var(--font-body)", fontSize: 14, fontWeight: 700, color: "#1a1a1a" }}>
+                    {item.localAlternative.localProducer}
+                  </div>
+                  <div style={{ fontFamily: "var(--font-body)", fontSize: 13, color: "#757575" }}>
+                    {item.localAlternative.product}
+                  </div>
+                </div>
+                <div style={{ fontFamily: "var(--font-body)", fontSize: 13, color: "#057dbc" }}>
+                  {item.localAlternative.whereToBuy}
+                </div>
+              </>}
+
+              {tab === "stores" && (
+                <div style={{
+                  fontFamily: "var(--font-ui)", fontSize: 11,
+                  color: "#757575", textAlign: "right", paddingTop: 2,
+                }}>
+                  {item.qty} {item.unit}
+                </div>
+              )}
+>>>>>>> 9ccb2acbcbf2f620324df75cf69fb1a765498a84
             </div>
           ))}
         </div>

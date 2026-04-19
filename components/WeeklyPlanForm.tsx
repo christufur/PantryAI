@@ -144,7 +144,7 @@ export default function WeeklyPlanForm() {
                 {/* Day kicker */}
                 <div
                   style={{
-                    fontFamily: "'JetBrains Mono', monospace",
+                    fontFamily: "var(--font-ui)",
                     fontSize: 10,
                     color: "#757575",
                     letterSpacing: "0.1em",
@@ -167,7 +167,7 @@ export default function WeeklyPlanForm() {
                     border: "none",
                     borderBottom: "2px solid #000",
                     padding: "6px 0",
-                    fontFamily: "Lora, serif",
+                    fontFamily: "var(--font-body)",
                     fontSize: 16,
                     background: "transparent",
                     outline: "none",
@@ -187,7 +187,7 @@ export default function WeeklyPlanForm() {
                     width: 48,
                     border: "2px solid #000",
                     padding: "6px 8px",
-                    fontFamily: "'JetBrains Mono', monospace",
+                    fontFamily: "var(--font-ui)",
                     fontSize: 12,
                     textAlign: "center",
                     background: "#ffffff",
@@ -209,7 +209,7 @@ export default function WeeklyPlanForm() {
                 style={{
                   background: "transparent",
                   border: "2px solid #000",
-                  fontFamily: "Inter, sans-serif",
+                  fontFamily: "var(--font-ui)",
                   fontWeight: 700,
                   fontSize: 11,
                   textTransform: "uppercase",
@@ -231,7 +231,7 @@ export default function WeeklyPlanForm() {
                 background: loading ? "#e2e8f0" : "#000",
                 color: loading ? "#757575" : "#fff",
                 border: "2px solid #000",
-                fontFamily: "Inter, sans-serif",
+                fontFamily: "var(--font-ui)",
                 fontWeight: 700,
                 fontSize: 13,
                 textTransform: "uppercase",
@@ -249,7 +249,7 @@ export default function WeeklyPlanForm() {
           {error && (
             <p
               style={{
-                fontFamily: "Lora, serif",
+                fontFamily: "var(--font-body)",
                 fontSize: 14,
                 color: "#c8102e",
                 border: "1px solid #c8102e",
@@ -288,7 +288,7 @@ export default function WeeklyPlanForm() {
                       padding: "8px 14px",
                       background: "#000",
                       color: "#fff",
-                      fontFamily: "'JetBrains Mono', monospace",
+                      fontFamily: "var(--font-ui)",
                       fontSize: 11,
                       textTransform: "uppercase",
                       letterSpacing: "0.1em",
@@ -303,7 +303,7 @@ export default function WeeklyPlanForm() {
                       <>
                         <div
                           style={{
-                            fontFamily: "'JetBrains Mono', monospace",
+                            fontFamily: "var(--font-ui)",
                             fontSize: 10,
                             color: "#057dbc",
                             textTransform: "uppercase",
@@ -314,7 +314,7 @@ export default function WeeklyPlanForm() {
                           FROM PANTRY
                         </div>
                         {day.usesFromPantry.map((item) => (
-                          <div key={item.name} style={{ fontFamily: "Lora, serif", fontSize: 14, color: "#1a1a1a" }}>
+                          <div key={item.name} style={{ fontFamily: "var(--font-body)", fontSize: 14, color: "#1a1a1a" }}>
                             ✓ {item.name}
                           </div>
                         ))}
@@ -325,7 +325,7 @@ export default function WeeklyPlanForm() {
                       <>
                         <div
                           style={{
-                            fontFamily: "'JetBrains Mono', monospace",
+                            fontFamily: "var(--font-ui)",
                             fontSize: 10,
                             color: "#757575",
                             textTransform: "uppercase",
@@ -337,7 +337,7 @@ export default function WeeklyPlanForm() {
                           TO BUY
                         </div>
                         {day.needsToBuy.map((item) => (
-                          <div key={item.name} style={{ fontFamily: "Lora, serif", fontSize: 14, color: "#757575" }}>
+                          <div key={item.name} style={{ fontFamily: "var(--font-body)", fontSize: 14, color: "#757575" }}>
                             ○ {item.name}
                           </div>
                         ))}
@@ -358,7 +358,7 @@ export default function WeeklyPlanForm() {
                     color: "#fff",
                     padding: "14px 20px",
                     marginBottom: 24,
-                    fontFamily: "'JetBrains Mono', monospace",
+                    fontFamily: "var(--font-ui)",
                     fontSize: 13,
                     fontWeight: 700,
                     textTransform: "uppercase",
@@ -383,8 +383,8 @@ export default function WeeklyPlanForm() {
                       <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                         <span
                           style={{
-                            fontFamily: "'Source Serif 4', serif",
-                            fontSize: 17,
+                            fontFamily: "var(--font-display)",
+                            fontSize: "var(--text-md)",
                             fontWeight: 600,
                             color: "#1a1a1a",
                           }}
@@ -393,7 +393,7 @@ export default function WeeklyPlanForm() {
                         </span>
                         <span
                           style={{
-                            fontFamily: "'JetBrains Mono', monospace",
+                            fontFamily: "var(--font-ui)",
                             fontSize: 10,
                             color: "#757575",
                             textTransform: "uppercase",
@@ -410,7 +410,7 @@ export default function WeeklyPlanForm() {
                         <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
                           <div
                             style={{
-                              fontFamily: "'JetBrains Mono', monospace",
+                              fontFamily: "var(--font-ui)",
                               fontSize: 10,
                               color: "#057dbc",
                               textTransform: "uppercase",
@@ -421,7 +421,7 @@ export default function WeeklyPlanForm() {
                           </div>
                           <p
                             style={{
-                              fontFamily: "Lora, serif",
+                              fontFamily: "var(--font-body)",
                               fontSize: 13,
                               color: "#1a1a1a",
                               margin: 0,
@@ -467,7 +467,7 @@ export default function WeeklyPlanForm() {
                       background: "#000",
                       color: "#fff",
                       padding: "14px 20px",
-                      fontFamily: "'JetBrains Mono', monospace",
+                      fontFamily: "var(--font-ui)",
                       fontSize: 13,
                       fontWeight: 700,
                       textTransform: "uppercase",
@@ -483,7 +483,7 @@ export default function WeeklyPlanForm() {
                   {outletOpen && (
                     <div style={{ border: "2px solid #000", borderTop: "none", padding: "20px 20px 8px" }}>
                       <p style={{
-                        fontFamily: "Lora, serif",
+                        fontFamily: "var(--font-body)",
                         fontSize: 13,
                         color: "#757575",
                         margin: "0 0 20px",
@@ -493,7 +493,7 @@ export default function WeeklyPlanForm() {
                       {sections.map((section) => (
                         <div key={section.label} style={{ marginBottom: 20 }}>
                           <div style={{
-                            fontFamily: "'JetBrains Mono', monospace",
+                            fontFamily: "var(--font-ui)",
                             fontSize: 10,
                             fontWeight: 700,
                             textTransform: "uppercase",
@@ -515,7 +515,7 @@ export default function WeeklyPlanForm() {
                                 gap: 12,
                               }}
                             >
-                              <span style={{ fontFamily: "'Source Serif 4', serif", fontSize: 15, fontWeight: 600, color: "#1a1a1a" }}>
+                              <span style={{ fontFamily: "var(--font-display)", fontSize: 15, fontWeight: 600, color: "#1a1a1a" }}>
                                 {outlet.website ? (
                                   <a
                                     href={outlet.website}
@@ -528,7 +528,7 @@ export default function WeeklyPlanForm() {
                                 ) : outlet.name}
                               </span>
                               <span style={{
-                                fontFamily: "'JetBrains Mono', monospace",
+                                fontFamily: "var(--font-ui)",
                                 fontSize: 10,
                                 color: "#757575",
                                 textTransform: "uppercase",

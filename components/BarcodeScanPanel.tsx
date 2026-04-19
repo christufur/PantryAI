@@ -158,7 +158,7 @@ function ViewfinderOverlay() {
             display: "inline-block",
             background: "rgba(0,0,0,0.65)",
             color: "#fff",
-            fontFamily: "Inter, sans-serif",
+            fontFamily: "var(--font-ui)",
             fontSize: 11,
             fontWeight: 600,
             letterSpacing: "0.04em",
@@ -436,7 +436,7 @@ export default function BarcodeScanPanel({ onBarcode, onBack }: Props) {
             <span
               style={{
                 color: "#fff",
-                fontFamily: "'JetBrains Mono', monospace",
+                fontFamily: "var(--font-ui)",
                 fontSize: 10,
                 letterSpacing: "0.12em",
                 textTransform: "uppercase",
@@ -468,7 +468,7 @@ export default function BarcodeScanPanel({ onBarcode, onBack }: Props) {
                 background: "#fff",
                 color: "#1a1a1a",
                 border: "2px solid #fff",
-                fontFamily: "Inter, sans-serif",
+                fontFamily: "var(--font-ui)",
                 fontWeight: 700,
                 fontSize: 13,
                 textTransform: "uppercase",
@@ -492,7 +492,7 @@ export default function BarcodeScanPanel({ onBarcode, onBack }: Props) {
             alignSelf: "flex-start",
             background: "transparent",
             border: "2px solid #000",
-            fontFamily: "Inter, sans-serif",
+            fontFamily: "var(--font-ui)",
             fontWeight: 700,
             fontSize: 12,
             textTransform: "uppercase",
@@ -510,7 +510,7 @@ export default function BarcodeScanPanel({ onBarcode, onBack }: Props) {
       {hint && (
         <p
           style={{
-            fontFamily: "Lora, serif",
+            fontFamily: "var(--font-body)",
             fontSize: 13,
             color: "#757575",
             margin: 0,
@@ -525,7 +525,7 @@ export default function BarcodeScanPanel({ onBarcode, onBack }: Props) {
         <label
           htmlFor="barcode-manual"
           style={{
-            fontFamily: "'JetBrains Mono', monospace",
+            fontFamily: "var(--font-ui)",
             fontSize: 10,
             textTransform: "uppercase",
             letterSpacing: "0.1em",
@@ -550,7 +550,7 @@ export default function BarcodeScanPanel({ onBarcode, onBack }: Props) {
             if (e.key === "Enter") submitManual();
           }}
           style={{
-            fontFamily: "Inter, sans-serif",
+            fontFamily: "var(--font-ui)",
             fontSize: 14,
             padding: "10px 12px",
             border: "2px solid #000",
@@ -570,7 +570,7 @@ export default function BarcodeScanPanel({ onBarcode, onBack }: Props) {
           style={{
             background: "transparent",
             border: "2px solid #000",
-            fontFamily: "Inter, sans-serif",
+            fontFamily: "var(--font-ui)",
             fontWeight: 700,
             fontSize: 13,
             textTransform: "uppercase",
@@ -590,7 +590,7 @@ export default function BarcodeScanPanel({ onBarcode, onBack }: Props) {
             background: "#000",
             color: "#fff",
             border: "2px solid #000",
-            fontFamily: "Inter, sans-serif",
+            fontFamily: "var(--font-ui)",
             fontWeight: 700,
             fontSize: 13,
             textTransform: "uppercase",

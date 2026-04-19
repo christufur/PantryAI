@@ -8,8 +8,8 @@ export default function ChatPage() {
         background: "#1a3a4a",
         color: "#a8d8ea",
         padding: "10px 32px",
-        fontFamily: "'JetBrains Mono', monospace",
-        fontSize: 12, fontWeight: 700,
+        fontFamily: "var(--font-ui)",
+        fontSize: "var(--text-ribbon)", fontWeight: 700,
         textTransform: "uppercase", letterSpacing: "0.12em",
         display: "flex", justifyContent: "space-between", alignItems: "center",
         flexWrap: "wrap", gap: 8,
@@ -26,7 +26,7 @@ export default function ChatPage() {
           marginBottom: 18,
         }}>
           <div style={{
-            fontFamily: "'JetBrains Mono', monospace",
+            fontFamily: "var(--font-ui)",
             fontSize: 10, fontWeight: 700,
             textTransform: "uppercase", letterSpacing: "0.12em",
             color: "#4fc3f7",
@@ -35,16 +35,16 @@ export default function ChatPage() {
             ❄ APPLIANCE INTELLIGENCE · ALWAYS WATCHING
           </div>
           <h1 style={{
-            fontFamily: "'Source Serif 4', serif",
-            fontWeight: 600, fontSize: 44,
+            fontFamily: "var(--font-display)",
+            fontWeight: 600, fontSize: "var(--text-title)",
             lineHeight: 1.0, letterSpacing: "-0.02em",
             margin: "0 0 8px", color: "#1a3a4a",
           }}>
             Hi. I&apos;m Fridgey.
           </h1>
           <p style={{
-            fontFamily: "Lora, serif",
-            fontSize: 17,
+            fontFamily: "var(--font-body)",
+            fontSize: "var(--text-md)",
             color: "var(--caption)",
             margin: 0,
           }}>

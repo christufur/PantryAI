@@ -12,7 +12,7 @@ const FOOD_BANKS = [
 ];
 
 const btnBase: React.CSSProperties = {
-  fontFamily: "Inter, sans-serif",
+  fontFamily: "var(--font-ui)",
   fontWeight: 700,
   fontSize: 12,
   textTransform: "uppercase",
@@ -89,7 +89,7 @@ export default function DonateModal({
         {/* Header */}
         <div style={{ borderBottom: "2px solid #000", padding: "12px 18px" }}>
           <div style={{
-            fontFamily: "'JetBrains Mono', monospace",
+            fontFamily: "var(--font-ui)",
             fontSize: 10, fontWeight: 700,
             textTransform: "uppercase", letterSpacing: "0.12em",
             color: "#057dbc", marginBottom: 4,
@@ -99,7 +99,7 @@ export default function DonateModal({
           <div
             id="donate-modal-title"
             style={{
-              fontFamily: "'Source Serif 4', serif",
+              fontFamily: "var(--font-display)",
               fontSize: 20, fontWeight: 600, lineHeight: 1.2, color: "#000",
             }}
           >
@@ -116,7 +116,7 @@ export default function DonateModal({
               {/* Items — inline */}
               <div>
                 <div style={{
-                  fontFamily: "'JetBrains Mono', monospace",
+                  fontFamily: "var(--font-ui)",
                   fontSize: 9, fontWeight: 700,
                   textTransform: "uppercase", letterSpacing: "0.1em",
                   color: "var(--caption)", marginBottom: 5,
@@ -124,7 +124,7 @@ export default function DonateModal({
                   Items
                 </div>
                 <div style={{
-                  fontFamily: "Lora, serif",
+                  fontFamily: "var(--font-body)",
                   fontSize: 13, color: "#000", lineHeight: 1.5,
                 }}>
                   {items.map((item) => item.name).join(", ")}
@@ -134,7 +134,7 @@ export default function DonateModal({
               {/* Food banks — compact rows */}
               <div>
                 <div style={{
-                  fontFamily: "'JetBrains Mono', monospace",
+                  fontFamily: "var(--font-ui)",
                   fontSize: 9, fontWeight: 700,
                   textTransform: "uppercase", letterSpacing: "0.1em",
                   color: "var(--caption)", marginBottom: 8,
@@ -156,15 +156,15 @@ export default function DonateModal({
                       }}
                     >
                       <div>
-                        <div style={{ fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: 12 }}>
+                        <div style={{ fontFamily: "var(--font-ui)", fontWeight: 700, fontSize: 12 }}>
                           {fb.name}
                         </div>
-                        <div style={{ fontFamily: "Lora, serif", fontSize: 11, color: "var(--caption)" }}>
+                        <div style={{ fontFamily: "var(--font-body)", fontSize: 11, color: "var(--caption)" }}>
                           {fb.address}
                         </div>
                       </div>
                       <div className="donate-bank-hours" style={{
-                        fontFamily: "'JetBrains Mono', monospace",
+                        fontFamily: "var(--font-ui)",
                         fontSize: 10, color: "var(--caption)",
                         whiteSpace: "nowrap", flexShrink: 0, paddingTop: 2,
                       }}>
@@ -177,7 +177,7 @@ export default function DonateModal({
 
               {status === "error" && (
                 <p style={{
-                  fontFamily: "Lora, serif", fontSize: 12,
+                  fontFamily: "var(--font-body)", fontSize: 12,
                   color: "#c8102e", border: "1px solid #c8102e",
                   padding: "8px 10px", margin: 0,
                 }}>
@@ -187,7 +187,7 @@ export default function DonateModal({
             </>
           ) : (
             <p style={{
-              fontFamily: "Lora, serif", fontSize: 14,
+              fontFamily: "var(--font-body)", fontSize: 14,
               color: "var(--caption)", margin: 0, lineHeight: 1.6,
             }}>
               These items have been removed from your pantry. Every donation helps reduce food waste in New Mexico.

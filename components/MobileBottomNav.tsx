@@ -75,7 +75,7 @@ export default function MobileBottomNav() {
           }}>
             <Icon size={20} strokeWidth={active ? 2.5 : 1.5} />
             <span style={{
-              fontFamily: "'JetBrains Mono', monospace",
+              fontFamily: "var(--font-ui)",
               fontSize: 9, fontWeight: 700,
               textTransform: "uppercase", letterSpacing: "0.08em",
             }}>

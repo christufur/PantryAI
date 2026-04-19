@@ -4,6 +4,7 @@ import { pantryItems } from "@/db/schema";
 import { asc } from "drizzle-orm";
 import { GoogleGenAI } from "@google/genai";
 import { loadProfile, profilePromptContext } from "@/lib/profile";
+import { GEMINI_MODEL_RESPONSE_HEADER, withGeminiModelFallback } from "@/lib/gemini";
 
 export async function POST(req: NextRequest) {
   const { message, history } = await req.json() as {
@@ -55,18 +56,25 @@ If empty, tell them to snap a photo of their fridge so you can see what you're w
 
   try {
     const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-    const response = await ai.models.generateContent({
-      model: "gemini-3.1-flash-lite-preview",
-      contents: [
-        ...history.map((h) => ({
-          role: h.role === "assistant" ? "model" : "user",
-          parts: [{ text: h.content }],
-        })),
-        { role: "user", parts: [{ text: message }] },
-      ],
-      config: { systemInstruction: systemPrompt },
-    });
-    return NextResponse.json({ reply: response.text });
+    const { result: response, model: geminiModel } = await withGeminiModelFallback(
+      (m) =>
+        ai.models.generateContent({
+          model: m,
+          contents: [
+            ...history.map((h) => ({
+              role: h.role === "assistant" ? "model" : "user",
+              parts: [{ text: h.content }],
+            })),
+            { role: "user", parts: [{ text: message }] },
+          ],
+          config: { systemInstruction: systemPrompt },
+        }),
+      { maxAttemptsPerModel: 3, baseDelayMs: 400 }
+    );
+    return NextResponse.json(
+      { reply: response.text, geminiModel },
+      { headers: { [GEMINI_MODEL_RESPONSE_HEADER]: geminiModel } }
+    );
   } catch (err) {
     console.error("Gemini error:", err);
     return NextResponse.json(
