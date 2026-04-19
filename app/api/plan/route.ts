@@ -4,6 +4,7 @@ import { pantryItems, localSwaps, mealsPlanned } from "@/db/schema";
 import { generateWeeklyPlan, type PantrySnapshot } from "@/lib/gemini";
 import { desc, sql } from "drizzle-orm";
 import { fetchNearbyLocalOutlets } from "@/lib/usda";
+import { loadProfile, profilePromptContext } from "@/lib/profile";
 
 const DEFAULT_ZIP = "87102";
 
@@ -25,8 +26,10 @@ export async function POST(request: NextRequest) {
           : new Date((item.expiryDate as unknown as number) * 1000).toISOString().split("T")[0],
     }));
 
+  const profileCtx = profilePromptContext(loadProfile());
+
   const [plan, nearbyOutlets] = await Promise.all([
-    generateWeeklyPlan(numDays ?? 7, calorieTarget ?? 2000, pantry, mealIdeas ?? []),
+    generateWeeklyPlan(numDays ?? 7, calorieTarget ?? 2000, pantry, mealIdeas ?? [], profileCtx),
     fetchNearbyLocalOutlets(DEFAULT_ZIP),
   ]);
 
