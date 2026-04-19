@@ -127,11 +127,18 @@
     --sidebar-ring: oklch(0.556 0 0);
 }
 
+html {
+  /* Prevent rubber-band overscroll bounce on iOS 16+ and Android Chrome.
+     Applied in <head> via globals.css so it takes effect before first paint. */
+  overscroll-behavior-y: none;
+}
+
 body {
   background: var(--paper) !important;
   color: var(--ink) !important;
   font-family: 'Lora', Georgia, serif;
   -webkit-font-smoothing: antialiased;
+  overscroll-behavior-y: none; /* belt-and-suspenders — both html and body needed on some WebKit builds */
 }
 
 @layer base {
