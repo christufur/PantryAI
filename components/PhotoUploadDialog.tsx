@@ -216,7 +216,7 @@ export default function PhotoUploadDialog({
           minHeight: fullWidthTrigger ? 48 : undefined,
         }}
       >
-        ◎ SNAP FRIDGE
+        ◎ ADD FROM PHOTO
       </button>
 
       <Dialog

@@ -4,10 +4,18 @@ import { useEffect, useMemo, useRef, useState, type MutableRefObject } from "rea
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { PlainItem } from "@/components/pantry-types";
+import { CircleHelp } from "lucide-react";
 import PhotoUploadDialog from "@/components/PhotoUploadDialog";
 import EditItemDialog from "@/components/EditItemDialog";
 import DeleteItemButton from "@/components/DeleteItemButton";
 import DonateModal from "@/components/DonateModal";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 const SHELF_ORDER = ["fridge", "freezer", "pantry", "other"] as const;
 const SCALE_MAX = 14;
@@ -35,6 +43,7 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
   const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
   const [localItems, setLocalItems] = useState(items);
   const [dragOverKey, setDragOverKey] = useState<string | null>(null);
+  const [helpOpen, setHelpOpen] = useState(false);
   const [donateOpen, setDonateOpen] = useState(false);
   const dragEndedRef = useRef(false);
   /** Touch / narrow: drag-and-drop is unreliable — use press-and-hold → move sheet instead. */
@@ -180,20 +189,20 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
       }}
       className="kitchen-board-outer"
     >
-      {/* One control plane: horizon + stats + rescue CTA */}
+      {/* Split header: title + help · primary add CTA; deck = stats first (emphasis on in-window), then horizon */}
       <header style={{ marginBottom: 28 }}>
         <div
           className="kitchen-board-title-row"
           style={{
             display: "flex",
-            justifyContent: "flex-start",
+            justifyContent: "space-between",
             alignItems: "center",
-            gap: 14,
+            gap: 16,
             flexWrap: "wrap",
-            marginBottom: 12,
+            marginBottom: 20,
           }}
         >
-          <div style={{ flex: "0 1 auto", minWidth: 0 }}>
+          <div style={{ flex: "1 1 auto", minWidth: 0 }}>
             <div
               style={{
                 fontFamily: "'JetBrains Mono', monospace",
@@ -207,38 +216,95 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
             >
               One surface · sort by urgency · move between storage columns
             </div>
-            <h1
+            <div
               style={{
-                fontFamily: "'Source Serif 4', serif",
-                fontWeight: 600,
-                fontSize: "clamp(32px, 5vw, 48px)",
-                lineHeight: 1.05,
-                letterSpacing: "-0.03em",
-                margin: 0,
+                display: "flex",
+                alignItems: "center",
+                gap: 10,
+                flexWrap: "wrap",
               }}
             >
-              Kitchen board
-            </h1>
+              <h1
+                style={{
+                  fontFamily: "'Source Serif 4', serif",
+                  fontWeight: 600,
+                  fontSize: "clamp(32px, 5vw, 48px)",
+                  lineHeight: 1.05,
+                  letterSpacing: "-0.03em",
+                  margin: 0,
+                }}
+              >
+                Kitchen board
+              </h1>
+              <button
+                type="button"
+                onClick={() => setHelpOpen(true)}
+                aria-label="How the kitchen board works"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: 36,
+                  height: 36,
+                  padding: 0,
+                  border: "2px solid var(--hairline)",
+                  background: "var(--paper)",
+                  color: "var(--caption)",
+                  cursor: "pointer",
+                  borderRadius: 0,
+                  flexShrink: 0,
+                }}
+              >
+                <CircleHelp size={18} strokeWidth={2} aria-hidden />
+              </button>
+            </div>
           </div>
           <div className="kitchen-snap-slot" style={{ flexShrink: 0 }}>
-            <PhotoUploadDialog triggerVariant="outline" />
+            <PhotoUploadDialog triggerVariant="solid" />
           </div>
         </div>
-        <p
-          style={{
-            fontFamily: "Lora, serif",
-            fontSize: 15,
-            color: "var(--caption)",
-            maxWidth: 640,
-            margin: "0 0 24px",
-            lineHeight: 1.45,
-          }}
-        >
-          Each ingredient lives in one place: its storage column, ordered soonest-expiry first.
-          The red band is your adjustable rescue window—everything in that window is highlighted
-          everywhere at once.           On desktop, drag a tile into another column; on phones and tablets, press and hold a card
-          to move it. Tick boxes to batch a recipe; edit or remove from the row.
-        </p>
+
+        <Dialog open={helpOpen} onOpenChange={setHelpOpen}>
+          <DialogContent
+            className="!z-[200000] sm:max-w-md !rounded-none !border-2 !border-black !bg-[var(--paper)] !p-6 !ring-0"
+            showCloseButton
+          >
+            <DialogHeader>
+              <DialogTitle
+                style={{
+                  fontFamily: "'Source Serif 4', serif",
+                  fontSize: 22,
+                  fontWeight: 600,
+                  color: "#000",
+                }}
+              >
+                How this board works
+              </DialogTitle>
+              <DialogDescription
+                style={{
+                  fontFamily: "Lora, serif",
+                  fontSize: 15,
+                  color: "#1a1a1a",
+                  lineHeight: 1.55,
+                  marginTop: 8,
+                }}
+              >
+                <span style={{ display: "block", marginBottom: 12 }}>
+                  Each ingredient sits in one storage column (fridge, freezer, pantry), ordered by
+                  soonest expiry first.
+                </span>
+                <span style={{ display: "block", marginBottom: 12 }}>
+                  The <strong>rescue window</strong> is adjustable: anything expiring within that many
+                  days is highlighted in red everywhere on the board.
+                </span>
+                <span style={{ display: "block" }}>
+                  On desktop, drag a tile to another column. On touch devices, press and hold a card to
+                  move it. Use checkboxes to batch a recipe; use the row actions to edit or remove.
+                </span>
+              </DialogDescription>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
 
         <div
           className="kitchen-deck"
@@ -253,126 +319,81 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
             style={{
               border: "2px solid #000",
               padding: "18px 20px",
-              background: "var(--paper)",
-            }}
-          >
-            <div
-              style={{
-                fontFamily: "'JetBrains Mono', monospace",
-                fontSize: 10,
-                fontWeight: 700,
-                textTransform: "uppercase",
-                letterSpacing: "0.12em",
-                color: "var(--caption)",
-                marginBottom: 10,
-              }}
-            >
-              Rescue horizon (highlight ≤)
-            </div>
-            <div
-              style={{
-                fontFamily: "'Source Serif 4', serif",
-                fontSize: 36,
-                fontWeight: 600,
-                lineHeight: 1,
-                marginBottom: 14,
-              }}
-            >
-              {aboveLabel}
-            </div>
-            <input
-              type="range"
-              min={0}
-              max={SCALE_MAX}
-              step={1}
-              value={threshold}
-              onChange={(e) => setThreshold(Number(e.target.value))}
-              style={{ width: "100%", accentColor: "#c8102e" }}
-              aria-label="Days threshold for rescue highlight"
-            />
-            <div
-              style={{
-                position: "relative",
-                height: 20,
-                marginTop: 8,
-                fontFamily: "'JetBrains Mono', monospace",
-                fontSize: 10,
-                fontWeight: 700,
-                letterSpacing: "0.08em",
-                color: "var(--caption)",
-              }}
-            >
-              {([[0, "NOW"], [3, "3D"], [7, "7D"], [SCALE_MAX, "14D"]] as [number, string][]).map(
-                ([v, label]) => (
-                  <button
-                    key={label}
-                    type="button"
-                    onClick={() => setThreshold(v)}
-                    style={{
-                      position: "absolute",
-                      left: `${(v / SCALE_MAX) * 100}%`,
-                      transform: v === 0 ? "none" : v === SCALE_MAX ? "translateX(-100%)" : "translateX(-50%)",
-                      background: "transparent",
-                      border: "none",
-                      padding: 0,
-                      cursor: "pointer",
-                      color: threshold === v ? "#000" : "var(--caption)",
-                      fontFamily: "inherit",
-                      fontSize: "inherit",
-                      fontWeight: "inherit",
-                      letterSpacing: "inherit",
-                      textDecoration: threshold === v ? "underline" : "none",
-                    }}
-                  >
-                    {label}
-                  </button>
-                )
-              )}
-            </div>
-          </div>
-
-          <div
-            style={{
-              border: "2px solid #000",
-              padding: "18px 20px",
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
-              gap: 14,
+              gap: 16,
               background: "var(--paper)",
             }}
           >
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: 12,
-                fontFamily: "'JetBrains Mono', monospace",
-                fontSize: 11,
-                textTransform: "uppercase",
-                letterSpacing: "0.08em",
-              }}
-            >
-              <div style={{ borderBottom: "1px solid var(--hairline)", paddingBottom: 8 }}>
-                <span style={{ color: "var(--caption)" }}>Total</span>
-                <div style={{ fontSize: 22, fontWeight: 700, color: "#000" }}>{localItems.length}</div>
+            <div>
+              <div
+                style={{
+                  fontFamily: "'JetBrains Mono', monospace",
+                  fontSize: 10,
+                  fontWeight: 700,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.12em",
+                  color: "var(--caption)",
+                  marginBottom: 8,
+                }}
+              >
+                In rescue window (expiry ≤ horizon)
               </div>
-              <div style={{ borderBottom: "1px solid var(--hairline)", paddingBottom: 8 }}>
-                <span style={{ color: "var(--caption)" }}>In window</span>
-                <div style={{ fontSize: 22, fontWeight: 700, color: "#c8102e" }}>
-                  {urgentInHorizon.length}
+              <div
+                style={{
+                  fontFamily: "'Source Serif 4', serif",
+                  fontSize: "clamp(28px, 4.5vw, 40px)",
+                  fontWeight: 600,
+                  lineHeight: 1,
+                  color: "#c8102e",
+                  marginBottom: 16,
+                }}
+              >
+                {urgentInHorizon.length}
+              </div>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr 1fr",
+                  gap: 10,
+                  fontFamily: "'JetBrains Mono', monospace",
+                  fontSize: 10,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.06em",
+                }}
+              >
+                <div style={{ borderBottom: "1px solid var(--hairline)", paddingBottom: 8 }}>
+                  <span style={{ color: "var(--caption)" }}>Total</span>
+                  <div style={{ fontSize: 18, fontWeight: 700, color: "#000", marginTop: 4 }}>
+                    {localItems.length}
+                  </div>
                 </div>
-              </div>
-              <div style={{ borderBottom: "1px solid var(--hairline)", paddingBottom: 8 }}>
-                <span style={{ color: "var(--caption)" }}>Dying ≤3d</span>
-                <div style={{ fontSize: 22, fontWeight: 700, color: dyingCount ? "#c8102e" : "#000" }}>
-                  {dyingCount}
+                <div style={{ borderBottom: "1px solid var(--hairline)", paddingBottom: 8 }}>
+                  <span style={{ color: "var(--caption)" }}>Dying ≤3d</span>
+                  <div
+                    style={{
+                      fontSize: 18,
+                      fontWeight: 700,
+                      color: dyingCount ? "#c8102e" : "#000",
+                      marginTop: 4,
+                    }}
+                  >
+                    {dyingCount}
+                  </div>
                 </div>
-              </div>
-              <div style={{ borderBottom: "1px solid var(--hairline)", paddingBottom: 8 }}>
-                <span style={{ color: "var(--caption)" }}>Expired</span>
-                <div style={{ fontSize: 22, fontWeight: 700, color: expiredCount ? "#c8102e" : "#000" }}>
-                  {expiredCount}
+                <div style={{ borderBottom: "1px solid var(--hairline)", paddingBottom: 8 }}>
+                  <span style={{ color: "var(--caption)" }}>Expired</span>
+                  <div
+                    style={{
+                      fontSize: 18,
+                      fontWeight: 700,
+                      color: expiredCount ? "#c8102e" : "#000",
+                      marginTop: 4,
+                    }}
+                  >
+                    {expiredCount}
+                  </div>
                 </div>
               </div>
             </div>
@@ -430,9 +451,92 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
                   padding: "8px 0",
                 }}
               >
-                Nothing in this window—slide the rule to widen it.
+                Nothing in this window—slide the rule on the right to widen it.
               </div>
             )}
+          </div>
+
+          <div
+            style={{
+              border: "2px solid #000",
+              padding: "18px 20px",
+              background: "var(--paper)",
+            }}
+          >
+            <div
+              style={{
+                fontFamily: "'JetBrains Mono', monospace",
+                fontSize: 10,
+                fontWeight: 700,
+                textTransform: "uppercase",
+                letterSpacing: "0.12em",
+                color: "var(--caption)",
+                marginBottom: 10,
+              }}
+            >
+              Rescue horizon (highlight ≤)
+            </div>
+            <div
+              style={{
+                fontFamily: "'Source Serif 4', serif",
+                fontSize: "clamp(18px, 2.5vw, 24px)",
+                fontWeight: 600,
+                lineHeight: 1.2,
+                marginBottom: 14,
+                color: "#000",
+              }}
+            >
+              {aboveLabel}
+            </div>
+            <input
+              type="range"
+              min={0}
+              max={SCALE_MAX}
+              step={1}
+              value={threshold}
+              onChange={(e) => setThreshold(Number(e.target.value))}
+              style={{ width: "100%", accentColor: "#c8102e" }}
+              aria-label="Days threshold for rescue highlight"
+            />
+            <div
+              style={{
+                position: "relative",
+                height: 20,
+                marginTop: 8,
+                fontFamily: "'JetBrains Mono', monospace",
+                fontSize: 10,
+                fontWeight: 700,
+                letterSpacing: "0.08em",
+                color: "var(--caption)",
+              }}
+            >
+              {([[0, "NOW"], [3, "3D"], [7, "7D"], [SCALE_MAX, "14D"]] as [number, string][]).map(
+                ([v, label]) => (
+                  <button
+                    key={label}
+                    type="button"
+                    onClick={() => setThreshold(v)}
+                    style={{
+                      position: "absolute",
+                      left: `${(v / SCALE_MAX) * 100}%`,
+                      transform: v === 0 ? "none" : v === SCALE_MAX ? "translateX(-100%)" : "translateX(-50%)",
+                      background: "transparent",
+                      border: "none",
+                      padding: 0,
+                      cursor: "pointer",
+                      color: threshold === v ? "#000" : "var(--caption)",
+                      fontFamily: "inherit",
+                      fontSize: "inherit",
+                      fontWeight: "inherit",
+                      letterSpacing: "inherit",
+                      textDecoration: threshold === v ? "underline" : "none",
+                    }}
+                  >
+                    {label}
+                  </button>
+                )
+              )}
+            </div>
           </div>
         </div>
       </header>
