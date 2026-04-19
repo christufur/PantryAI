@@ -6,7 +6,7 @@
     "unit": "each",
     "storageLocation": "fridge",
     "daysFromNow": 1,
-    "isLocal": true
+    "isLocal": false
   },
   {
     "name": "Spinach",
@@ -60,7 +60,7 @@
     "unit": "loaf",
     "storageLocation": "pantry",
     "daysFromNow": 6,
-    "isLocal": true
+    "isLocal": false
   },
   {
     "name": "Cheddar Cheese",
@@ -96,7 +96,7 @@
     "unit": "oz",
     "storageLocation": "pantry",
     "daysFromNow": 60,
-    "isLocal": true
+    "isLocal": false
   },
   {
     "name": "Ground Beef",
@@ -114,7 +114,7 @@
     "unit": "pack",
     "storageLocation": "fridge",
     "daysFromNow": 14,
-    "isLocal": true
+    "isLocal": false
   },
   {
     "name": "Bolita Beans",
@@ -123,6 +123,6 @@
     "unit": "lb",
     "storageLocation": "pantry",
     "daysFromNow": 365,
-    "isLocal": true
+    "isLocal": false
   }
 ]
