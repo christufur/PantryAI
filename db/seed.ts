@@ -3,13 +3,15 @@
 // Does NOT touch pantry_items, meals_planned, or recipes_cache.
 
 import { db } from "@/lib/db";
-import { shelfLife, localSwaps, donationOrgs, userProfile } from "@/db/schema";
+import { shelfLife, localSwaps, donationOrgs, userProfile, pantryItems } from "@/db/schema";
 import shelfLifeData from "./seed/shelf_life.json";
 import localSwapsData from "./seed/local_swaps.json";
 import donationOrgsData from "./seed/donation_orgs.json";
+import pantryItemsData from "./seed/pantry_items.json";
 
 async function main() {
-  console.log("Clearing lookup tables…");
+  console.log("Clearing tables…");
+  await db.delete(pantryItems);
   await db.delete(shelfLife);
   await db.delete(localSwaps);
   await db.delete(donationOrgs);
@@ -22,6 +24,14 @@ async function main() {
 
   console.log(`Inserting ${donationOrgsData.length} donation_orgs rows…`);
   await db.insert(donationOrgs).values(donationOrgsData);
+
+  const now = Date.now();
+  const pantryRows = pantryItemsData.map(({ daysFromNow, ...item }) => ({
+    ...item,
+    expiryDate: new Date(now + daysFromNow * 86_400_000),
+  }));
+  console.log(`Inserting ${pantryRows.length} pantry_items rows…`);
+  await db.insert(pantryItems).values(pantryRows);
 
   // Seed default user profile if none exists
   const existingProfile = db.select().from(userProfile).get();
