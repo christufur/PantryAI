@@ -23,6 +23,15 @@ export const metadata: Metadata = {
   title: "pantry.ai",
   description: "Vision-model pantry tracker. Sort: dying first. Zero waste.",
   applicationName: "pantry.ai",
+  openGraph: {
+    title: "pantry.ai",
+    description: "Vision-model pantry tracker. Sort: dying first. Zero waste.",
+    images: [{ url: "/og-image.png", width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/og-image.png"],
+  },
   /** Legacy Android hint alongside manifest (Chrome still reads manifest for install UI). */
   other: {
     "mobile-web-app-capable": "yes",
