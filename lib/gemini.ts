@@ -37,6 +37,37 @@ async function withRetry<T>(
 
 const MODEL = "gemini-3.1-flash-lite-preview";
 
+/** HTTP header name for which Gemini model handled the request (used by API routes). */
+export const GEMINI_MODEL_RESPONSE_HEADER = "X-Gemini-Model";
+
+const GEMINI_MODEL_FALLBACKS = [MODEL, "gemini-2.0-flash", "gemini-2.0-flash-lite"] as const;
+
+/**
+ * Try primary model with retries, then fall back to other models on persistent retryable failures.
+ * Used by chat when a specific model tier is overloaded.
+ */
+export async function withGeminiModelFallback<T>(
+  fn: (model: string) => Promise<T>,
+  opts: { maxAttemptsPerModel: number; baseDelayMs: number }
+): Promise<{ result: T; model: string }> {
+  let lastErr: unknown;
+  for (const m of GEMINI_MODEL_FALLBACKS) {
+    for (let attempt = 0; attempt < opts.maxAttemptsPerModel; attempt++) {
+      try {
+        const result = await fn(m);
+        return { result, model: m };
+      } catch (e) {
+        lastErr = e;
+        if (!isRetryableGeminiError(e)) throw e;
+        if (attempt < opts.maxAttemptsPerModel - 1) {
+          await sleep(opts.baseDelayMs * 2 ** attempt);
+        }
+      }
+    }
+  }
+  throw lastErr;
+}
+
 function client() {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error("GEMINI_API_KEY not set");
@@ -85,7 +116,7 @@ const identifySchema = {
 export async function identifyPantryItems(
   imageBuffer: Buffer,
   mimeType: string = "image/jpeg"
-): Promise<IdentifiedItem[]> {
+): Promise<{ items: IdentifiedItem[]; model: string }> {
   const ai = client();
 
   const prompt = `Identify every food item visible in this photo of a pantry, fridge, or groceries.
@@ -112,7 +143,7 @@ Ignore non-food items.`;
     });
 
     const parsed = JSON.parse(response.text ?? '{"items":[]}');
-    return parsed.items as IdentifiedItem[];
+    return { items: parsed.items as IdentifiedItem[], model: MODEL };
   }, { maxAttempts: 3, baseDelayMs: 400 });
 }
 
@@ -193,7 +224,7 @@ export async function generateWeeklyPlan(
   pantry: PantrySnapshot[],
   mealIdeas?: string[],
   profileContext = ""
-): Promise<WeeklyPlan> {
+): Promise<{ plan: WeeklyPlan; model: string }> {
   const ai = client();
 
   const ideasSection = mealIdeas && mealIdeas.length > 0
@@ -236,7 +267,8 @@ Return strict JSON matching the schema.`;
       },
     });
 
-    return JSON.parse(response.text ?? "{}") as WeeklyPlan;
+    const plan = JSON.parse(response.text ?? "{}") as WeeklyPlan;
+    return { plan, model: MODEL };
   }, { maxAttempts: 3, baseDelayMs: 500 });
 }
 
@@ -337,6 +369,7 @@ export type Recipe = {
   saves: string[]; // subset of input ingredients actually used
   caloriesMin?: number; // rough per-serving estimate
   caloriesMax?: number;
+  geminiModel?: string;
 };
 
 const recipeSchema = {
@@ -385,7 +418,8 @@ Also estimate a rough per-serving calorie range (caloriesMin / caloriesMax). The
       },
     });
 
-    return JSON.parse(response.text ?? "{}") as Recipe;
+    const recipe = JSON.parse(response.text ?? "{}") as Recipe;
+    return { ...recipe, geminiModel: MODEL };
   }, { maxAttempts: 5, baseDelayMs: 600 });
 }
 
