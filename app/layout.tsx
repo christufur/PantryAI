@@ -80,15 +80,13 @@ export default function RootLayout({
               gap: 10,
             }}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element -- static app mark from /public */}
-            <img
-              src="/icons/icon.svg"
-              alt=""
-              width={22}
-              height={22}
-              aria-hidden
-              style={{ flexShrink: 0, borderRadius: 5 }}
-            />
+            {/* Bare fridge mark — no tile bg, body inherits white, cutouts match black nav */}
+            <svg width="22" height="22" viewBox="0 0 120 120" aria-hidden="true" style={{ flexShrink: 0 }}>
+              <rect x="30" y="12" width="60" height="96" rx="12" fill="currentColor"/>
+              <rect x="30" y="46" width="60" height="2" fill="#000"/>
+              <rect x="38" y="20" width="2.5" height="22" rx="1.25" fill="#000"/>
+              <rect x="38" y="52" width="2.5" height="48" rx="1.25" fill="#000"/>
+            </svg>
             pantry<span style={{ color: '#888', fontWeight: 400 }}>.ai</span>
           </Link>
           <div className="util-nav" style={{ display: 'flex', gap: 28 }}>
