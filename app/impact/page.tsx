@@ -20,7 +20,7 @@ export default function ImpactPage() {
   ];
 
   return (
-    <main style={{ background: "var(--paper)", minHeight: "100dvh" }}>
+    <main style={{ background: "var(--paper)" }}>
 
       {/* ── Ribbon ─────────────────────────────────────────────────── */}
       <div style={{
