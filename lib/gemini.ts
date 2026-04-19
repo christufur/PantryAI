@@ -265,16 +265,30 @@ Use AS MANY of the listed pantry ingredients as reasonably possible — they're 
 
 Keep it achievable in under 45 minutes for a weeknight dinner. Respect any dietary restrictions or allergies listed in the user profile above. Return strict JSON.`;
 
-  const response = await ai.models.generateContent({
-    model: MODEL,
-    contents: prompt,
-    config: {
-      responseMimeType: "application/json",
-      responseSchema: recipeSchema,
-    },
-  });
+  const maxAttempts = 5;
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    try {
+      const response = await ai.models.generateContent({
+        model: MODEL,
+        contents: prompt,
+        config: {
+          responseMimeType: "application/json",
+          responseSchema: recipeSchema,
+        },
+      });
 
-  return JSON.parse(response.text ?? "{}") as Recipe;
+      return JSON.parse(response.text ?? "{}") as Recipe;
+    } catch (e) {
+      const canRetry = attempt < maxAttempts - 1 && isRetryableGeminiError(e);
+      if (canRetry) {
+        await sleep(600 * 2 ** attempt);
+        continue;
+      }
+      throw e;
+    }
+  }
+
+  throw new Error("generateRecipe: unexpected fall-through");
 }
 
 // Stable hash for the recipe cache key. Sort so {tomato,basil} == {basil,tomato}.
