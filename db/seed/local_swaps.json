@@ -239,10 +239,17 @@
   },
   {
     "genericName": "eggs",
+    "localProducer": "Sweet Mercy Farms",
+    "product": "Local ABQ eggs",
+    "whereToBuy": "Downtown Growers' Market",
+    "notes": "ABQ farm — verified 2026 DGM vendor"
+  },
+  {
+    "genericName": "eggs",
     "localProducer": "De Smet Dairy",
     "product": "Local eggs",
     "whereToBuy": "De Smet Dairy (Downtown ABQ)",
-    "notes": "Bright yolks — highly rated local dairy farm"
+    "notes": "Highly rated — bright yolks"
   },
   {
     "genericName": "eggs",
