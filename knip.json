@@ -1,0 +1,30 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "entry": [
+    "app/**/page.{ts,tsx}",
+    "app/**/layout.{ts,tsx}",
+    "app/**/loading.{ts,tsx}",
+    "app/**/not-found.{ts,tsx}",
+    "app/**/error.{ts,tsx}",
+    "app/**/route.{ts,tsx}",
+    "app/**/manifest.{ts,tsx}",
+    "app/**/sitemap.{ts,tsx}",
+    "app/**/robots.{ts,tsx}",
+    "app/**/icon.{ts,tsx}",
+    "app/**/opengraph-image.{ts,tsx}",
+    "middleware.ts",
+    "next.config.ts",
+    "drizzle.config.ts",
+    "scripts/**/*.{mjs,ts}",
+    "db/seed.ts",
+    "db/seed-demo.ts",
+    "db/clear-pantry.ts"
+  ],
+  "project": ["**/*.{ts,tsx,mjs,js}"],
+  "ignore": [
+    "db/migrations/**",
+    "public/**",
+    "*.md",
+    "*.pdf"
+  ]
+}
