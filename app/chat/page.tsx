@@ -2,7 +2,7 @@ import ChatInterface from "@/components/ChatInterface";
 
 export default function ChatPage() {
   return (
-    <main style={{ background: "var(--paper)", minHeight: "100vh" }}>
+    <main style={{ background: "var(--paper)", minHeight: "100vh", display: "flex", flexDirection: "column" }} className="chat-page">
       {/* Ribbon */}
       <div style={{
         background: "#1a3a4a",
@@ -18,7 +18,7 @@ export default function ChatPage() {
         <span style={{ fontWeight: 400, opacity: 0.7, fontSize: 10 }}>YOUR FRIDGE, PERSONIFIED</span>
       </div>
 
-      <div style={{ maxWidth: 680, margin: "0 auto", padding: "40px 32px" }} className="chat-container">
+      <div style={{ maxWidth: 680, margin: "0 auto", padding: "40px 32px", flex: 1, display: "flex", flexDirection: "column", width: "100%" }} className="chat-container">
         {/* Header */}
         <div style={{
           borderBottom: "2px solid #1a3a4a",
@@ -57,7 +57,13 @@ export default function ChatPage() {
 
       <style>{`
         @media (max-width: 768px) {
-          .chat-container { padding: 24px 16px !important; }
+          .chat-page { height: 100dvh; }
+          .chat-container { padding: 16px 16px 0 !important; flex: 1; min-height: 0; }
+        }
+        @media (min-width: 769px) {
+          .ribbon { padding: 10px 32px; }
+        }
+        @media (max-width: 768px) {
           .ribbon { padding: 10px 16px !important; }
         }
       `}</style>
