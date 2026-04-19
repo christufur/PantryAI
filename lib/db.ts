@@ -36,26 +36,43 @@ function resolveSqliteFilePath(): string {
   return path.join(getProjectRoot(), "sqlite.db");
 }
 
-/** Apply Drizzle baseline migration with IF NOT EXISTS (safe for partial / empty DBs). */
-function applyBaselineSchema(sqlite: Database.Database) {
-  const migrationPath = path.join(
-    getProjectRoot(),
-    "db/migrations/0000_spotty_red_hulk.sql"
-  );
-  if (!existsSync(migrationPath)) {
-    throw new Error(
-      `SQLite baseline migration missing: ${migrationPath}. Run from project root.`
-    );
-  }
-  const raw = readFileSync(migrationPath, "utf8");
-  const statements = raw
-    .split(/-->\s*statement-breakpoint\s*/g)
-    .map((s) => s.trim())
-    .filter(Boolean)
-    .map((s) => s.replace(/CREATE TABLE `/g, "CREATE TABLE IF NOT EXISTS `"));
+const MIGRATIONS = [
+  "db/migrations/0000_spotty_red_hulk.sql",
+  "db/migrations/0001_meal_plan_columns.sql",
+];
 
-  for (const stmt of statements) {
-    sqlite.exec(stmt);
+/** Apply all migrations in order. CREATE TABLE uses IF NOT EXISTS; ALTER TABLE errors are swallowed (column already exists). */
+function applyBaselineSchema(sqlite: Database.Database) {
+  const root = getProjectRoot();
+  for (const rel of MIGRATIONS) {
+    const migrationPath = path.join(root, rel);
+    if (!existsSync(migrationPath)) {
+      if (rel.includes("0000_")) {
+        throw new Error(`SQLite baseline migration missing: ${migrationPath}. Run from project root.`);
+      }
+      continue; // optional migrations may not exist yet
+    }
+    const raw = readFileSync(migrationPath, "utf8");
+    const statements = raw
+      .split(/-->\s*statement-breakpoint\s*/g)
+      .map((s) => s.trim())
+      .filter(Boolean)
+      .map((s) => s.replace(/CREATE TABLE `/g, "CREATE TABLE IF NOT EXISTS `"));
+
+    for (const stmt of statements) {
+      try {
+        sqlite.exec(stmt);
+      } catch (err: unknown) {
+        // Ignore "duplicate column name" — migration already applied
+        if (
+          typeof err === "object" && err !== null &&
+          "message" in err &&
+          typeof (err as { message: unknown }).message === "string" &&
+          (err as { message: string }).message.includes("duplicate column name")
+        ) continue;
+        throw err;
+      }
+    }
   }
 }
 

@@ -57,13 +57,16 @@ export const donationOrgs = sqliteTable("donation_orgs", {
   notes: text("notes"),
 });
 
-// Persisted weekly plan. One row per (week_start, day) meal slot.
+// Persisted weekly plan. One row per (plan_id, day, meal_type) slot.
 // ingredientsJson is the LLM's plan output: what's used from pantry vs bought.
 export const mealsPlanned = sqliteTable("meals_planned", {
   id: integer("id").primaryKey({ autoIncrement: true }),
+  planId: integer("plan_id").notNull().default(0), // groups meals into a plan; use Date.now() on insert
   weekStart: integer("week_start", { mode: "timestamp" }).notNull(),
   dayIndex: integer("day_index").notNull(), // 0 = Monday ... 6 = Sunday
+  mealType: text("meal_type").notNull().default("dinner"), // "breakfast" | "lunch" | "dinner"
   mealName: text("meal_name").notNull(),
+  estimatedCalories: integer("estimated_calories"),
   servings: integer("servings").notNull().default(2),
   ingredientsJson: text("ingredients_json"), // {uses_from_pantry:[], needs_to_buy:[]}
 });
