@@ -105,7 +105,7 @@ export default function RootLayout({
           </Link>
           <div className="util-nav" style={{ display: 'flex', gap: 28 }}>
             <Link href="/" style={{ color: '#fff', textDecoration: 'none' }}>HOME</Link>
-            <Link href="/plan" style={{ color: '#fff', textDecoration: 'none' }}>PLAN</Link>
+            <Link href="/wall" style={{ color: '#fff', textDecoration: 'none' }}>PLAN</Link>
             <Link href="/recipe" style={{ color: '#fff', textDecoration: 'none' }}>COOK</Link>
             <Link href="/impact" style={{ color: '#c8102e', textDecoration: 'none', fontWeight: 700 }}>IMPACT</Link>
             <Link href="/chat" style={{ color: '#fff', textDecoration: 'none' }}>ASK THE FRIDGE</Link>
@@ -184,7 +184,7 @@ export default function RootLayout({
             /* Show bottom nav, hide desktop util-nav links */
             .mobile-bottom-nav {
               display: flex !important;
-              z-index: 150000 !important;
+              z-index: 170000 !important;
             }
 
             /* Android/Chrome: clip horizontal overflow only; keep vertical scrolling explicit
