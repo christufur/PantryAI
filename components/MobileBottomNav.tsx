@@ -2,29 +2,58 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useLayoutEffect, useState } from "react";
 import { Home, ChefHat, CalendarDays, MessageCircle, Settings } from "lucide-react";
 
 const NAV = [
   { href: "/",        label: "HOME",  Icon: Home         },
   { href: "/recipe",  label: "COOK",  Icon: ChefHat      },
-  { href: "/plan",    label: "PLAN",  Icon: CalendarDays },
+  { href: "/wall",    label: "PLAN",  Icon: CalendarDays, match: "plan" as const },
   { href: "/chat",    label: "CHAT",  Icon: MessageCircle },
   { href: "/settings",label: "ME",   Icon: Settings      },
 ];
 
 export default function MobileBottomNav() {
   const pathname = usePathname();
+  /** Android Chrome: fixed bottom:0 stays on the *layout* viewport; the keyboard shrinks the *visual* viewport and hides the bar. Pin to the visible bottom. */
+  const [visualBottomGap, setVisualBottomGap] = useState(0);
+
+  useLayoutEffect(() => {
+    const vv = window.visualViewport;
+    if (!vv) return;
+    const sync = () => {
+      const gap = window.innerHeight - vv.height - vv.offsetTop;
+      setVisualBottomGap(Math.max(0, gap));
+    };
+    sync();
+    vv.addEventListener("resize", sync);
+    vv.addEventListener("scroll", sync);
+    return () => {
+      vv.removeEventListener("resize", sync);
+      vv.removeEventListener("scroll", sync);
+    };
+  }, []);
 
   return (
     <nav style={{
-      position: "fixed", bottom: 0, left: 0, right: 0,
+      position: "fixed",
+      left: 0,
+      right: 0,
+      width: "100%",
+      boxSizing: "border-box",
+      bottom: visualBottomGap,
       background: "#000", borderTop: "2px solid #222",
       display: "flex",
-      zIndex: 99999,
-      paddingBottom: "env(safe-area-inset-bottom)",
+      zIndex: 150000,
+      paddingBottom: "max(12px, env(safe-area-inset-bottom, 0px))",
     }} className="mobile-bottom-nav">
-      {NAV.map(({ href, label, Icon }) => {
-        const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
+      {NAV.map(({ href, label, Icon, match }) => {
+        const active =
+          match === "plan"
+            ? pathname === "/wall" || pathname.startsWith("/plan")
+            : href === "/"
+              ? pathname === "/"
+              : pathname.startsWith(href);
         return (
           <Link key={href} href={href} style={{
             flex: 1, display: "flex", flexDirection: "column",

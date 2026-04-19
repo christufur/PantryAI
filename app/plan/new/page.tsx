@@ -45,8 +45,9 @@ export default function NewPlanPage() {
         }),
       });
       if (!res.ok) throw new Error(await res.text());
-      const data = await res.json();
-      router.push(`/plan/${data.planId}`);
+      await res.json();
+      // Go straight to the wall (avoids /plan/:id → redirect RSC abort + dev Performance.measure bug).
+      router.push("/wall");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
       setLoading(false);
