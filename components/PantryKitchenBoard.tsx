@@ -219,7 +219,7 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
           className="kitchen-deck"
           style={{
             display: "grid",
-            gridTemplateColumns: "minmax(0, 1.2fr) minmax(0, 1fr)",
+            gridTemplateColumns: "1fr 1fr",
             gap: 20,
             alignItems: "stretch",
           }}
@@ -658,13 +658,12 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
       )}
 
       <style>{`
-        @media (max-width: 900px) {
-          .kitchen-deck { grid-template-columns: 1fr !important; }
-          .kitchen-columns {
-            grid-template-columns: 1fr !important;
-          }
+        @media (max-width: 1024px) {
+          .kitchen-columns { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
         }
         @media (max-width: 640px) {
+          .kitchen-deck { grid-template-columns: 1fr !important; }
+          .kitchen-columns { grid-template-columns: 1fr !important; }
           .kitchen-board-title-row {
             flex-direction: column;
             align-items: stretch !important;
