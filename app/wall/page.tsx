@@ -135,7 +135,7 @@ export default async function WallPage() {
   const weekRangeLabel = weekStart ? `WEEK OF ${formatShort(weekStart).toUpperCase()}` : "NO ACTIVE PLAN";
 
   return (
-    <main style={{ background: "var(--paper)", minHeight: "100dvh" }}>
+    <main style={{ background: "var(--paper)", minHeight: "100svh" }}>
       {/* Black ribbon */}
       <div
         style={{
