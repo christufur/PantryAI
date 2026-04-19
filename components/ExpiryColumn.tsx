@@ -77,7 +77,7 @@ export default function ExpiryColumn({ items }: { items: ColumnItem[] }) {
         )}
 
         {groups.length === 0 && (
-          <div style={{ paddingLeft: 72, paddingTop: 24, fontFamily: "Lora, serif", fontSize: 16, color: "var(--caption)" }}>
+          <div style={{ paddingLeft: 72, paddingTop: 24, fontFamily: "var(--font-body)", fontSize: 16, color: "var(--caption)" }}>
             No items in inventory.{" "}
             <Link href="/" style={{ color: "var(--link)" }}>Snap your fridge</Link>.
           </div>
@@ -109,7 +109,7 @@ export default function ExpiryColumn({ items }: { items: ColumnItem[] }) {
                 paddingRight: 12,
                 paddingTop: 14,
                 textAlign: "right",
-                fontFamily: "'JetBrains Mono', monospace",
+                fontFamily: "var(--font-ui)",
                 fontSize: 11,
                 fontWeight: 700,
                 letterSpacing: "0.08em",
@@ -159,7 +159,7 @@ export default function ExpiryColumn({ items }: { items: ColumnItem[] }) {
                   >
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{
-                        fontFamily: "'JetBrains Mono', monospace",
+                        fontFamily: "var(--font-ui)",
                         fontSize: 9,
                         letterSpacing: "0.1em",
                         color: "var(--caption)",
@@ -170,7 +170,7 @@ export default function ExpiryColumn({ items }: { items: ColumnItem[] }) {
                         {isBeyond && " · SAFE"}
                       </div>
                       <div style={{
-                        fontFamily: "'Source Serif 4', serif",
+                        fontFamily: "var(--font-display)",
                         fontSize: 18,
                         fontWeight: inDanger ? 600 : 400,
                         color: inDanger ? "#c8102e" : "#000",
@@ -182,7 +182,7 @@ export default function ExpiryColumn({ items }: { items: ColumnItem[] }) {
                     <Link
                       href={`/recipe?ingredients=${encodeURIComponent(item.name)}`}
                       style={{
-                        fontFamily: "Inter, sans-serif",
+                        fontFamily: "var(--font-ui)",
                         fontWeight: 700,
                         fontSize: 10,
                         textTransform: "uppercase",
@@ -224,7 +224,7 @@ export default function ExpiryColumn({ items }: { items: ColumnItem[] }) {
               paddingTop: 4,
             }}>
               <span style={{
-                fontFamily: "'JetBrains Mono', monospace",
+                fontFamily: "var(--font-ui)",
                 fontSize: 10,
                 fontWeight: 700,
                 letterSpacing: "0.12em",
@@ -243,7 +243,7 @@ export default function ExpiryColumn({ items }: { items: ColumnItem[] }) {
       <aside style={{ position: "sticky", top: 16, alignSelf: "start" }} className="column-aside">
         <div style={{ border: "2px solid #000", padding: 20, marginBottom: 20 }}>
           <div style={{
-            fontFamily: "'JetBrains Mono', monospace",
+            fontFamily: "var(--font-ui)",
             fontSize: 10, fontWeight: 700,
             textTransform: "uppercase", letterSpacing: "0.12em",
             color: "var(--caption)", marginBottom: 8,
@@ -251,8 +251,8 @@ export default function ExpiryColumn({ items }: { items: ColumnItem[] }) {
             COOK USING · THINGS DYING IN
           </div>
           <div style={{
-            fontFamily: "'Source Serif 4', serif",
-            fontSize: 44, fontWeight: 600,
+            fontFamily: "var(--font-display)",
+            fontSize: "var(--text-title)", fontWeight: 600,
             lineHeight: 1, letterSpacing: "-0.02em",
             marginBottom: 16,
           }}>
@@ -274,7 +274,7 @@ export default function ExpiryColumn({ items }: { items: ColumnItem[] }) {
             display: "flex",
             justifyContent: "space-between",
             marginTop: 8,
-            fontFamily: "'JetBrains Mono', monospace",
+            fontFamily: "var(--font-ui)",
             fontSize: 10, fontWeight: 700,
             letterSpacing: "0.08em", color: "var(--caption)",
           }}>
@@ -299,7 +299,7 @@ export default function ExpiryColumn({ items }: { items: ColumnItem[] }) {
 
         <div style={{ border: "2px solid #c8102e", padding: 16, marginBottom: 20 }}>
           <div style={{
-            fontFamily: "'JetBrains Mono', monospace",
+            fontFamily: "var(--font-ui)",
             fontSize: 10, fontWeight: 700,
             textTransform: "uppercase", letterSpacing: "0.12em",
             color: "#c8102e", marginBottom: 10,
@@ -308,7 +308,7 @@ export default function ExpiryColumn({ items }: { items: ColumnItem[] }) {
           </div>
 
           {above.length === 0 ? (
-            <div style={{ fontFamily: "Lora, serif", fontSize: 14, color: "var(--caption)" }}>
+            <div style={{ fontFamily: "var(--font-body)", fontSize: 14, color: "var(--caption)" }}>
               Nothing dying within {aboveLabel}. Slide the rule up.
             </div>
           ) : (
@@ -318,7 +318,7 @@ export default function ExpiryColumn({ items }: { items: ColumnItem[] }) {
                   borderBottom: "1px solid var(--hairline)",
                   padding: "6px 0",
                   display: "flex", justifyContent: "space-between",
-                  fontFamily: "'JetBrains Mono', monospace",
+                  fontFamily: "var(--font-ui)",
                   fontSize: 12, letterSpacing: "0.06em", textTransform: "uppercase",
                 }}>
                   <span>{i.name}</span>
@@ -328,7 +328,7 @@ export default function ExpiryColumn({ items }: { items: ColumnItem[] }) {
                 </div>
               ))}
               {above.length > 8 && (
-                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "var(--caption)", marginTop: 6 }}>
+                <div style={{ fontFamily: "var(--font-ui)", fontSize: 10, color: "var(--caption)", marginTop: 6 }}>
                   + {above.length - 8} MORE
                 </div>
               )}
@@ -341,7 +341,7 @@ export default function ExpiryColumn({ items }: { items: ColumnItem[] }) {
             href={recipeHref}
             style={{
               display: "block",
-              fontFamily: "Inter, sans-serif", fontWeight: 700,
+              fontFamily: "var(--font-ui)", fontWeight: 700,
               fontSize: 13, textTransform: "uppercase", letterSpacing: "0.06em",
               padding: "14px 16px", border: "2px solid #000",
               background: "#000", color: "#fff",
@@ -355,7 +355,7 @@ export default function ExpiryColumn({ items }: { items: ColumnItem[] }) {
             disabled
             style={{
               display: "block", width: "100%",
-              fontFamily: "Inter, sans-serif", fontWeight: 700,
+              fontFamily: "var(--font-ui)", fontWeight: 700,
               fontSize: 13, textTransform: "uppercase", letterSpacing: "0.06em",
               padding: "14px 16px", border: "2px solid var(--hairline)",
               background: "#fff", color: "var(--disabled)", cursor: "not-allowed",

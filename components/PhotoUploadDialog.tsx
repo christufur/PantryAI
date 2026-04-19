@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import BarcodeScanPanel from "@/components/BarcodeScanPanel";
 import {
@@ -35,6 +35,19 @@ interface ApiResponse {
 type DialogState = "pick" | "scan" | "loading" | "receipt";
 type LoadingSource = "photo" | "barcode";
 
+const PHOTO_LOADING_HINTS = [
+  "Scanning the frame…",
+  "Spotting packages and produce…",
+  "Reading labels and dates…",
+  "Building your inventory lines…",
+];
+
+const BARCODE_LOADING_HINTS = [
+  "Reaching Open Food Facts…",
+  "Matching this barcode…",
+  "Preparing your line item…",
+];
+
 export default function PhotoUploadDialog({
   fullWidthTrigger = false,
   triggerVariant = "solid",
@@ -54,6 +67,17 @@ export default function PhotoUploadDialog({
   const [loadingSource, setLoadingSource] = useState<LoadingSource>("photo");
   const galleryInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
+  const [loadingHintIndex, setLoadingHintIndex] = useState(0);
+
+  useEffect(() => {
+    if (dialogState !== "loading") return;
+    setLoadingHintIndex(0);
+    const hints = loadingSource === "barcode" ? BARCODE_LOADING_HINTS : PHOTO_LOADING_HINTS;
+    const id = window.setInterval(() => {
+      setLoadingHintIndex((i) => (i + 1) % hints.length);
+    }, 2300);
+    return () => window.clearInterval(id);
+  }, [dialogState, loadingSource]);
 
   function resetState() {
     setFile(null);
@@ -160,15 +184,44 @@ export default function PhotoUploadDialog({
   return (
     <>
       <style>{`
-        @keyframes ellipsis {
-          0%   { content: '.'; }
-          33%  { content: '..'; }
-          66%  { content: '...'; }
-          100% { content: '.'; }
+        @keyframes wired-sweep {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(200%); }
         }
-        .wired-ellipsis::after {
-          content: '.';
-          animation: ellipsis 1.2s steps(1, end) infinite;
+        @keyframes wired-hint-in {
+          from { opacity: 0; transform: translateY(4px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes wired-rule-pulse {
+          0%, 100% { opacity: 0.35; }
+          50% { opacity: 1; }
+        }
+        .wired-loading-sweep {
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 100%;
+          width: 45%;
+          background: linear-gradient(
+            90deg,
+            transparent 0%,
+            rgba(0, 0, 0, 0.07) 45%,
+            rgba(0, 0, 0, 0.12) 50%,
+            rgba(0, 0, 0, 0.07) 55%,
+            transparent 100%
+          );
+          animation: wired-sweep 2s ease-in-out infinite;
+        }
+        .wired-loading-hint {
+          animation: wired-hint-in 0.45s ease-out both;
+        }
+        .wired-loading-rule {
+          animation: wired-rule-pulse 1.4s ease-in-out infinite;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .wired-loading-sweep { animation: none; opacity: 0.2; transform: none; }
+          .wired-loading-hint { animation: none; }
+          .wired-loading-rule { animation: none; opacity: 0.7; }
         }
         @media (max-width: 600px) {
           .wired-receipt-btns {
@@ -199,7 +252,7 @@ export default function PhotoUploadDialog({
                 color: "#fff",
                 border: "2px solid #000",
               }),
-          fontFamily: "Inter, sans-serif",
+          fontFamily: "var(--font-ui)",
           fontWeight: 700,
           fontSize: 13,
           textTransform: "uppercase",
@@ -240,7 +293,7 @@ export default function PhotoUploadDialog({
           <DialogHeader>
             <DialogTitle
               style={{
-                fontFamily: "'JetBrains Mono', monospace",
+                fontFamily: "var(--font-ui)",
                 fontSize: 11,
                 fontWeight: 700,
                 color: "#757575",
@@ -252,19 +305,25 @@ export default function PhotoUploadDialog({
                 ? "SCAN PRODUCT BARCODE"
                 : dialogState === "loading" && loadingSource === "barcode"
                   ? "BARCODE LOOKUP"
-                  : "IDENTIFY ITEMS VIA PHOTO"}
+                  : dialogState === "loading" && loadingSource === "photo"
+                    ? "ANALYZING PHOTO"
+                    : "IDENTIFY ITEMS VIA PHOTO"}
             </DialogTitle>
             <DialogDescription
               style={{
-                fontFamily: "Lora, serif",
+                fontFamily: "var(--font-body)",
                 color: "#757575",
                 fontSize: 14,
                 marginTop: 4,
               }}
             >
-              {dialogState === "scan"
-                ? "We look up the code in Open Food Facts (free open database) — no AI key required. Pick storage below, then scan or type the digits."
-                : "Add a fridge photo from your library or use the camera, then Gemini returns structured JSON (items with categories and dates) that we turn into pantry rows. Or scan a barcode instead."}
+              {dialogState === "loading"
+                ? loadingSource === "barcode"
+                  ? "One moment — we’re fetching product details."
+                  : "One moment — we’re reading your photo into pantry rows."
+                : dialogState === "scan"
+                  ? "Open Food Facts lookup (no AI key). Choose storage, then scan or type the barcode."
+                  : "Choose a photo or camera shot, pick storage, then identify. Barcode scan is available if you prefer."}
             </DialogDescription>
           </DialogHeader>
 
@@ -274,7 +333,7 @@ export default function PhotoUploadDialog({
               <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                 <span
                   style={{
-                    fontFamily: "'JetBrains Mono', monospace",
+                    fontFamily: "var(--font-ui)",
                     fontSize: 10,
                     textTransform: "uppercase",
                     letterSpacing: "0.1em",
@@ -312,7 +371,7 @@ export default function PhotoUploadDialog({
                       background: "#fff",
                       color: "#1a1a1a",
                       border: "2px solid #000",
-                      fontFamily: "Inter, sans-serif",
+                      fontFamily: "var(--font-ui)",
                       fontWeight: 700,
                       fontSize: 12,
                       textTransform: "uppercase",
@@ -332,7 +391,7 @@ export default function PhotoUploadDialog({
                       background: "#fff",
                       color: "#1a1a1a",
                       border: "2px solid #000",
-                      fontFamily: "Inter, sans-serif",
+                      fontFamily: "var(--font-ui)",
                       fontWeight: 700,
                       fontSize: 12,
                       textTransform: "uppercase",
@@ -355,7 +414,7 @@ export default function PhotoUploadDialog({
                       background: "#fff",
                       color: "#1a1a1a",
                       border: "2px solid #000",
-                      fontFamily: "Inter, sans-serif",
+                      fontFamily: "var(--font-ui)",
                       fontWeight: 700,
                       fontSize: 12,
                       textTransform: "uppercase",
@@ -371,7 +430,7 @@ export default function PhotoUploadDialog({
                 {file && (
                   <p
                     style={{
-                      fontFamily: "Inter, sans-serif",
+                      fontFamily: "var(--font-ui)",
                       fontSize: 12,
                       color: "#1a1a1a",
                       margin: 0,
@@ -387,7 +446,7 @@ export default function PhotoUploadDialog({
                 <label
                   htmlFor="storage-location"
                   style={{
-                    fontFamily: "'JetBrains Mono', monospace",
+                    fontFamily: "var(--font-ui)",
                     fontSize: 10,
                     textTransform: "uppercase",
                     letterSpacing: "0.1em",
@@ -407,7 +466,7 @@ export default function PhotoUploadDialog({
                       background: "#ffffff",
                       border: "2px solid #000",
                       borderRadius: 0,
-                      fontFamily: "Inter, sans-serif",
+                      fontFamily: "var(--font-ui)",
                       fontSize: 13,
                     }}
                   >
@@ -424,7 +483,7 @@ export default function PhotoUploadDialog({
               {error && (
                 <p
                   style={{
-                    fontFamily: "Lora, serif",
+                    fontFamily: "var(--font-body)",
                     fontSize: 13,
                     color: "#c8102e",
                     border: "1px solid #c8102e",
@@ -441,7 +500,7 @@ export default function PhotoUploadDialog({
                   style={{
                     background: "transparent",
                     border: "2px solid #000",
-                    fontFamily: "Inter, sans-serif",
+                    fontFamily: "var(--font-ui)",
                     fontWeight: 700,
                     fontSize: 13,
                     textTransform: "uppercase",
@@ -461,7 +520,7 @@ export default function PhotoUploadDialog({
                     background: file ? "#000" : "#e2e8f0",
                     color: file ? "#fff" : "#757575",
                     border: "2px solid #000",
-                    fontFamily: "Inter, sans-serif",
+                    fontFamily: "var(--font-ui)",
                     fontWeight: 700,
                     fontSize: 13,
                     textTransform: "uppercase",
@@ -484,7 +543,7 @@ export default function PhotoUploadDialog({
                 <label
                   htmlFor="storage-location-scan"
                   style={{
-                    fontFamily: "'JetBrains Mono', monospace",
+                    fontFamily: "var(--font-ui)",
                     fontSize: 10,
                     textTransform: "uppercase",
                     letterSpacing: "0.1em",
@@ -506,7 +565,7 @@ export default function PhotoUploadDialog({
                       background: "#ffffff",
                       border: "2px solid #000",
                       borderRadius: 0,
-                      fontFamily: "Inter, sans-serif",
+                      fontFamily: "var(--font-ui)",
                       fontSize: 13,
                     }}
                   >
@@ -523,7 +582,7 @@ export default function PhotoUploadDialog({
               {error && (
                 <p
                   style={{
-                    fontFamily: "Lora, serif",
+                    fontFamily: "var(--font-body)",
                     fontSize: 13,
                     color: "#c8102e",
                     border: "1px solid #c8102e",
@@ -551,45 +610,63 @@ export default function PhotoUploadDialog({
               style={{
                 display: "flex",
                 flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 12,
-                padding: "40px 0",
+                alignItems: "stretch",
+                gap: 20,
+                padding: "28px 0 8px",
               }}
             >
               <div
                 style={{
-                  fontFamily: "'JetBrains Mono', monospace",
-                  fontSize: 11,
-                  fontWeight: 700,
-                  color: "#757575",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.1em",
-                  textAlign: "center",
+                  position: "relative",
+                  height: 56,
+                  border: "2px solid #000",
+                  background: "#fafaf9",
+                  overflow: "hidden",
                 }}
+                aria-hidden
               >
-                {loadingSource === "barcode"
-                  ? "OPEN FOOD FACTS · LOOKUP"
-                  : "GEMINI VISION · ANALYZING"}
+                <div className="wired-loading-sweep" />
+                <div
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    pointerEvents: "none",
+                  }}
+                >
+                  <span
+                    className="wired-loading-rule"
+                    style={{
+                      fontFamily: "var(--font-ui)",
+                      fontSize: 10,
+                      fontWeight: 700,
+                      letterSpacing: "0.12em",
+                      color: "#757575",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    ─── {loadingSource === "barcode" ? "OFF" : "VISION"} · PROCESSING ───
+                  </span>
+                </div>
               </div>
               <p
+                key={loadingHintIndex}
+                className="wired-loading-hint"
                 style={{
-                  fontFamily: "Lora, serif",
-                  fontSize: 16,
+                  fontFamily: "var(--font-body)",
+                  fontSize: 15,
+                  lineHeight: 1.45,
                   color: "#1a1a1a",
                   textAlign: "center",
                   margin: 0,
+                  minHeight: "2.2em",
                 }}
               >
-                {loadingSource === "barcode" ? (
-                  <>
-                    Resolving product<span className="wired-ellipsis" />
-                  </>
-                ) : (
-                  <>
-                    Identifying items<span className="wired-ellipsis" />
-                  </>
-                )}
+                {(loadingSource === "barcode" ? BARCODE_LOADING_HINTS : PHOTO_LOADING_HINTS)[
+                  loadingHintIndex
+                ]}
               </p>
             </div>
           )}
@@ -600,7 +677,7 @@ export default function PhotoUploadDialog({
               <div
                 style={{
                   border: "2px solid #000",
-                  fontFamily: "'JetBrains Mono', monospace",
+                  fontFamily: "var(--font-ui)",
                   fontSize: 11,
                   lineHeight: 1.8,
                   background: "#fafaf9",
@@ -663,7 +740,7 @@ export default function PhotoUploadDialog({
                     background: "#000",
                     color: "#fff",
                     border: "2px solid #000",
-                    fontFamily: "Inter, sans-serif",
+                    fontFamily: "var(--font-ui)",
                     fontWeight: 700,
                     fontSize: 13,
                     textTransform: "uppercase",
@@ -682,7 +759,7 @@ export default function PhotoUploadDialog({
                     background: "transparent",
                     color: "#000",
                     border: "2px solid #000",
-                    fontFamily: "Inter, sans-serif",
+                    fontFamily: "var(--font-ui)",
                     fontWeight: 700,
                     fontSize: 13,
                     textTransform: "uppercase",

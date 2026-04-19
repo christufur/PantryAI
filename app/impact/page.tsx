@@ -26,8 +26,8 @@ export default function ImpactPage() {
       <div style={{
         background: "#000", color: "#fff",
         padding: "10px 32px",
-        fontFamily: "'JetBrains Mono', monospace",
-        fontSize: 12, fontWeight: 700,
+        fontFamily: "var(--font-ui)",
+        fontSize: "var(--text-ribbon)", fontWeight: 700,
         textTransform: "uppercase", letterSpacing: "0.12em",
         display: "flex", justifyContent: "space-between", alignItems: "center",
         flexWrap: "wrap", gap: 8,
@@ -42,7 +42,7 @@ export default function ImpactPage() {
         <section style={{ borderBottom: "2px solid #000", paddingBottom: 20, marginBottom: 0 }}>
 
           <div style={{
-            fontFamily: "'JetBrains Mono', monospace", fontSize: 11, fontWeight: 700,
+            fontFamily: "var(--font-ui)", fontSize: 11, fontWeight: 700,
             textTransform: "uppercase", letterSpacing: "0.14em", color: "#c8102e",
             marginBottom: 16,
           }}>
@@ -50,21 +50,21 @@ export default function ImpactPage() {
           </div>
 
           <div style={{
-            fontFamily: "'Source Serif 4', serif", fontWeight: 700,
-            fontSize: 96, lineHeight: 0.85, letterSpacing: "-0.04em",
+            fontFamily: "var(--font-display)", fontWeight: 700,
+            fontSize: "var(--text-hero-num)", lineHeight: 0.85, letterSpacing: "-0.04em",
             color: "#c8102e", marginBottom: 20,
           }} className="impact-hero-num">
             {fmt(totals.itemsRescued)}
           </div>
 
           <div style={{
-            fontFamily: "'JetBrains Mono', monospace", fontSize: 13, fontWeight: 700,
+            fontFamily: "var(--font-ui)", fontSize: 13, fontWeight: 700,
             textTransform: "uppercase", letterSpacing: "0.10em", color: "var(--ink)",
             marginBottom: 6,
           }}>
             ITEMS SAVED
           </div>
-          <div style={{ fontFamily: "Lora, serif", fontSize: 16, color: "var(--caption)", lineHeight: 1.5 }}>
+          <div style={{ fontFamily: "var(--font-body)", fontSize: 16, color: "var(--caption)", lineHeight: 1.5 }}>
             {totals.itemsRescued === 0
               ? "Start tracking: delete items you've used before they expire."
               : "Rescued from your pantry before expiry."}
@@ -86,21 +86,21 @@ export default function ImpactPage() {
                 className="impact-stat-cell"
               >
                 <div style={{
-                  fontFamily: "'JetBrains Mono', monospace", fontSize: 10, fontWeight: 700,
+                  fontFamily: "var(--font-ui)", fontSize: 10, fontWeight: 700,
                   textTransform: "uppercase", letterSpacing: "0.12em",
                   color: "var(--caption)", marginBottom: 12,
                 }}>
                   {s.label}
                 </div>
                 <div style={{
-                  fontFamily: "'Source Serif 4', serif", fontWeight: 700,
-                  fontSize: 44, lineHeight: 1.0, letterSpacing: "-0.02em",
+                  fontFamily: "var(--font-display)", fontWeight: 700,
+                  fontSize: "var(--text-stat)", lineHeight: 1.0, letterSpacing: "-0.02em",
                   color: "var(--ink)",
                 }} className="impact-stat-num">
                   {s.value}
                 </div>
                 <div style={{
-                  fontFamily: "'JetBrains Mono', monospace", fontSize: 10,
+                  fontFamily: "var(--font-ui)", fontSize: 10,
                   color: "var(--caption)", marginTop: 8,
                   textTransform: "uppercase", letterSpacing: "0.08em",
                 }}>
@@ -114,8 +114,8 @@ export default function ImpactPage() {
         {/* ── Lede ───────────────────────────────────────────────────── */}
         <section style={{ borderTop: "none", paddingTop: 20 }}>
           <p style={{
-            fontFamily: "Lora, serif",
-            fontSize: 15, lineHeight: 1.8,
+            fontFamily: "var(--font-body)",
+            fontSize: "var(--text-sm)", lineHeight: 1.8,
             color: "var(--caption)", margin: 0,
           }}>
             The average American household wastes <strong style={{ color: "var(--ink)" }}>~$1,600</strong> of food

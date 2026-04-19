@@ -15,15 +15,15 @@ export default async function RecipeDishPage({
   if (!ingredientParam?.trim()) {
     return (
       <main style={{ background: "var(--paper)", minHeight: "100vh", padding: 40 }}>
-        <p style={{ fontFamily: "Lora, serif", fontSize: 16 }}>Missing ingredients.</p>
+        <p style={{ fontFamily: "var(--font-body)", fontSize: "var(--text-md)" }}>Missing ingredients.</p>
         <Link
           href="/recipe"
           style={{
-            fontFamily: "Inter, sans-serif",
+            fontFamily: "var(--font-ui)",
             fontWeight: 700,
-            fontSize: 12,
+            fontSize: "var(--text-ribbon)",
             textTransform: "uppercase",
-            letterSpacing: "0.05em",
+            letterSpacing: "0.08em",
             marginTop: 16,
             display: "inline-block",
             color: "#000",

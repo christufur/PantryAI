@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { db, ensureSqliteSchema, getSqlitePath } from "@/lib/db";
 import { pantryItems, shelfLife, localSwaps } from "@/db/schema";
 import { and, eq } from "drizzle-orm";
-import { identifyPantryItems } from "@/lib/gemini";
+import { GEMINI_MODEL_RESPONSE_HEADER, identifyPantryItems } from "@/lib/gemini";
 
 export const runtime = "nodejs";
 
@@ -45,9 +45,12 @@ export async function POST(request: NextRequest) {
 
   const buffer = Buffer.from(await file.arrayBuffer());
 
-  let identified: Awaited<ReturnType<typeof identifyPantryItems>>;
+  let identified: Awaited<ReturnType<typeof identifyPantryItems>>["items"];
+  let geminiModel: string;
   try {
-    identified = await identifyPantryItems(buffer, file.type);
+    const out = await identifyPantryItems(buffer, file.type);
+    identified = out.items;
+    geminiModel = out.model;
   } catch (e) {
     if (e instanceof ApiError && (e.status === 503 || e.status === 429)) {
       return NextResponse.json(
@@ -162,7 +165,10 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    return NextResponse.json({ items: inserted });
+    return NextResponse.json(
+      { items: inserted, geminiModel },
+      { headers: { [GEMINI_MODEL_RESPONSE_HEADER]: geminiModel } }
+    );
   } catch (e) {
     if (sqliteMissingTableHint(e)) {
       return NextResponse.json(

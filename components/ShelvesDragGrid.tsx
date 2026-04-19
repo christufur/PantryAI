@@ -20,9 +20,16 @@ type Props = {
   items: ShelfDragItem[];
   shelfLabels: Record<string, string>;
   nameFontSize?: number;
+  /** Server time for first paint — avoids SSR/client `Date.now()` hydration mismatch. */
+  nowMs: number;
 };
 
-export default function ShelvesDragGrid({ items: itemsProp, shelfLabels, nameFontSize = 15 }: Props) {
+export default function ShelvesDragGrid({
+  items: itemsProp,
+  shelfLabels,
+  nameFontSize = 15,
+  nowMs,
+}: Props) {
   const router = useRouter();
   const [items, setItems] = useState(itemsProp);
   const [dragOverKey, setDragOverKey] = useState<string | null>(null);
@@ -32,7 +39,10 @@ export default function ShelvesDragGrid({ items: itemsProp, shelfLabels, nameFon
     setItems(itemsProp);
   }, [itemsProp]);
 
-  const now = Date.now();
+  const [now, setNow] = useState(nowMs);
+  useEffect(() => {
+    setNow(Date.now());
+  }, []);
   function days(unix: number) {
     return Math.floor((unix * 1000 - now) / 86_400_000);
   }
@@ -95,7 +105,7 @@ export default function ShelvesDragGrid({ items: itemsProp, shelfLabels, nameFon
           <section key={key} style={{ marginBottom: 40 }}>
             <div
               style={{
-                fontFamily: "'JetBrains Mono', monospace",
+                fontFamily: "var(--font-ui)",
                 fontSize: 10,
                 fontWeight: 700,
                 textTransform: "uppercase",
@@ -205,7 +215,7 @@ export default function ShelvesDragGrid({ items: itemsProp, shelfLabels, nameFon
                   >
                     <div
                       style={{
-                        fontFamily: "'JetBrains Mono', monospace",
+                        fontFamily: "var(--font-ui)",
                         fontSize: 9,
                         fontWeight: 700,
                         textTransform: "uppercase",
@@ -217,7 +227,7 @@ export default function ShelvesDragGrid({ items: itemsProp, shelfLabels, nameFon
                     </div>
                     <div
                       style={{
-                        fontFamily: "'Source Serif 4', serif",
+                        fontFamily: "var(--font-display)",
                         fontWeight: 600,
                         fontSize: nameFontSize,
                         lineHeight: 1.05,
@@ -229,7 +239,7 @@ export default function ShelvesDragGrid({ items: itemsProp, shelfLabels, nameFon
                     </div>
                     <div
                       style={{
-                        fontFamily: "'JetBrains Mono', monospace",
+                        fontFamily: "var(--font-ui)",
                         fontSize: 10,
                         fontWeight: 700,
                         letterSpacing: "0.08em",

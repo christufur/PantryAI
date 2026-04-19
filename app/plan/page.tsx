@@ -142,8 +142,8 @@ export default async function PlanPage() {
           background: "#000",
           color: "#fff",
           padding: "10px 32px",
-          fontFamily: "'JetBrains Mono', monospace",
-          fontSize: 12,
+          fontFamily: "var(--font-ui)",
+          fontSize: "var(--text-ribbon)",
           fontWeight: 700,
           textTransform: "uppercase",
           letterSpacing: "0.12em",
@@ -164,13 +164,13 @@ export default async function PlanPage() {
       <div style={{ maxWidth: 1400, margin: "0 auto", padding: "32px" }} className="wall-container">
         {/* Action bar */}
         <section style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 24, gap: 16, flexWrap: "wrap" }}>
-          <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, fontWeight: 700, letterSpacing: "0.14em", color: "var(--caption)" }}>
+          <div style={{ fontFamily: "var(--font-ui)", fontSize: "var(--text-ribbon)", fontWeight: 700, letterSpacing: "0.14em", color: "var(--caption)" }}>
             {weekRangeLabel}
           </div>
           <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
             {activePlanId && (
               <Link href={`/plan/${activePlanId}/shopping`} style={{
-                fontFamily: "'JetBrains Mono', monospace", fontSize: 11, fontWeight: 700,
+                fontFamily: "var(--font-ui)", fontSize: 11, fontWeight: 700,
                 textTransform: "uppercase", letterSpacing: "0.08em",
                 padding: "10px 16px", border: "2px solid #000", background: "#fff", color: "#000", textDecoration: "none",
               }}>
@@ -178,7 +178,7 @@ export default async function PlanPage() {
               </Link>
             )}
             <Link href="/plan/new" style={{
-              fontFamily: "'JetBrains Mono', monospace", fontSize: 11, fontWeight: 700,
+              fontFamily: "var(--font-ui)", fontSize: 11, fontWeight: 700,
               textTransform: "uppercase", letterSpacing: "0.08em",
               padding: "10px 16px", border: "2px solid #000", background: "#000", color: "#fff", textDecoration: "none",
             }}>
@@ -190,7 +190,7 @@ export default async function PlanPage() {
         {/* TONIGHT */}
         <section style={{ borderBottom: "2px solid #000", paddingBottom: 32, marginBottom: 32 }}>
           <div style={{
-            fontFamily: "'JetBrains Mono', monospace", fontSize: 12, fontWeight: 700,
+            fontFamily: "var(--font-ui)", fontSize: "var(--text-ribbon)", fontWeight: 700,
             textTransform: "uppercase", letterSpacing: "0.14em",
             color: tonight ? "#c8102e" : "var(--caption)", marginBottom: 12,
           }}>
@@ -206,15 +206,15 @@ export default async function PlanPage() {
           <div style={{ display: "grid", gridTemplateColumns: "1fr 240px", gap: 32, alignItems: "end" }} className="wall-tonight-grid">
             <div>
               <h1 style={{
-                fontFamily: "'Source Serif 4', serif", fontWeight: 600,
-                fontSize: 48, lineHeight: 1.0, letterSpacing: "-0.02em", margin: 0, color: "var(--ink)",
+                fontFamily: "var(--font-display)", fontWeight: 600,
+                fontSize: "var(--text-title)", lineHeight: 1.0, letterSpacing: "-0.02em", margin: 0, color: "var(--ink)",
               }} className="wall-headline">
                 {tonight ? tonight.title : "Pantry's clean."}
               </h1>
               {tonight && (tonight.saves?.length ?? 0) > 0 && (
                 <div style={{
-                  marginTop: 16, fontFamily: "'JetBrains Mono', monospace",
-                  fontSize: 13, fontWeight: 700, letterSpacing: "0.08em",
+                  marginTop: 16, fontFamily: "var(--font-ui)",
+                  fontSize: "var(--text-2xs)", fontWeight: 700, letterSpacing: "0.08em",
                   textTransform: "uppercase", color: "var(--caption)",
                 }}>
                   {tonight.saves!.join(" · ")}
@@ -222,8 +222,8 @@ export default async function PlanPage() {
               )}
             </div>
             <Link href={ctaHref} style={{
-              fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: 14,
-              textTransform: "uppercase", letterSpacing: "0.06em",
+              fontFamily: "var(--font-ui)", fontWeight: 700, fontSize: "var(--text-ribbon)",
+              textTransform: "uppercase", letterSpacing: "0.08em",
               padding: "18px 22px", border: "2px solid #000",
               background: "#000", color: "#fff", textDecoration: "none",
               textAlign: "center", alignSelf: "end",
@@ -237,13 +237,13 @@ export default async function PlanPage() {
         <section style={{ display: "grid", gridTemplateColumns: "320px 1fr", gap: 40 }} className="wall-bottom-grid">
           <div>
             <div style={{
-              fontFamily: "'JetBrains Mono', monospace", fontSize: 11, fontWeight: 700,
+              fontFamily: "var(--font-ui)", fontSize: 11, fontWeight: 700,
               textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--caption)", marginBottom: 12,
             }}>
               DYING SOON
             </div>
             {dying.length === 0 ? (
-              <div style={{ fontFamily: "Lora, serif", fontSize: 16, color: "var(--caption)" }}>Nothing within 3 days.</div>
+              <div style={{ fontFamily: "var(--font-body)", fontSize: "var(--text-md)", color: "var(--caption)" }}>Nothing within 3 days.</div>
             ) : (
               <div style={{ borderTop: "2px solid #000" }}>
                 {dying.slice(0, 8).map((it) => {
@@ -253,10 +253,10 @@ export default async function PlanPage() {
                       borderBottom: "1px solid var(--hairline)", padding: "12px 0",
                       display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 12,
                     }}>
-                      <span style={{ fontFamily: "'Source Serif 4', serif", fontSize: 22, fontWeight: 600, color: "#000", lineHeight: 1.1 }}>
+                      <span style={{ fontFamily: "var(--font-display)", fontSize: "var(--text-card-name)", fontWeight: 600, color: "#000", lineHeight: 1.1 }}>
                         {it.name}
                       </span>
-                      <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", color: "#c8102e" }}>
+                      <span style={{ fontFamily: "var(--font-ui)", fontSize: "var(--text-2xs)", fontWeight: 700, letterSpacing: "0.08em", color: "#c8102e" }}>
                         {d < 0 ? "EXP" : `${d}D`}
                       </span>
                     </div>
@@ -269,7 +269,7 @@ export default async function PlanPage() {
           <div>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 12 }}>
               <div style={{
-                fontFamily: "'JetBrains Mono', monospace", fontSize: 11, fontWeight: 700,
+                fontFamily: "var(--font-ui)", fontSize: 11, fontWeight: 700,
                 textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--caption)",
               }}>
                 THIS WEEK {days.length > 0 ? "· TAP A DAY FOR DETAIL" : ""}
@@ -278,11 +278,11 @@ export default async function PlanPage() {
 
             {days.length === 0 ? (
               <div style={{ border: "2px dashed var(--hairline)", padding: "48px 24px", textAlign: "center" }}>
-                <p style={{ fontFamily: "Lora, serif", fontSize: 18, color: "var(--caption)", margin: "0 0 16px" }}>
+                <p style={{ fontFamily: "var(--font-body)", fontSize: "var(--text-lg)", color: "var(--caption)", margin: "0 0 16px" }}>
                   No plan yet. Generate one to see your week.
                 </p>
                 <Link href="/plan/new" style={{
-                  fontFamily: "'JetBrains Mono', monospace", fontSize: 12, fontWeight: 700,
+                  fontFamily: "var(--font-ui)", fontSize: 12, fontWeight: 700,
                   textTransform: "uppercase", letterSpacing: "0.08em",
                   padding: "12px 22px", border: "2px solid #000",
                   background: "#000", color: "#fff", textDecoration: "none", display: "inline-block",
@@ -300,7 +300,7 @@ export default async function PlanPage() {
         {pastPlans.length > 0 && (
           <section style={{ marginTop: 48, paddingTop: 24, borderTop: "1px solid var(--hairline)" }}>
             <div style={{
-              fontFamily: "'JetBrains Mono', monospace", fontSize: 11, fontWeight: 700,
+              fontFamily: "var(--font-ui)", fontSize: 11, fontWeight: 700,
               textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--caption)", marginBottom: 12,
             }}>
               PAST PLANS ({pastPlans.length})
@@ -314,10 +314,10 @@ export default async function PlanPage() {
                       borderBottom: "1px solid var(--hairline)", padding: "14px 0",
                       display: "flex", justifyContent: "space-between", alignItems: "baseline",
                     }}>
-                      <div style={{ fontFamily: "'Source Serif 4', serif", fontSize: 16, fontWeight: 600 }}>
+                      <div style={{ fontFamily: "var(--font-display)", fontSize: "var(--text-md)", fontWeight: 600 }}>
                         {dayCount}-Day Plan
                       </div>
-                      <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: "var(--caption)", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+                      <div style={{ fontFamily: "var(--font-ui)", fontSize: 11, color: "var(--caption)", textTransform: "uppercase", letterSpacing: "0.08em" }}>
                         {formatShort(plan.weekStart)} →
                       </div>
                     </div>

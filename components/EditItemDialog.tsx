@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/select";
 
 const LABEL_STYLE: React.CSSProperties = {
-  fontFamily: "'JetBrains Mono', monospace",
+  fontFamily: "var(--font-ui)",
   fontSize: 10,
   textTransform: "uppercase",
   letterSpacing: "0.1em",
@@ -28,7 +28,7 @@ const SELECT_TRIGGER_STYLE: React.CSSProperties = {
   background: "#ffffff",
   border: "2px solid #000",
   borderRadius: 0,
-  fontFamily: "Inter, sans-serif",
+  fontFamily: "var(--font-ui)",
   fontSize: 13,
 };
 
@@ -92,7 +92,7 @@ export default function EditItemDialog({
       <button
         onClick={() => setOpen(true)}
         style={{
-          fontFamily: "Inter, sans-serif",
+          fontFamily: "var(--font-ui)",
           fontWeight: 700,
           fontSize: 11,
           textTransform: "uppercase",
@@ -121,7 +121,7 @@ export default function EditItemDialog({
           <DialogHeader>
             <DialogTitle
               style={{
-                fontFamily: "'JetBrains Mono', monospace",
+                fontFamily: "var(--font-ui)",
                 fontSize: 11,
                 fontWeight: 700,
                 color: "#757575",
@@ -147,7 +147,7 @@ export default function EditItemDialog({
                   style={{
                     border: "2px solid #000",
                     padding: "8px 10px",
-                    fontFamily: "'JetBrains Mono', monospace",
+                    fontFamily: "var(--font-ui)",
                     fontSize: 14,
                     background: "#fff",
                     color: "#000",
@@ -197,7 +197,7 @@ export default function EditItemDialog({
                 style={{
                   border: "2px solid #000",
                   padding: "8px 10px",
-                  fontFamily: "'JetBrains Mono', monospace",
+                  fontFamily: "var(--font-ui)",
                   fontSize: 13,
                   background: "#fff",
                   color: "#000",
@@ -223,14 +223,14 @@ export default function EditItemDialog({
                 width: "100%",
               }}
             >
-              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 18, lineHeight: 1 }}>
+              <span style={{ fontFamily: "var(--font-ui)", fontSize: 18, lineHeight: 1 }}>
                 {isLocalVal ? "◉" : "◎"}
               </span>
               <div>
-                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em" }}>
+                <div style={{ fontFamily: "var(--font-ui)", fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em" }}>
                   {isLocalVal ? "NM LOCAL" : "MARK AS LOCAL"}
                 </div>
-                <div style={{ fontFamily: "Lora, serif", fontSize: 12, opacity: 0.8, marginTop: 2 }}>
+                <div style={{ fontFamily: "var(--font-body)", fontSize: 12, opacity: 0.8, marginTop: 2 }}>
                   {isLocalVal ? "Sourced from a local NM producer" : "Tap if you bought this locally"}
                 </div>
               </div>
@@ -241,7 +241,7 @@ export default function EditItemDialog({
               <button
                 onClick={() => setOpen(false)}
                 style={{
-                  fontFamily: "Inter, sans-serif",
+                  fontFamily: "var(--font-ui)",
                   fontWeight: 700,
                   fontSize: 13,
                   textTransform: "uppercase",
@@ -260,7 +260,7 @@ export default function EditItemDialog({
                 onClick={handleSave}
                 disabled={saving}
                 style={{
-                  fontFamily: "Inter, sans-serif",
+                  fontFamily: "var(--font-ui)",
                   fontWeight: 700,
                   fontSize: 13,
                   textTransform: "uppercase",

@@ -30,8 +30,8 @@ export default async function RecipePage() {
       <div style={{
         background: '#000', color: '#fff',
         padding: '10px 32px',
-        fontFamily: "'JetBrains Mono', monospace",
-        fontSize: 12, fontWeight: 700,
+        fontFamily: "var(--font-ui)",
+        fontSize: "var(--text-ribbon)", fontWeight: 700,
         textTransform: 'uppercase', letterSpacing: '0.12em',
         display: 'flex', justifyContent: 'space-between', alignItems: 'center'
       }}>
@@ -41,7 +41,7 @@ export default async function RecipePage() {
       <div style={{ maxWidth: 720, margin: '0 auto', padding: '40px 32px' }} className="recipe-container">
         <div style={{ marginBottom: 32 }}>
           <div style={{
-            fontFamily: "'JetBrains Mono', monospace",
+            fontFamily: "var(--font-ui)",
             fontSize: 11, fontWeight: 700,
             textTransform: 'uppercase', letterSpacing: '0.12em',
             color: 'var(--caption)', marginBottom: 8,
@@ -49,15 +49,15 @@ export default async function RecipePage() {
             VAR · 02 · COOK FROM PANTRY
           </div>
           <h1 style={{
-            fontFamily: "'Source Serif 4', serif",
-            fontWeight: 600, fontSize: 44, lineHeight: 1.0,
+            fontFamily: "var(--font-display)",
+            fontWeight: 600, fontSize: "var(--text-title)", lineHeight: 1.0,
             letterSpacing: '-0.02em',
             margin: '0 0 8px',
           }}>
             What are we cooking?
           </h1>
           <p style={{
-            fontFamily: 'Lora, serif', fontSize: 16,
+            fontFamily: "var(--font-body)", fontSize: "var(--text-md)",
             color: 'var(--caption)', margin: 0,
           }}>
             Pick the ingredients you want to use. Dying items are pre-selected.
@@ -70,20 +70,20 @@ export default async function RecipePage() {
             textAlign: 'center',
           }}>
             <div style={{
-              fontFamily: "'Source Serif 4', serif",
-              fontSize: 22, fontWeight: 600, marginBottom: 8,
+              fontFamily: "var(--font-display)",
+              fontSize: "var(--text-card-name)", fontWeight: 600, marginBottom: 8,
             }}>
               Your pantry is empty.
             </div>
             <p style={{
-              fontFamily: 'Lora, serif', fontSize: 15,
+              fontFamily: "var(--font-body)", fontSize: "var(--text-sm)",
               color: 'var(--caption)', margin: '0 0 20px',
             }}>
               Snap a photo of your fridge first.
             </p>
             <Link href="/" style={{
-              fontFamily: 'Inter, sans-serif', fontWeight: 700,
-              fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.05em',
+              fontFamily: "var(--font-ui)", fontWeight: 700,
+              fontSize: "var(--text-ribbon)", textTransform: 'uppercase', letterSpacing: '0.08em',
               padding: '10px 18px', border: '2px solid #000',
               background: '#000', color: '#fff',
               textDecoration: 'none', display: 'inline-block',

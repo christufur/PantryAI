@@ -57,8 +57,8 @@ export default function RecipeDishClient({
             background: "#000",
             color: "#fff",
             padding: "10px 32px",
-            fontFamily: "'JetBrains Mono', monospace",
-            fontSize: 12,
+            fontFamily: "var(--font-ui)",
+            fontSize: "var(--text-ribbon)",
             fontWeight: 700,
             textTransform: "uppercase",
             letterSpacing: "0.12em",
@@ -73,8 +73,8 @@ export default function RecipeDishClient({
         <div style={{ maxWidth: 720, margin: "0 auto", padding: "48px 32px" }} className="recipe-container">
           <p
             style={{
-              fontFamily: "Lora, serif",
-              fontSize: 18,
+              fontFamily: "var(--font-body)",
+              fontSize: "var(--text-lg)",
               color: "var(--caption)",
               margin: 0,
             }}
@@ -94,8 +94,8 @@ export default function RecipeDishClient({
             background: "#000",
             color: "#fff",
             padding: "10px 32px",
-            fontFamily: "'JetBrains Mono', monospace",
-            fontSize: 12,
+            fontFamily: "var(--font-ui)",
+            fontSize: "var(--text-ribbon)",
             fontWeight: 700,
             textTransform: "uppercase",
             letterSpacing: "0.12em",
@@ -110,7 +110,7 @@ export default function RecipeDishClient({
         <div style={{ maxWidth: 720, margin: "0 auto", padding: "40px 32px" }} className="recipe-container">
           <p
             style={{
-              fontFamily: "Lora, serif",
+              fontFamily: "var(--font-body)",
               fontSize: 16,
               color: "#1a1a1a",
               margin: "0 0 20px",
@@ -120,7 +120,7 @@ export default function RecipeDishClient({
           >
             {error ?? "Something went wrong."}
           </p>
-          <p style={{ fontFamily: "Lora, serif", fontSize: 14, color: "var(--caption)", margin: "0 0 24px" }}>
+          <p style={{ fontFamily: "var(--font-body)", fontSize: 14, color: "var(--caption)", margin: "0 0 24px" }}>
             The AI service may be busy (503). We retry automatically a few times; you can try again in a moment.
           </p>
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
@@ -128,11 +128,11 @@ export default function RecipeDishClient({
               type="button"
               onClick={() => void load()}
               style={{
-                fontFamily: "Inter, sans-serif",
+                fontFamily: "var(--font-ui)",
                 fontWeight: 700,
-                fontSize: 12,
+                fontSize: "var(--text-ribbon)",
                 textTransform: "uppercase",
-                letterSpacing: "0.05em",
+                letterSpacing: "0.08em",
                 padding: "10px 18px",
                 border: "2px solid #000",
                 background: "#000",
@@ -145,11 +145,11 @@ export default function RecipeDishClient({
             <Link
               href="/recipe"
               style={{
-                fontFamily: "Inter, sans-serif",
+                fontFamily: "var(--font-ui)",
                 fontWeight: 700,
-                fontSize: 12,
+                fontSize: "var(--text-ribbon)",
                 textTransform: "uppercase",
-                letterSpacing: "0.05em",
+                letterSpacing: "0.08em",
                 padding: "10px 18px",
                 border: "2px solid #000",
                 background: "#fff",
@@ -178,8 +178,8 @@ export default function RecipeDishClient({
           background: "#000",
           color: "#fff",
           padding: "10px 32px",
-          fontFamily: "'JetBrains Mono', monospace",
-          fontSize: 12,
+          fontFamily: "var(--font-ui)",
+          fontSize: "var(--text-ribbon)",
           fontWeight: 700,
           textTransform: "uppercase",
           letterSpacing: "0.12em",
@@ -195,7 +195,7 @@ export default function RecipeDishClient({
       <div style={{ maxWidth: 720, margin: "0 auto", padding: "40px 32px" }} className="recipe-container">
         <div
           style={{
-            fontFamily: "'JetBrains Mono', monospace",
+            fontFamily: "var(--font-ui)",
             fontSize: 11,
             fontWeight: 700,
             textTransform: "uppercase",
@@ -210,9 +210,9 @@ export default function RecipeDishClient({
 
         <h1
           style={{
-            fontFamily: "'Source Serif 4', serif",
+            fontFamily: "var(--font-display)",
             fontWeight: 600,
-            fontSize: 48,
+            fontSize: "var(--text-title)",
             lineHeight: 1.0,
             letterSpacing: "-0.02em",
             margin: "0 0 24px",
@@ -228,7 +228,7 @@ export default function RecipeDishClient({
           <div style={{ flex: "0 0 220px" }} className="recipe-ingredients">
             <div
               style={{
-                fontFamily: "'JetBrains Mono', monospace",
+                fontFamily: "var(--font-ui)",
                 fontSize: 10,
                 fontWeight: 700,
                 textTransform: "uppercase",
@@ -244,8 +244,8 @@ export default function RecipeDishClient({
                 <li
                   key={i}
                   style={{
-                    fontFamily: "Lora, serif",
-                    fontSize: 15,
+                    fontFamily: "var(--font-body)",
+                    fontSize: "var(--text-sm)",
                     lineHeight: 1.5,
                     color: "var(--ink)",
                     padding: "8px 0",
@@ -261,7 +261,7 @@ export default function RecipeDishClient({
           <div style={{ flex: 1 }}>
             <div
               style={{
-                fontFamily: "'JetBrains Mono', monospace",
+                fontFamily: "var(--font-ui)",
                 fontSize: 10,
                 fontWeight: 700,
                 textTransform: "uppercase",
@@ -277,7 +277,7 @@ export default function RecipeDishClient({
                 <li key={i} style={{ display: "flex", gap: 16, alignItems: "flex-start" }}>
                   <span
                     style={{
-                      fontFamily: "'Source Serif 4', serif",
+                      fontFamily: "var(--font-display)",
                       fontWeight: 600,
                       fontSize: 20,
                       color: "var(--caption)",
@@ -290,8 +290,8 @@ export default function RecipeDishClient({
                   </span>
                   <span
                     style={{
-                      fontFamily: "Lora, serif",
-                      fontSize: 16,
+                      fontFamily: "var(--font-body)",
+                      fontSize: "var(--text-md)",
                       lineHeight: 1.6,
                       color: "var(--ink)",
                     }}
@@ -308,7 +308,7 @@ export default function RecipeDishClient({
                   marginTop: 32,
                   borderTop: "1px solid var(--hairline)",
                   paddingTop: 16,
-                  fontFamily: "'JetBrains Mono', monospace",
+                  fontFamily: "var(--font-ui)",
                   fontSize: 11,
                   letterSpacing: "0.08em",
                   color: "var(--dying)",
@@ -328,7 +328,7 @@ export default function RecipeDishClient({
               >
                 <div
                   style={{
-                    fontFamily: "'JetBrains Mono', monospace",
+                    fontFamily: "var(--font-ui)",
                     fontSize: 10,
                     fontWeight: 700,
                     textTransform: "uppercase",
@@ -345,7 +345,7 @@ export default function RecipeDishClient({
                     style={{
                       borderBottom: i < buyLocal.length - 1 ? "1px solid #d1e9f5" : "none",
                       padding: "8px 0",
-                      fontFamily: "Lora, serif",
+                      fontFamily: "var(--font-body)",
                       fontSize: 14,
                       color: "#1a1a1a",
                     }}
@@ -377,11 +377,11 @@ export default function RecipeDishClient({
           <Link
             href="/recipe"
             style={{
-              fontFamily: "Inter, sans-serif",
+              fontFamily: "var(--font-ui)",
               fontWeight: 700,
-              fontSize: 12,
+              fontSize: "var(--text-ribbon)",
               textTransform: "uppercase",
-              letterSpacing: "0.05em",
+              letterSpacing: "0.08em",
               padding: "10px 18px",
               border: "2px solid #000",
               background: "#000",
@@ -395,11 +395,11 @@ export default function RecipeDishClient({
           <Link
             href="/"
             style={{
-              fontFamily: "Inter, sans-serif",
+              fontFamily: "var(--font-ui)",
               fontWeight: 700,
-              fontSize: 12,
+              fontSize: "var(--text-ribbon)",
               textTransform: "uppercase",
-              letterSpacing: "0.05em",
+              letterSpacing: "0.08em",
               padding: "10px 18px",
               border: "2px solid #000",
               background: "#fff",

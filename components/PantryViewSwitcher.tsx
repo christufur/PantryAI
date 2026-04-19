@@ -6,7 +6,14 @@ import type { PlainItem } from "@/components/pantry-types";
 
 export type { PlainItem } from "@/components/pantry-types";
 
-export default function PantryViewSwitcher({ items }: { items: PlainItem[] }) {
+export default function PantryViewSwitcher({
+  items,
+  nowMs,
+}: {
+  items: PlainItem[];
+  /** Server time for first paint — avoids SSR/client `Date.now()` hydration mismatch. */
+  nowMs: number;
+}) {
   if (items.length === 0) {
     return (
       <div
@@ -15,8 +22,8 @@ export default function PantryViewSwitcher({ items }: { items: PlainItem[] }) {
       >
         <div
           style={{
-            fontFamily: "'Source Serif 4', serif",
-            fontSize: "clamp(28px, 6vw, 36px)",
+            fontFamily: "var(--font-display)",
+            fontSize: "clamp(var(--text-subtitle), 6vw, var(--text-subtitle-max))",
             fontWeight: 600,
             marginBottom: 10,
           }}
@@ -25,8 +32,8 @@ export default function PantryViewSwitcher({ items }: { items: PlainItem[] }) {
         </div>
         <p
           style={{
-            fontFamily: "Lora, serif",
-            fontSize: 16,
+            fontFamily: "var(--font-body)",
+            fontSize: "var(--text-md)",
             color: "var(--caption)",
             margin: "0 auto 28px",
             maxWidth: 420,
@@ -49,7 +56,7 @@ export default function PantryViewSwitcher({ items }: { items: PlainItem[] }) {
 
   return (
     <div className="page-grid-outer">
-      <PantryKitchenBoard items={items} />
+      <PantryKitchenBoard items={items} nowMs={nowMs} />
       <style>{`
         @media (max-width: 768px) {
           .page-grid-outer { padding: 0 !important; }

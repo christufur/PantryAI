@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { recipesCache } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import { generateRecipe, ingredientsHash } from "@/lib/gemini";
+import { GEMINI_MODEL_RESPONSE_HEADER, generateRecipe, ingredientsHash } from "@/lib/gemini";
 import { computeBuyLocal } from "@/lib/recipe-buy-local";
 import { loadProfile, profilePromptContext, profileHash } from "@/lib/profile";
 import type { Recipe } from "@/lib/gemini";
@@ -42,7 +42,11 @@ export async function GET(request: NextRequest) {
     const savedItems: string[] = recipe.saves ?? ingredients.slice(0, 3);
     const buyLocal = computeBuyLocal(savedItems);
 
-    return NextResponse.json({ ...recipe, buyLocal });
+    const headers =
+      recipe.geminiModel != null
+        ? { [GEMINI_MODEL_RESPONSE_HEADER]: recipe.geminiModel }
+        : undefined;
+    return NextResponse.json({ ...recipe, buyLocal }, headers ? { headers } : undefined);
   } catch (e) {
     const message =
       e instanceof ApiError
