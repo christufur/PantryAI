@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import ExpiryColumn from "@/components/ExpiryColumn";
 import PhotoUploadDialog from "@/components/PhotoUploadDialog";
 import DeleteItemButton from "@/components/DeleteItemButton";
+import ShelvesDragGrid from "@/components/ShelvesDragGrid";
 
 export type PlainItem = {
   id: number;
@@ -20,7 +21,6 @@ export type PlainItem = {
 
 type View = "list" | "column" | "shelves";
 
-const SHELF_ORDER = ["fridge", "freezer", "pantry"] as const;
 const SHELF_LABELS: Record<string, string> = {
   fridge:  "FRIDGE",
   freezer: "FREEZER",
@@ -70,18 +70,6 @@ export default function PantryViewSwitcher({ items }: { items: PlainItem[] }) {
     [items]
   );
 
-  // ── Shelves buckets ───────────────────────────────────────────────────────
-  const buckets = useMemo(() => {
-    const b: Record<string, PlainItem[]> = { fridge: [], freezer: [], pantry: [], other: [] };
-    for (const it of items) {
-      const key = (SHELF_ORDER as readonly string[]).includes(it.storageLocation)
-        ? it.storageLocation : "other";
-      b[key].push(it);
-    }
-    return b;
-  }, [items]);
-  const shelves = [...SHELF_ORDER, "other"].filter(k => buckets[k].length > 0);
-
   // ─────────────────────────────────────────────────────────────────────────
   //  View-toggle bar
   // ─────────────────────────────────────────────────────────────────────────
@@ -113,12 +101,20 @@ export default function PantryViewSwitcher({ items }: { items: PlainItem[] }) {
     </div>
   );
 
+  const mobileSnapBar = (
+    <div className="mobile-snap-bar">
+      <div className="mobile-snap-bar-inner">
+        <PhotoUploadDialog fullWidthTrigger />
+      </div>
+    </div>
+  );
+
   // ─────────────────────────────────────────────────────────────────────────
   //  Shared sidebar (LIST view only)
   // ─────────────────────────────────────────────────────────────────────────
   const sidebar = (
     <div style={{ position: "sticky", top: 16 }} className="sidebar">
-      <div style={{ border: "2px solid #000", padding: 20, marginBottom: 24 }}>
+      <div className="sidebar-add-snap" style={{ border: "2px solid #000", padding: 20, marginBottom: 24 }}>
         <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--caption)", marginBottom: 10 }}>
           ADD ITEMS
         </div>
@@ -196,10 +192,13 @@ export default function PantryViewSwitcher({ items }: { items: PlainItem[] }) {
     return (
       <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 32px" }} className="page-grid-outer">
         {toggleBar}
+        {mobileSnapBar}
         <div style={{ padding: "60px 0", textAlign: "center" }}>
           <div style={{ fontFamily: "'Source Serif 4', serif", fontSize: 32, fontWeight: 600, marginBottom: 8 }}>Nothing here yet.</div>
           <div style={{ fontFamily: "Lora, serif", fontSize: 16, color: "var(--caption)", marginBottom: 32 }}>Snap your fridge to get started.</div>
-          <PhotoUploadDialog />
+          <div className="empty-state-desktop-snap" style={{ display: "inline-block" }}>
+            <PhotoUploadDialog />
+          </div>
         </div>
       </div>
     );
@@ -217,6 +216,7 @@ export default function PantryViewSwitcher({ items }: { items: PlainItem[] }) {
         padding: selectionCount > 0 ? "32px 32px 96px" : "32px 32px 0",
       }} className="page-grid-outer">
         {toggleBar}
+        {mobileSnapBar}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 300px", gap: 40, alignItems: "start" }} className="page-grid">
           <div>
             {/* Select-all header */}
@@ -282,9 +282,8 @@ export default function PantryViewSwitcher({ items }: { items: PlainItem[] }) {
                       {item.qty} {item.unit} · {item.storageLocation.toUpperCase()}
                     </div>
                   </div>
-                  <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
+                  <div style={{ display: "flex", gap: 8, flexShrink: 0, alignItems: "center" }}>
                     <Link href={`/recipe?ingredients=${encodeURIComponent(item.name)}`} style={{ fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: 11, textTransform: "uppercase", letterSpacing: "0.05em", padding: "6px 12px", border: "2px solid #000", color: isDying ? "#fff" : "#000", background: isDying ? "#000" : "#fff", textDecoration: "none", whiteSpace: "nowrap" }}>RECIPE</Link>
-                    <Link href={`/donate?item_id=${item.id}`} style={{ fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: 11, textTransform: "uppercase", letterSpacing: "0.05em", padding: "6px 12px", border: "2px solid #000", color: "#000", background: "#fff", textDecoration: "none", whiteSpace: "nowrap" }}>DONATE</Link>
                     <DeleteItemButton id={item.id} name={item.name} />
                   </div>
                 </div>
@@ -359,6 +358,7 @@ export default function PantryViewSwitcher({ items }: { items: PlainItem[] }) {
     return (
       <div style={{ maxWidth: 1200, margin: "0 auto", padding: "32px 32px 0" }} className="page-grid-outer">
         {toggleBar}
+        {mobileSnapBar}
         <div style={{ marginBottom: 8 }}>
           <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--caption)", marginBottom: 4 }}>EXPIRES IN</div>
           <h2 style={{ fontFamily: "'Source Serif 4', serif", fontWeight: 600, fontSize: 56, lineHeight: 0.95, letterSpacing: "-0.025em", margin: "0 0 8px" }} className="column-title">This Week</h2>
@@ -383,47 +383,21 @@ export default function PantryViewSwitcher({ items }: { items: PlainItem[] }) {
   return (
     <div style={{ maxWidth: 1200, margin: "0 auto", padding: "32px 32px 0" }} className="page-grid-outer">
       {toggleBar}
+      {mobileSnapBar}
       <div style={{ marginBottom: 32 }}>
         <h2 style={{ fontFamily: "'Source Serif 4', serif", fontWeight: 600, fontSize: 56, lineHeight: 0.95, letterSpacing: "-0.025em", margin: "0 0 8px" }} className="shelves-title">Shelves</h2>
         <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--caption)" }}>
-          TAP AN ITEM TO GET A RECIPE · DYING ITEMS IN RED
+          DRAG ITEMS BETWEEN SHELVES · TAP A TILE FOR A RECIPE · DYING IN RED
         </div>
       </div>
 
-      {shelves.map(key => (
-        <section key={key} style={{ marginBottom: 40 }}>
-          <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--caption)", marginBottom: 8, display: "flex", justifyContent: "space-between" }}>
-            <span>{SHELF_LABELS[key]}</span>
-            <span>{buckets[key].length} {buckets[key].length === 1 ? "ITEM" : "ITEMS"}</span>
-          </div>
-          <div style={{ borderBottom: "4px solid #000", display: "flex", flexWrap: "wrap", alignItems: "flex-end", gap: 8, paddingBottom: 0, minHeight: 96 }} className="shelf-row">
-            {buckets[key].map(item => {
-              const d = days(item.expiryDate);
-              const isDying = d <= 3;
-              const dLabel = d < 0 ? "EXP" : `${d}D`;
-              const w = Math.min(180, Math.max(88, item.name.length * 11 + 28));
-              return (
-                <Link key={item.id} href={`/recipe?ingredients=${encodeURIComponent(item.name)}`} title={`${item.name} · ${item.qty} ${item.unit} · ${dLabel}`} style={{ width: w, height: 88, border: "2px solid #000", background: isDying ? "#c8102e" : "#fff", color: isDying ? "#fff" : "#000", textDecoration: "none", padding: "8px 10px", display: "flex", flexDirection: "column", justifyContent: "space-between", flexShrink: 0 }}>
-                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", opacity: isDying ? 0.95 : 0.6 }}>
-                    {item.category.replace(/_/g, " ")}
-                  </div>
-                  <div style={{ fontFamily: "'Source Serif 4', serif", fontWeight: 600, fontSize: 15, lineHeight: 1.05, textTransform: "uppercase", letterSpacing: "-0.01em" }}>
-                    {item.name}
-                  </div>
-                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, fontWeight: 700, letterSpacing: "0.08em", display: "flex", justifyContent: "space-between" }}>
-                    <span>{item.qty}{item.unit === "each" ? "" : ` ${item.unit}`}</span>
-                    <span>{dLabel}</span>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-        </section>
-      ))}
+      <ShelvesDragGrid items={items} shelfLabels={SHELF_LABELS} nameFontSize={15} />
 
       {dying.length > 0 && (
         <div style={{ marginTop: 24, borderTop: "1px solid var(--hairline)", paddingTop: 20, display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 40 }}>
-          <PhotoUploadDialog />
+          <div className="desktop-only-snap-aux">
+            <PhotoUploadDialog />
+          </div>
           <Link href={`/recipe?ingredients=${encodeURIComponent(dying.map(i => i.name).join(","))}`} style={{ fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: "0.05em", padding: "10px 18px", border: "2px solid #000", background: "#000", color: "#fff", textDecoration: "none" }}>
             COOK → SAVE {dying.length} DYING
           </Link>

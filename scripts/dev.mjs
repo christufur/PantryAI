@@ -10,6 +10,12 @@ const root = path.join(__dirname, "..");
 const nextCli = path.join(root, "node_modules", "next", "dist", "bin", "next");
 const port = process.env.PORT || "3000";
 
+const useHttps =
+  process.env.DEV_HTTPS === "1" ||
+  process.env.DEV_HTTPS === "true" ||
+  process.argv.includes("--experimental-https") ||
+  process.argv.includes("--https");
+
 function isWsl() {
   try {
     return /microsoft/i.test(fs.readFileSync("/proc/version", "utf8"));
@@ -95,17 +101,24 @@ function printHints() {
   const winLan = windowsPrivateLanIp();
   const linuxGuess = bestLinuxIfaceIp();
   const lan = isWsl() ? winLan || linuxGuess : linuxGuess;
+  const scheme = useHttps ? "https" : "http";
   const lanHint = lan
-    ? `http://${lan}:${port}`
-    : `http://<your-LAN-IP>:${port}`;
+    ? `${scheme}://${lan}:${port}`
+    : `${scheme}://<your-LAN-IP>:${port}`;
 
   console.log(`
-  Next.js shows "Network: http://0.0.0.0:${port}" because the server binds to all interfaces.
+  Next.js shows "Network: ${scheme}://0.0.0.0:${port}" because the server binds to all interfaces.
   That is not a URL you open — use one of these instead:
 
-  • This machine        http://localhost:${port}
+  • This machine        ${scheme}://localhost:${port}
   • Other devices (LAN) ${lanHint}
 `);
+
+  if (useHttps) {
+    console.log(`  HTTPS: self-signed cert (Next.js --experimental-https). Browsers will warn — choose “Advanced” / “Show details” / “Proceed” once per device. iPhone Safari needs this for camera APIs.
+
+`);
+  }
 
   if (isWsl()) {
     const { paths: ps1Paths, unixPath } = wslPortProxyScriptWindowsPaths();
@@ -126,6 +139,7 @@ function printHints() {
   If it still fails from another device: npm run wsl:portproxy-diagnose-path, run that .ps1 on Windows.
 
   Then on the other device open your Windows Wi‑Fi/Ethernet IP from ipconfig, e.g. ${lanHint}
+  ${useHttps ? "(use https:// and trust the certificate warning once.)" : ""}
 `);
   } else if (linuxGuess) {
     console.log(
@@ -136,7 +150,10 @@ function printHints() {
 
 printHints();
 
-const child = spawn(process.execPath, [nextCli, "dev", "--hostname", "0.0.0.0"], {
+const nextArgs = ["dev", "--hostname", "0.0.0.0"];
+if (useHttps) nextArgs.push("--experimental-https");
+
+const child = spawn(process.execPath, [nextCli, ...nextArgs], {
   cwd: root,
   stdio: "inherit",
   env: process.env,

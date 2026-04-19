@@ -3,6 +3,7 @@ import "./globals.css";
 import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import ScrollToTopButton from "@/components/ScrollToTopButton";
 
 const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -20,7 +21,7 @@ export default function RootLayout({
     <html lang="en" className={cn("font-sans", geist.variable)} suppressHydrationWarning>
       <body suppressHydrationWarning>
         {/* Utility bar */}
-        <div style={{
+        <div className="utility-bar" style={{
           background: '#000', color: '#fff',
           padding: '14px 40px',
           display: 'flex', justifyContent: 'space-between', alignItems: 'center',
@@ -29,10 +30,10 @@ export default function RootLayout({
         }}>
           <Link href="/" style={{ color: '#fff', textDecoration: 'none' }}>PANTRYOS.APP</Link>
           <div className="util-nav" style={{ display: 'flex', gap: 28 }}>
+            <Link href="/" style={{ color: '#fff', textDecoration: 'none' }}>HOME</Link>
             <Link href="/wall" style={{ color: '#fff', textDecoration: 'none' }}>WALL</Link>
             <Link href="/recipe" style={{ color: '#fff', textDecoration: 'none' }}>COOK</Link>
             <Link href="/plan" style={{ color: '#fff', textDecoration: 'none' }}>PLAN</Link>
-            <Link href="/donate" style={{ color: '#fff', textDecoration: 'none' }}>DONATE</Link>
             <Link href="/chat" style={{ color: '#fff', textDecoration: 'none' }}>ASK THE FRIDGE</Link>
           </div>
         </div>
@@ -65,9 +66,40 @@ export default function RootLayout({
 
         {children}
 
+        <ScrollToTopButton />
+
         <style>{`
+          .mobile-snap-bar { display: none; }
           @media (max-width: 768px) {
-            .util-nav { display: none !important; }
+            .mobile-snap-bar {
+              display: flex !important;
+              justify-content: center;
+              width: 100%;
+              padding: 0 0 20px;
+              box-sizing: border-box;
+            }
+            .mobile-snap-bar-inner {
+              width: 100%;
+              max-width: 360px;
+            }
+            .sidebar-add-snap { display: none !important; }
+            .empty-state-desktop-snap { display: none !important; }
+            .desktop-only-snap-aux { display: none !important; }
+            .utility-bar {
+              flex-wrap: wrap !important;
+              align-items: flex-start !important;
+              gap: 12px !important;
+              padding: 12px 16px !important;
+            }
+            .util-nav {
+              display: flex !important;
+              flex-wrap: wrap !important;
+              justify-content: flex-end !important;
+              gap: 12px 16px !important;
+              font-size: 11px !important;
+              letter-spacing: 0.08em !important;
+              max-width: 100% !important;
+            }
             .masthead-name { font-size: 36px !important; }
             .masthead-tagline { display: none !important; }
             .masthead { padding: 20px 16px 16px !important; }

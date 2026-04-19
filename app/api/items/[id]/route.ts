@@ -1,7 +1,64 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/lib/db";
-import { pantryItems } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { db, ensureSqliteSchema } from "@/lib/db";
+import { pantryItems, shelfLife } from "@/db/schema";
+import { and, eq } from "drizzle-orm";
+
+const VALID_STORAGE: ReadonlySet<string> = new Set(["fridge", "freezer", "pantry"]);
+
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  ensureSqliteSchema();
+  const { id } = await params;
+  const itemId = Number(id);
+  if (!Number.isFinite(itemId)) {
+    return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+  }
+
+  let body: unknown;
+  try {
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  }
+
+  const loc =
+    typeof body === "object" &&
+    body !== null &&
+    "storageLocation" in body &&
+    typeof (body as { storageLocation: unknown }).storageLocation === "string"
+      ? (body as { storageLocation: string }).storageLocation
+      : null;
+
+  if (!loc || !VALID_STORAGE.has(loc)) {
+    return NextResponse.json({ error: "Invalid storageLocation" }, { status: 400 });
+  }
+
+  const row = db.select().from(pantryItems).where(eq(pantryItems.id, itemId)).get();
+  if (!row) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+
+  const shelfRow = db
+    .select()
+    .from(shelfLife)
+    .where(and(eq(shelfLife.category, row.category), eq(shelfLife.storageLocation, loc)))
+    .get();
+  const shelfDays = shelfRow?.days ?? 7;
+  const expiryDate = new Date(Date.now() + shelfDays * 86_400_000);
+
+  db.update(pantryItems)
+    .set({ storageLocation: loc, expiryDate })
+    .where(eq(pantryItems.id, itemId))
+    .run();
+
+  return NextResponse.json({
+    ok: true,
+    storageLocation: loc,
+    expiryDate: expiryDate.toISOString(),
+  });
+}
 
 export async function DELETE(
   _req: NextRequest,
