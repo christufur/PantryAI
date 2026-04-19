@@ -8,6 +8,7 @@ import ScrollToTopButton from "@/components/ScrollToTopButton";
 import MobileBottomNav from "@/components/MobileBottomNav";
 import RegisterServiceWorker from "@/components/RegisterServiceWorker";
 import PwaInstallBanner from "@/components/PwaInstallBanner";
+import ScrollLockSafety from "@/components/ScrollLockSafety";
 
 const geist        = Geist({ subsets: ['latin'], variable: '--font-sans', display: 'swap' });
 const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], weight: ['400', '700'], variable: '--font-mono', display: 'swap' });
@@ -160,6 +161,7 @@ export default function RootLayout({
         <ScrollToTopButton />
         <PwaInstallBanner />
         <MobileBottomNav />
+        <ScrollLockSafety />
         <RegisterServiceWorker />
 
         <style>{`
@@ -185,10 +187,14 @@ export default function RootLayout({
               z-index: 150000 !important;
             }
 
-            /* Android/Chrome: wide content (e.g. week grid) must not widen the document or fixed chrome drifts horizontally. */
+            /* Android/Chrome: clip horizontal overflow only; keep vertical scrolling explicit
+               so it isn’t accidentally suppressed when combined with modal scroll-lock. */
             html, body {
               overflow-x: hidden;
+              overflow-y: auto;
               max-width: 100%;
+              -webkit-overflow-scrolling: touch;
+              touch-action: pan-y pinch-zoom;
             }
             .util-nav { display: none !important; }
 

@@ -126,9 +126,10 @@
 }
 
 html {
-  /* Prevent rubber-band overscroll bounce on iOS 16+ and Android Chrome.
-     Applied in <head> via globals.css so it takes effect before first paint. */
-  overscroll-behavior-y: none;
+  /* Avoid `overscroll-behavior-y: none` on document — it has caused Android Chrome
+     to stop vertical scrolling entirely on some builds. Rubber-band is acceptable. */
+  overscroll-behavior-y: auto;
+  overflow-y: auto;
 }
 
 body {
@@ -136,7 +137,8 @@ body {
   color: var(--ink) !important;
   font-family: 'Lora', Georgia, serif;
   -webkit-font-smoothing: antialiased;
-  overscroll-behavior-y: none; /* belt-and-suspenders — both html and body needed on some WebKit builds */
+  overscroll-behavior-y: auto;
+  overflow-y: auto;
 }
 
 @layer base {
