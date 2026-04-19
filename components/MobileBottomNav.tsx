@@ -36,24 +36,7 @@ export default function MobileBottomNav() {
         vv.removeEventListener("scroll", sync);
       };
 
-      // --- touchmove guard: iOS 15 and older don't support overscroll-behavior.
-      //     Prevent the rubber-band bounce by cancelling touchmove when already
-      //     at the top of the page and the user is still pulling down. ---
-      let lastY = 0;
-      const onTouchStart = (e: TouchEvent) => { lastY = e.touches[0].clientY; };
-      const onTouchMove = (e: TouchEvent) => {
-        const dy = e.touches[0].clientY - lastY;
-        const atTop = window.scrollY === 0;
-        if (atTop && dy > 0 && e.cancelable) e.preventDefault();
-      };
-      document.addEventListener("touchstart", onTouchStart, { passive: true });
-      document.addEventListener("touchmove", onTouchMove, { passive: false });
-
-      return () => {
-        cleanup();
-        document.removeEventListener("touchstart", onTouchStart);
-        document.removeEventListener("touchmove", onTouchMove);
-      };
+      return cleanup;
     }
   }, []);
 
