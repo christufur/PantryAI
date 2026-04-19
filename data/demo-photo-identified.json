@@ -1,0 +1,51 @@
+[
+  {
+    "name": "Whole milk",
+    "category": "dairy_milk",
+    "qty": 1,
+    "unit": "each",
+    "printedDate": null
+  },
+  {
+    "name": "Greek yogurt",
+    "category": "dairy_yogurt",
+    "qty": 2,
+    "unit": "each",
+    "printedDate": "2026-04-24"
+  },
+  {
+    "name": "Eggs",
+    "category": "eggs",
+    "qty": 12,
+    "unit": "each",
+    "printedDate": null
+  },
+  {
+    "name": "Baby spinach",
+    "category": "leafy_greens",
+    "qty": 1,
+    "unit": "each",
+    "printedDate": "2026-04-21"
+  },
+  {
+    "name": "Cherry tomatoes",
+    "category": "tomato",
+    "qty": 1,
+    "unit": "each",
+    "printedDate": null
+  },
+  {
+    "name": "Sharp cheddar",
+    "category": "dairy_cheese_hard",
+    "qty": 8,
+    "unit": "oz",
+    "printedDate": "2026-05-10"
+  },
+  {
+    "name": "Sourdough loaf",
+    "category": "bread",
+    "qty": 1,
+    "unit": "each",
+    "printedDate": null
+  }
+]
