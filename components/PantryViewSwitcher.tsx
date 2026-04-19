@@ -3,16 +3,19 @@
 import PhotoUploadDialog from "@/components/PhotoUploadDialog";
 import PantryKitchenBoard from "@/components/PantryKitchenBoard";
 import type { PlainItem } from "@/components/pantry-types";
+import type { ImpactTotals } from "@/lib/impact";
 
 export type { PlainItem } from "@/components/pantry-types";
 
 export default function PantryViewSwitcher({
   items,
   nowMs,
+  impact,
 }: {
   items: PlainItem[];
   /** Server time for first paint — avoids SSR/client `Date.now()` hydration mismatch. */
   nowMs: number;
+  impact: ImpactTotals;
 }) {
   if (items.length === 0) {
     return (
@@ -56,7 +59,7 @@ export default function PantryViewSwitcher({
 
   return (
     <div className="page-grid-outer">
-      <PantryKitchenBoard items={items} nowMs={nowMs} />
+      <PantryKitchenBoard items={items} nowMs={nowMs} impact={impact} />
       <style>{`
         @media (max-width: 768px) {
           .page-grid-outer { padding: 0 !important; }

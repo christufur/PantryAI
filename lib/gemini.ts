@@ -1,7 +1,6 @@
 // Single Gemini client + three task-specific functions.
 // Uses @google/genai (the current SDK; @google/generative-ai is deprecated).
-// Primary: gemini-3.1-flash-lite-preview (cheap); on 429/503/overload we retry then fall back
-// to models in GEMINI_MODEL_FALLBACK (default: gemini-2.5-flash). Override with GEMINI_MODEL_PRIMARY.
+// Model: gemini-3.1-flash-lite-preview — low-cost multimodal model with higher rate limits.
 
 import { ApiError, GoogleGenAI, Type } from "@google/genai";
 
@@ -18,71 +17,25 @@ function isRetryableGeminiError(e: unknown): boolean {
   return false;
 }
 
-function geminiModelChain(): string[] {
-  const primary = process.env.GEMINI_MODEL_PRIMARY ?? "gemini-3.1-flash-lite-preview";
-  const fallbacks = (process.env.GEMINI_MODEL_FALLBACK ?? "gemini-2.5-flash")
-    .split(",")
-    .map((s) => s.trim())
-    .filter(Boolean);
-  const seen = new Set<string>();
-  const out: string[] = [];
-  for (const m of [primary, ...fallbacks]) {
-    if (!seen.has(m)) {
-      seen.add(m);
-      out.push(m);
-    }
-  }
-  return out;
-}
-
-export type GeminiModelFallbackOptions = {
-  maxAttemptsPerModel?: number;
-  baseDelayMs?: number;
-};
-
-export type GeminiModelFallbackResult<T> = { result: T; model: string };
-
-/** HTTP response header set by API routes when a Gemini call succeeds (inspect in DevTools → Network). */
-export const GEMINI_MODEL_RESPONSE_HEADER = "x-gemini-model";
-
-/** Try each model in the chain; per-model exponential backoff on overload/rate-limit errors. */
-export async function withGeminiModelFallback<T>(
-  fn: (model: string) => Promise<T>,
-  options?: GeminiModelFallbackOptions
-): Promise<GeminiModelFallbackResult<T>> {
-  const maxAttempts = options?.maxAttemptsPerModel ?? 3;
-  const baseDelay = options?.baseDelayMs ?? 400;
-  const models = geminiModelChain();
-  let lastError: unknown;
-
-  for (let mi = 0; mi < models.length; mi++) {
-    const model = models[mi];
-    for (let attempt = 0; attempt < maxAttempts; attempt++) {
-      try {
-        const result = await fn(model);
-        console.log("[Gemini] response model:", model);
-        return { result, model };
-      } catch (e) {
-        lastError = e;
-        if (!isRetryableGeminiError(e)) {
-          throw e;
-        }
-        const canRetrySameModel = attempt < maxAttempts - 1;
-        if (canRetrySameModel) {
-          await sleep(baseDelay * 2 ** attempt);
-          continue;
-        }
-        if (mi < models.length - 1) {
-          await sleep(300);
-          break;
-        }
-        throw e;
+async function withRetry<T>(
+  fn: () => Promise<T>,
+  { maxAttempts = 3, baseDelayMs = 500 }: { maxAttempts?: number; baseDelayMs?: number } = {}
+): Promise<T> {
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    try {
+      return await fn();
+    } catch (e) {
+      if (attempt < maxAttempts - 1 && isRetryableGeminiError(e)) {
+        await sleep(baseDelayMs * 2 ** attempt);
+        continue;
       }
+      throw e;
     }
   }
-
-  throw lastError instanceof Error ? lastError : new Error(String(lastError));
+  throw new Error("withRetry: unexpected fall-through");
 }
+
+const MODEL = "gemini-3.1-flash-lite-preview";
 
 function client() {
   const apiKey = process.env.GEMINI_API_KEY;
@@ -129,15 +82,10 @@ const identifySchema = {
   required: ["items"],
 };
 
-export type IdentifyPantryItemsResult = {
-  items: IdentifiedItem[];
-  model: string;
-};
-
 export async function identifyPantryItems(
   imageBuffer: Buffer,
   mimeType: string = "image/jpeg"
-): Promise<IdentifyPantryItemsResult> {
+): Promise<IdentifiedItem[]> {
   const ai = client();
 
   const prompt = `Identify every food item visible in this photo of a pantry, fridge, or groceries.
@@ -145,29 +93,27 @@ For each item, return name, category (from the allowed list), quantity, unit, an
 If uncertain about category, use "unknown". If quantity is unclear, use 1 "each".
 Ignore non-food items.`;
 
-  const { result: response, model } = await withGeminiModelFallback(
-    (m) =>
-      ai.models.generateContent({
-        model: m,
-        contents: [
-          {
-            role: "user",
-            parts: [
-              { text: prompt },
-              { inlineData: { mimeType, data: imageBuffer.toString("base64") } },
-            ],
-          },
-        ],
-        config: {
-          responseMimeType: "application/json",
-          responseSchema: identifySchema,
+  return withRetry(async () => {
+    const response = await ai.models.generateContent({
+      model: MODEL,
+      contents: [
+        {
+          role: "user",
+          parts: [
+            { text: prompt },
+            { inlineData: { mimeType, data: imageBuffer.toString("base64") } },
+          ],
         },
-      }),
-    { maxAttemptsPerModel: 3, baseDelayMs: 400 }
-  );
+      ],
+      config: {
+        responseMimeType: "application/json",
+        responseSchema: identifySchema,
+      },
+    });
 
-  const parsed = JSON.parse(response.text ?? '{"items":[]}');
-  return { items: parsed.items as IdentifiedItem[], model };
+    const parsed = JSON.parse(response.text ?? '{"items":[]}');
+    return parsed.items as IdentifiedItem[];
+  }, { maxAttempts: 3, baseDelayMs: 400 });
 }
 
 // ---------- 2. Weekly plan: calorie target + pantry → B/L/D for N days ----------
@@ -241,14 +187,12 @@ const planSchema = {
   required: ["days", "shoppingList"],
 };
 
-export type GenerateWeeklyPlanResult = { plan: WeeklyPlan; model: string };
-
 export async function generateWeeklyPlan(
   numDays: number,
   calorieTarget: number,
   pantry: PantrySnapshot[],
   mealIdeas?: string[]
-): Promise<GenerateWeeklyPlanResult> {
+): Promise<WeeklyPlan> {
   const ai = client();
 
   const ideasSection = mealIdeas && mealIdeas.length > 0
@@ -278,20 +222,18 @@ RULES:
 
 Return strict JSON matching the schema.`;
 
-  const { result: response, model } = await withGeminiModelFallback(
-    (m) =>
-      ai.models.generateContent({
-        model: m,
-        contents: prompt,
-        config: {
-          responseMimeType: "application/json",
-          responseSchema: planSchema,
-        },
-      }),
-    { maxAttemptsPerModel: 3, baseDelayMs: 400 }
-  );
+  return withRetry(async () => {
+    const response = await ai.models.generateContent({
+      model: MODEL,
+      contents: prompt,
+      config: {
+        responseMimeType: "application/json",
+        responseSchema: planSchema,
+      },
+    });
 
-  return { plan: JSON.parse(response.text ?? "{}") as WeeklyPlan, model };
+    return JSON.parse(response.text ?? "{}") as WeeklyPlan;
+  }, { maxAttempts: 3, baseDelayMs: 500 });
 }
 
 // ---------- 3. Recipe for a single item / ingredient set ----------
@@ -304,8 +246,6 @@ export type Recipe = {
   saves: string[]; // subset of input ingredients actually used
   caloriesMin?: number; // rough per-serving estimate
   caloriesMax?: number;
-  /** Present when this recipe JSON was produced by Gemini (not set for older cache rows). */
-  geminiModel?: string;
 };
 
 const recipeSchema = {
@@ -344,21 +284,18 @@ Use AS MANY of the listed pantry ingredients as reasonably possible — they're 
 Keep it achievable in under 45 minutes for a weeknight dinner. Respect any dietary restrictions or allergies listed in the user profile above.
 Also estimate a rough per-serving calorie range (caloriesMin / caloriesMax). These are approximations — give a realistic spread of ~100–150 cal to signal the uncertainty. Return strict JSON.`;
 
-  const { result: response, model } = await withGeminiModelFallback(
-    (m) =>
-      ai.models.generateContent({
-        model: m,
-        contents: prompt,
-        config: {
-          responseMimeType: "application/json",
-          responseSchema: recipeSchema,
-        },
-      }),
-    { maxAttemptsPerModel: 5, baseDelayMs: 600 }
-  );
+  return withRetry(async () => {
+    const response = await ai.models.generateContent({
+      model: MODEL,
+      contents: prompt,
+      config: {
+        responseMimeType: "application/json",
+        responseSchema: recipeSchema,
+      },
+    });
 
-  const parsed = JSON.parse(response.text ?? "{}") as Recipe;
-  return { ...parsed, geminiModel: model };
+    return JSON.parse(response.text ?? "{}") as Recipe;
+  }, { maxAttempts: 5, baseDelayMs: 600 });
 }
 
 // Stable hash for the recipe cache key. Sort so {tomato,basil} == {basil,tomato}.

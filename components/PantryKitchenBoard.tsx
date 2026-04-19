@@ -16,6 +16,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import type { ImpactTotals } from "@/lib/impact";
 
 const SHELF_ORDER = ["fridge", "freezer", "pantry", "other"] as const;
 const SCALE_MAX = 14;
@@ -39,9 +40,11 @@ type ShelfKey = (typeof SHELF_ORDER)[number];
 export default function PantryKitchenBoard({
   items,
   nowMs,
+  impact,
 }: {
   items: PlainItem[];
   nowMs: number;
+  impact: ImpactTotals;
 }) {
   const router = useRouter();
   const [now, setNow] = useState(nowMs);
@@ -199,7 +202,7 @@ export default function PantryKitchenBoard({
       className="kitchen-board-outer"
     >
       {/* Split header: title + help · primary add CTA; deck = stats first (emphasis on in-window), then horizon */}
-      <header style={{ marginBottom: 28 }}>
+      <header style={{ marginBottom: 16 }}>
         <div
           className="kitchen-board-title-row"
           style={{
@@ -315,236 +318,106 @@ export default function PantryKitchenBoard({
           </DialogContent>
         </Dialog>
 
-        <div
-          className="kitchen-deck"
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: 20,
-            alignItems: "stretch",
-          }}
-        >
-          <div
-            style={{
-              border: "2px solid #000",
-              padding: "18px 20px",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-              gap: 16,
-              background: "var(--paper)",
-            }}
-          >
-            <div>
-              <div
-                style={{
-                  fontFamily: "var(--font-ui)",
-                  fontSize: 10,
-                  fontWeight: 700,
-                  textTransform: "uppercase",
-                  letterSpacing: "0.12em",
-                  color: "var(--caption)",
-                  marginBottom: 8,
-                }}
-              >
-                In rescue window (expiry ≤ horizon)
-              </div>
-              <div
-                style={{
-                  fontFamily: "var(--font-display)",
-                  fontSize: "clamp(28px, 4.5vw, 40px)",
-                  fontWeight: 600,
-                  lineHeight: 1,
-                  color: "#c8102e",
-                  marginBottom: 16,
-                }}
-              >
-                {urgentInHorizon.length}
-              </div>
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr 1fr 1fr",
-                  gap: 10,
-                  fontFamily: "var(--font-ui)",
-                  fontSize: 10,
-                  textTransform: "uppercase",
-                  letterSpacing: "0.06em",
-                }}
-              >
-                <div style={{ borderBottom: "1px solid var(--hairline)", paddingBottom: 8 }}>
-                  <span style={{ color: "var(--caption)" }}>Total</span>
-                  <div style={{ fontSize: 18, fontWeight: 700, color: "#000", marginTop: 4 }}>
-                    {localItems.length}
+        <div className="kitchen-deck">
+          {/* Left: rescue window */}
+          <div className="kitchen-deck-card kitchen-rescue-card">
+            <div className="kitchen-deck-card__top">
+              <div className="kitchen-deck-kicker">Rescue window</div>
+              <div className="kitchen-deck-sub">Expiring within ≤ {aboveLabel}</div>
+              <div className="kitchen-deck-hero kitchen-deck-hero--alert">{urgentInHorizon.length}</div>
+            </div>
+
+            <div className="kitchen-deck-card__mid">
+              <div className="kitchen-deck-metric-grid">
+                {[
+                  { label: "Pantry total", value: localItems.length, tone: "neutral" as const },
+                  { label: "Dying ≤ 3d", value: dyingCount, tone: dyingCount ? "alert" as const : "neutral" as const },
+                  { label: "Expired", value: expiredCount, tone: expiredCount ? "alert" as const : "neutral" as const },
+                ].map((m) => (
+                  <div key={m.label} className="kitchen-deck-metric">
+                    <div className="kitchen-deck-metric__label">{m.label}</div>
+                    <div className={`kitchen-deck-metric__value ${m.tone === "alert" ? "is-alert" : ""}`}>
+                      {m.value}
+                    </div>
                   </div>
-                </div>
-                <div style={{ borderBottom: "1px solid var(--hairline)", paddingBottom: 8 }}>
-                  <span style={{ color: "var(--caption)" }}>Dying ≤3d</span>
-                  <div
-                    style={{
-                      fontSize: 18,
-                      fontWeight: 700,
-                      color: dyingCount ? "#c8102e" : "#000",
-                      marginTop: 4,
-                    }}
-                  >
-                    {dyingCount}
-                  </div>
-                </div>
-                <div style={{ borderBottom: "1px solid var(--hairline)", paddingBottom: 8 }}>
-                  <span style={{ color: "var(--caption)" }}>Expired</span>
-                  <div
-                    style={{
-                      fontSize: 18,
-                      fontWeight: 700,
-                      color: expiredCount ? "#c8102e" : "#000",
-                      marginTop: 4,
-                    }}
-                  >
-                    {expiredCount}
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
-            {urgentInHorizon.length > 0 ? (
-              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                <Link
-                  href={rescueRecipeHref}
-                  style={{
-                    display: "block",
-                    textAlign: "center",
-                    fontFamily: "var(--font-ui)",
-                    fontWeight: 700,
-                    fontSize: 12,
-                    textTransform: "uppercase",
-                    letterSpacing: "0.06em",
-                    padding: "12px 14px",
-                    border: "2px solid #000",
-                    background: "#000",
-                    color: "#fff",
-                    textDecoration: "none",
-                  }}
-                >
-                  Cook what&apos;s in the window ({urgentInHorizon.length}) →
-                </Link>
-                <button
-                  type="button"
-                  onClick={() => setDonateOpen(true)}
-                  style={{
-                    display: "block",
-                    width: "100%",
-                    textAlign: "center",
-                    fontFamily: "var(--font-ui)",
-                    fontWeight: 700,
-                    fontSize: 12,
-                    textTransform: "uppercase",
-                    letterSpacing: "0.06em",
-                    padding: "10px 14px",
-                    border: "2px solid #057dbc",
-                    background: "#fff",
-                    color: "#057dbc",
-                    cursor: "pointer",
-                    borderRadius: 0,
-                  }}
-                >
-                  ◉ Donate to community
-                </button>
-              </div>
-            ) : (
-              <div
-                style={{
-                  fontFamily: "var(--font-body)",
-                  fontSize: 13,
-                  color: "var(--caption)",
-                  textAlign: "center",
-                  padding: "8px 0",
-                }}
-              >
-                Nothing in this window—slide the rule on the right to widen it.
-              </div>
-            )}
+
+            <div className="kitchen-deck-card__bottom">
+              {urgentInHorizon.length > 0 ? (
+                <>
+                  <Link href={rescueRecipeHref} className="kitchen-deck-primary">
+                    Cook window ({urgentInHorizon.length}) →
+                  </Link>
+                  <button type="button" onClick={() => setDonateOpen(true)} className="kitchen-deck-secondary">
+                    ◉ Donate to community
+                  </button>
+                </>
+              ) : (
+                <div className="kitchen-deck-empty">
+                  Nothing in this window — widen the horizon.
+                </div>
+              )}
+            </div>
           </div>
 
-          <div
-            style={{
-              border: "2px solid #000",
-              padding: "18px 20px",
-              background: "var(--paper)",
-            }}
-          >
-            <div
-              style={{
-                fontFamily: "var(--font-ui)",
-                fontSize: 10,
-                fontWeight: 700,
-                textTransform: "uppercase",
-                letterSpacing: "0.12em",
-                color: "var(--caption)",
-                marginBottom: 10,
-              }}
-            >
-              Rescue horizon (highlight ≤)
+          {/* Right: two stacked cards */}
+          <div className="kitchen-right-stack">
+            <div className="kitchen-deck-card kitchen-horizon-card">
+              <div className="kitchen-deck-card__top">
+                <div className="kitchen-deck-kicker">Rescue horizon</div>
+                <div className="kitchen-deck-sub">What counts as urgent on the board</div>
+                <div className="kitchen-deck-hero">{aboveLabel}</div>
+              </div>
+
+              <div className="kitchen-deck-card__mid">
+                <div
+                  className="kitchen-range-shell"
+                  style={{ "--range-pct": `${(threshold / SCALE_MAX) * 100}%` } as React.CSSProperties}
+                >
+                  <input
+                    type="range"
+                    min={0}
+                    max={SCALE_MAX}
+                    step={1}
+                    value={threshold}
+                    onChange={(e) => setThreshold(Number(e.target.value))}
+                    className="kitchen-deck-range"
+                    aria-label="Days threshold for rescue highlight"
+                  />
+                </div>
+                <div className="kitchen-deck-ticks" aria-hidden>
+                  {([[0, "NOW"], [3, "3D"], [7, "7D"], [SCALE_MAX, "14D"]] as [number, string][]).map(([v, label]) => {
+                    const align = v === 0 ? "is-start" : v === SCALE_MAX ? "is-end" : "is-mid";
+                    return (
+                      <button
+                        key={label}
+                        type="button"
+                        onClick={() => setThreshold(v)}
+                        className={`kitchen-deck-tick ${align} ${threshold === v ? "is-active" : ""}`}
+                        style={{ left: `${(v / SCALE_MAX) * 100}%` }}
+                      >
+                        {label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
-            <div
-              style={{
-                fontFamily: "var(--font-display)",
-                fontSize: "clamp(18px, 2.5vw, 24px)",
-                fontWeight: 600,
-                lineHeight: 1.2,
-                marginBottom: 14,
-                color: "#000",
-              }}
-            >
-              {aboveLabel}
-            </div>
-            <input
-              type="range"
-              min={0}
-              max={SCALE_MAX}
-              step={1}
-              value={threshold}
-              onChange={(e) => setThreshold(Number(e.target.value))}
-              style={{ width: "100%", accentColor: "#c8102e" }}
-              aria-label="Days threshold for rescue highlight"
-            />
-            <div
-              style={{
-                position: "relative",
-                height: 20,
-                marginTop: 8,
-                fontFamily: "var(--font-ui)",
-                fontSize: 10,
-                fontWeight: 700,
-                letterSpacing: "0.08em",
-                color: "var(--caption)",
-              }}
-            >
-              {([[0, "NOW"], [3, "3D"], [7, "7D"], [SCALE_MAX, "14D"]] as [number, string][]).map(
-                ([v, label]) => (
-                  <button
-                    key={label}
-                    type="button"
-                    onClick={() => setThreshold(v)}
-                    style={{
-                      position: "absolute",
-                      left: `${(v / SCALE_MAX) * 100}%`,
-                      transform: v === 0 ? "none" : v === SCALE_MAX ? "translateX(-100%)" : "translateX(-50%)",
-                      background: "transparent",
-                      border: "none",
-                      padding: 0,
-                      cursor: "pointer",
-                      color: threshold === v ? "#000" : "var(--caption)",
-                      fontFamily: "inherit",
-                      fontSize: "inherit",
-                      fontWeight: "inherit",
-                      letterSpacing: "inherit",
-                      textDecoration: threshold === v ? "underline" : "none",
-                    }}
-                  >
-                    {label}
-                  </button>
-                )
-              )}
+
+            <div className="kitchen-deck-card kitchen-impact-card">
+              <div className="kitchen-deck-card__top">
+                <div className="kitchen-deck-kicker">Lifetime impact</div>
+                <div className="kitchen-deck-sub">Items rescued from the bin</div>
+                <div className="kitchen-deck-hero kitchen-deck-hero--alert">{impact.itemsRescued}</div>
+              </div>
+
+              <div className="kitchen-deck-card__bottom">
+                <Link href="/impact" className="kitchen-deck-ghost">
+                  Open impact report →
+                </Link>
+              </div>
             </div>
           </div>
         </div>
@@ -822,6 +695,428 @@ export default function PantryKitchenBoard({
       )}
 
       <style>{`
+        .kitchen-deck {
+          display: grid;
+          gap: 8px;
+          align-items: stretch;
+        }
+
+        .kitchen-right-stack {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+
+        .kitchen-deck-card {
+          border: 2px solid #000;
+          background: var(--paper);
+          min-width: 0;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .kitchen-deck-card__top {
+          padding: 8px 12px 6px;
+          border-bottom: 1px solid var(--hairline);
+        }
+
+        .kitchen-deck-card__mid {
+          padding: 8px 12px;
+          flex: 0 0 auto;
+          min-height: 0;
+        }
+
+        .kitchen-deck-card__bottom {
+          margin-top: 0;
+          border-top: 1px solid var(--hairline);
+        }
+
+        .kitchen-deck-kicker {
+          font-family: var(--font-ui);
+          font-size: 9px;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.14em;
+          color: var(--caption);
+          margin-bottom: 2px;
+        }
+
+        .kitchen-deck-sub {
+          font-family: var(--font-body);
+          font-size: 11px;
+          line-height: 1.25;
+          color: var(--caption);
+          margin-bottom: 4px;
+        }
+
+        .kitchen-deck-hero {
+          font-family: var(--font-display);
+          font-weight: 700;
+          font-size: clamp(22px, 2.4vw, 34px);
+          line-height: 0.92;
+          letter-spacing: -0.03em;
+          color: #000;
+        }
+
+        .kitchen-deck-hero--alert {
+          color: #c8102e;
+        }
+
+        .kitchen-deck-metric-grid {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          border-top: 1px solid var(--hairline);
+          border-left: 1px solid var(--hairline);
+        }
+
+        .kitchen-deck-metric {
+          padding: 6px 8px;
+          border-right: 1px solid var(--hairline);
+          border-bottom: 1px solid var(--hairline);
+        }
+
+        .kitchen-deck-metric__label {
+          font-family: var(--font-ui);
+          font-size: 8px;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.10em;
+          color: var(--caption);
+          margin-bottom: 2px;
+        }
+
+        .kitchen-deck-metric__value {
+          font-family: var(--font-display);
+          font-size: 16px;
+          font-weight: 700;
+          color: #000;
+          line-height: 1;
+        }
+
+        .kitchen-deck-metric__value.is-alert {
+          color: #c8102e;
+        }
+
+        .kitchen-range-shell {
+          position: relative;
+          width: 100%;
+          height: 14px;
+          margin: 0;
+          padding: 0;
+        }
+        .kitchen-range-shell::before {
+          content: "";
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: 50%;
+          transform: translateY(-50%);
+          height: 3px;
+          pointer-events: none;
+          z-index: 0;
+          border-radius: 1px;
+          background: linear-gradient(
+            to right,
+            #c8102e 0%,
+            #c8102e var(--range-pct, 0%),
+            var(--hairline) var(--range-pct, 0%),
+            var(--hairline) 100%
+          );
+        }
+        .kitchen-range-shell .kitchen-deck-range {
+          position: relative;
+          z-index: 1;
+        }
+
+        .kitchen-deck-range {
+          -webkit-appearance: none;
+          appearance: none;
+          width: 100%;
+          height: 14px;
+          margin: 0;
+          padding: 0;
+          background: transparent;
+          accent-color: #c8102e;
+          display: block;
+        }
+        .kitchen-deck-range::-webkit-slider-runnable-track {
+          height: 3px;
+          background: transparent;
+          border: none;
+        }
+        .kitchen-deck-range::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          width: 11px;
+          height: 11px;
+          margin-top: -4px;
+          border-radius: 50%;
+          background: #c8102e;
+          border: 2px solid #000;
+          cursor: pointer;
+        }
+        .kitchen-deck-range::-moz-range-track {
+          height: 3px;
+          background: transparent;
+          border: none;
+        }
+        .kitchen-deck-range::-moz-range-thumb {
+          width: 11px;
+          height: 11px;
+          border-radius: 50%;
+          background: #c8102e;
+          border: 2px solid #000;
+          cursor: pointer;
+        }
+
+        .kitchen-deck-ticks {
+          position: relative;
+          height: 20px;
+          margin-top: 8px;
+          font-family: var(--font-ui);
+          font-size: 8px;
+          font-weight: 700;
+          letter-spacing: 0.08em;
+          color: var(--caption);
+        }
+
+        .kitchen-deck-tick {
+          position: absolute;
+          top: 0;
+          transform: translateX(-50%);
+          background: transparent;
+          border: none;
+          padding: 0;
+          cursor: pointer;
+          color: inherit;
+          font-family: inherit;
+          font-size: inherit;
+          font-weight: inherit;
+          letter-spacing: inherit;
+          text-decoration: none;
+        }
+
+        .kitchen-deck-tick.is-start {
+          transform: none;
+        }
+
+        .kitchen-deck-tick.is-mid {
+          transform: translateX(-50%);
+        }
+
+        .kitchen-deck-tick.is-end {
+          transform: translateX(-100%);
+        }
+
+        .kitchen-deck-tick.is-active {
+          color: #000;
+          text-decoration: underline;
+        }
+
+        .kitchen-deck-hint {
+          margin-top: 6px;
+          font-family: var(--font-body);
+          font-size: 11px;
+          line-height: 1.35;
+          color: var(--caption);
+        }
+
+        .kitchen-deck-primary {
+          display: block;
+          text-align: center;
+          font-family: var(--font-ui);
+          font-weight: 700;
+          font-size: 10px;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          padding: 8px 12px;
+          background: #000;
+          color: #fff;
+          text-decoration: none;
+        }
+
+        .kitchen-deck-secondary {
+          display: block;
+          box-sizing: border-box;
+          width: calc(100% - 20px);
+          margin: 6px 10px 8px;
+          text-align: center;
+          font-family: var(--font-ui);
+          font-weight: 700;
+          font-size: 10px;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          padding: 8px 12px;
+          background: #fff;
+          color: #057dbc;
+          border: 2px solid #000;
+          cursor: pointer;
+          border-radius: 0;
+        }
+
+        .kitchen-deck-ghost {
+          display: block;
+          text-align: center;
+          font-family: var(--font-ui);
+          font-weight: 700;
+          font-size: 10px;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          padding: 8px 12px;
+          background: #fff;
+          color: #000;
+          text-decoration: none;
+          border-top: 1px solid var(--hairline);
+        }
+
+        /* Lifetime impact: single hairline between hero and CTA (not top border-bottom + bottom border-top) */
+        .kitchen-impact-card .kitchen-deck-card__top {
+          border-bottom: none;
+        }
+        .kitchen-impact-card .kitchen-deck-ghost {
+          border-top: none;
+        }
+
+        .kitchen-deck-footnote {
+          padding: 12px 16px;
+          font-family: var(--font-body);
+          font-size: 12px;
+          line-height: 1.45;
+          color: var(--caption);
+        }
+
+        .kitchen-deck-empty {
+          padding: 12px 16px;
+          font-family: var(--font-body);
+          font-size: 13px;
+          line-height: 1.45;
+          color: var(--caption);
+        }
+
+        @media (min-width: 768px) {
+          .kitchen-deck {
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+          }
+          /* Match left column height to the stacked right column; grow the mid band only */
+          .kitchen-rescue-card {
+            height: 100%;
+          }
+
+          /* Fill the same row height as rescue; split space between the two stacked cards */
+          .kitchen-right-stack {
+            height: 100%;
+            min-height: 0;
+            gap: 10px;
+          }
+          .kitchen-horizon-card,
+          .kitchen-impact-card {
+            flex: 1 1 0;
+            min-height: 0;
+          }
+
+          .kitchen-horizon-card .kitchen-deck-card__top {
+            padding: 12px 16px 10px;
+          }
+          .kitchen-horizon-card .kitchen-deck-kicker {
+            font-size: 10px;
+            margin-bottom: 4px;
+          }
+          .kitchen-horizon-card .kitchen-deck-sub {
+            font-size: 13px;
+            line-height: 1.35;
+            margin-bottom: 8px;
+          }
+          .kitchen-horizon-card .kitchen-deck-hero {
+            font-size: clamp(28px, 3.6vw, 48px);
+            line-height: 0.9;
+          }
+          .kitchen-horizon-card .kitchen-deck-card__mid {
+            flex: 1 1 auto;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 14px 16px 16px;
+          }
+          .kitchen-horizon-card .kitchen-range-shell,
+          .kitchen-horizon-card .kitchen-deck-range {
+            height: 12px;
+          }
+          .kitchen-horizon-card .kitchen-deck-ticks {
+            height: 22px;
+            margin-top: 12px;
+            font-size: 9px;
+          }
+
+          .kitchen-impact-card .kitchen-deck-card__top {
+            padding: 12px 16px 10px;
+          }
+          .kitchen-impact-card .kitchen-deck-kicker {
+            font-size: 10px;
+            margin-bottom: 4px;
+          }
+          .kitchen-impact-card .kitchen-deck-sub {
+            font-size: 13px;
+            line-height: 1.35;
+            margin-bottom: 8px;
+          }
+          .kitchen-impact-card .kitchen-deck-hero {
+            font-size: clamp(32px, 4.2vw, 56px);
+            line-height: 0.88;
+          }
+          .kitchen-impact-card .kitchen-deck-card__bottom {
+            margin-top: auto;
+          }
+          .kitchen-impact-card .kitchen-deck-ghost {
+            font-size: 11px;
+            padding: 12px 16px;
+          }
+          .kitchen-rescue-card .kitchen-deck-card__top {
+            padding: 14px 16px 12px;
+          }
+          .kitchen-rescue-card .kitchen-deck-kicker {
+            font-size: 10px;
+            letter-spacing: 0.14em;
+            margin-bottom: 4px;
+          }
+          .kitchen-rescue-card .kitchen-deck-sub {
+            font-size: 13px;
+            line-height: 1.35;
+            margin-bottom: 10px;
+          }
+          .kitchen-rescue-card .kitchen-deck-hero {
+            font-size: clamp(40px, 5.2vw, 72px);
+            line-height: 0.88;
+          }
+          .kitchen-rescue-card .kitchen-deck-card__mid {
+            flex: 1 1 auto;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 16px 14px;
+          }
+          .kitchen-rescue-card .kitchen-deck-metric {
+            padding: 12px 12px;
+          }
+          .kitchen-rescue-card .kitchen-deck-metric__label {
+            font-size: 9px;
+            margin-bottom: 6px;
+          }
+          .kitchen-rescue-card .kitchen-deck-metric__value {
+            font-size: 24px;
+          }
+          .kitchen-rescue-card .kitchen-deck-primary {
+            font-size: 11px;
+            padding: 12px 16px;
+          }
+          .kitchen-rescue-card .kitchen-deck-secondary {
+            font-size: 11px;
+            padding: 11px 16px;
+            width: calc(100% - 28px);
+            margin: 10px 14px 14px;
+          }
+        }
+
         @media (max-width: 1024px) {
           .kitchen-columns { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
         }
