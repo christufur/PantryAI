@@ -117,7 +117,6 @@ export default function ImpactPage() {
             fontFamily: "Lora, serif",
             fontSize: 15, lineHeight: 1.8,
             color: "var(--caption)", margin: 0,
-            maxWidth: 640,
           }}>
             The average American household wastes <strong style={{ color: "var(--ink)" }}>~$1,600</strong> of food
             per year. Roughly <strong style={{ color: "var(--ink)" }}>30–40%</strong> of the US food supply ends
