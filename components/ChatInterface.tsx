@@ -42,7 +42,7 @@ export default function ChatInterface() {
         body: JSON.stringify({ message: trimmed, history: messages }),
       });
       const data = await res.json();
-      setMessages([...nextMessages, { role: "assistant", content: data.reply }]);
+      setMessages([...nextMessages, { role: "assistant", content: data.reply ?? "No response. Try again." }]);
     } catch {
       setMessages([
         ...nextMessages,
@@ -146,7 +146,7 @@ export default function ChatInterface() {
       </div>
 
       {/* Quick-reply chips */}
-      {messages.length <= 1 && (
+      {!loading && (
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap", margin: "16px 0" }}>
           {[
             "What's about to die?",
@@ -216,7 +216,7 @@ export default function ChatInterface() {
             padding: "10px 18px",
             border: "2px solid #1a3a4a",
             background: loading ? ICE_BG : "#1a3a4a",
-            color: loading ? "#4fc3f7" : "#4fc3f7",
+            color: loading ? ICE_TEXT : "#fff",
             cursor: loading ? "not-allowed" : "pointer",
             minHeight: 44,
           }}
