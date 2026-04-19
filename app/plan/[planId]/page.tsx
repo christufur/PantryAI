@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
 
-export default function PlanIndexRedirect() {
+export default function PlanDetailRedirect() {
   redirect("/wall");
 }

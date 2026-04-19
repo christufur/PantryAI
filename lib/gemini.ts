@@ -83,7 +83,7 @@ Ignore non-food items.`;
   return parsed.items as IdentifiedItem[];
 }
 
-// ---------- 2. Weekly plan: user meals + pantry → sequenced week + shopping list ----------
+// ---------- 2. Weekly plan: calorie target + pantry → B/L/D for N days ----------
 
 export type PantrySnapshot = {
   name: string;
@@ -93,19 +93,33 @@ export type PantrySnapshot = {
   expiryDate: string; // ISO date
 };
 
-export type PlannedMealInput = {
+export type DayMeal = {
+  mealType: "breakfast" | "lunch" | "dinner";
   mealName: string;
-  servings: number;
+  estimatedCalories: number;
+  usesFromPantry: { name: string; qty: number; unit: string }[];
+  needsToBuy: { name: string; qty: number; unit: string }[];
 };
 
 export type WeeklyPlan = {
   days: {
-    dayIndex: number; // 0 = Monday … 6 = Sunday
-    mealName: string;
-    usesFromPantry: { name: string; qty: number; unit: string }[];
-    needsToBuy: { name: string; qty: number; unit: string }[];
+    dayIndex: number; // 0 = Monday … n-1
+    meals: DayMeal[];
   }[];
   shoppingList: { name: string; qty: number; unit: string }[];
+};
+
+const ingredientItems = {
+  type: Type.ARRAY,
+  items: {
+    type: Type.OBJECT,
+    properties: {
+      name: { type: Type.STRING },
+      qty: { type: Type.NUMBER },
+      unit: { type: Type.STRING },
+    },
+    required: ["name", "qty", "unit"],
+  },
 };
 
 const planSchema = {
@@ -117,74 +131,63 @@ const planSchema = {
         type: Type.OBJECT,
         properties: {
           dayIndex: { type: Type.INTEGER },
-          mealName: { type: Type.STRING },
-          usesFromPantry: {
+          meals: {
             type: Type.ARRAY,
             items: {
               type: Type.OBJECT,
               properties: {
-                name: { type: Type.STRING },
-                qty: { type: Type.NUMBER },
-                unit: { type: Type.STRING },
+                mealType: { type: Type.STRING, description: "breakfast, lunch, or dinner" },
+                mealName: { type: Type.STRING },
+                estimatedCalories: { type: Type.INTEGER },
+                usesFromPantry: ingredientItems,
+                needsToBuy: ingredientItems,
               },
-              required: ["name", "qty", "unit"],
-            },
-          },
-          needsToBuy: {
-            type: Type.ARRAY,
-            items: {
-              type: Type.OBJECT,
-              properties: {
-                name: { type: Type.STRING },
-                qty: { type: Type.NUMBER },
-                unit: { type: Type.STRING },
-              },
-              required: ["name", "qty", "unit"],
+              required: ["mealType", "mealName", "estimatedCalories", "usesFromPantry", "needsToBuy"],
             },
           },
         },
-        required: ["dayIndex", "mealName", "usesFromPantry", "needsToBuy"],
+        required: ["dayIndex", "meals"],
       },
     },
-    shoppingList: {
-      type: Type.ARRAY,
-      items: {
-        type: Type.OBJECT,
-        properties: {
-          name: { type: Type.STRING },
-          qty: { type: Type.NUMBER },
-          unit: { type: Type.STRING },
-        },
-        required: ["name", "qty", "unit"],
-      },
-    },
+    shoppingList: ingredientItems,
   },
   required: ["days", "shoppingList"],
 };
 
 export async function generateWeeklyPlan(
-  meals: PlannedMealInput[],
+  numDays: number,
+  calorieTarget: number,
   pantry: PantrySnapshot[],
-  profileContext = ""
+  mealIdeas?: string[]
 ): Promise<WeeklyPlan> {
   const ai = client();
 
-  const prompt = `You are planning a week of meals (Monday = day 0, Sunday = day 6).
-${profileContext}
-USER'S PLANNED MEALS:
-${meals.map((m, i) => `${i + 1}. ${m.mealName} (${m.servings} servings)`).join("\n")}
+  const ideasSection = mealIdeas && mealIdeas.length > 0
+    ? `USER'S MEAL IDEAS (incorporate these, don't invent others):\n${mealIdeas.map((m, i) => `${i + 1}. ${m}`).join("\n")}`
+    : "Generate appropriate meals from scratch based on the pantry and calorie target.";
+
+  const pantrySection = pantry.length > 0
+    ? pantry.map((p) => `- ${p.name} [${p.category}], ${p.qty} ${p.unit}, expires ${p.expiryDate}`).join("\n")
+    : "No pantry items — all ingredients need to be purchased.";
+
+  const prompt = `You are a meal planner. Plan ${numDays} days of meals (day 0 = Monday, day ${numDays - 1} = the last day).
+
+TARGET: ~${calorieTarget} calories per day total across breakfast + lunch + dinner.
+
+${ideasSection}
 
 CURRENT PANTRY (with expiry dates):
-${pantry
-  .map((p) => `- ${p.name} [${p.category}], ${p.qty} ${p.unit}, expires ${p.expiryDate}`)
-  .join("\n")}
+${pantrySection}
 
-TASK:
-1. Assign each meal to a day (0–6). Schedule meals that use expiring pantry items on EARLIER days so those items get used before they go bad.
-2. For each meal, list the ingredients used from the pantry (usesFromPantry) and the ingredients that need to be bought (needsToBuy).
-3. Aggregate everything not covered by the pantry into a single shoppingList at the bottom.
+RULES:
+1. Each day must have exactly 3 meals: breakfast, lunch, dinner.
+2. Target ~${calorieTarget} cal/day total (spread sensibly: breakfast ~25%, lunch ~35%, dinner ~40%).
+3. Schedule meals that use expiring pantry items on EARLIER days.
+4. For each meal, list usesFromPantry and needsToBuy ingredients.
+5. Aggregate all needsToBuy across all meals into one shoppingList (deduplicated).
+6. estimatedCalories is per meal, not per day.
 
-Return strict JSON matching the schema. Don't invent meals the user didn't ask for.`;
+Return strict JSON matching the schema.`;
 
   const response = await ai.models.generateContent({
     model: MODEL,

@@ -23,7 +23,6 @@ export default function Home() {
         qty:             r.qty,
         unit:            r.unit,
         storageLocation: r.storageLocation,
-        // expiryDate is a Date from Drizzle's timestamp mode; convert to unix seconds
         expiryDate:      r.expiryDate instanceof Date
                            ? Math.floor(r.expiryDate.getTime() / 1000)
                            : Number(r.expiryDate),
@@ -35,11 +34,10 @@ export default function Home() {
     });
   } catch {}
 
-  const dying  = items.filter(i => Math.floor((i.expiryDate * 1000 - Date.now()) / 86_400_000) <= 3);
+  const dying = items.filter(i => Math.floor((i.expiryDate * 1000 - Date.now()) / 86_400_000) <= 3);
 
   return (
     <main style={{ background: "var(--paper)", minHeight: "100vh" }}>
-      {/* Black ribbon */}
       <div style={{
         background: "#000", color: "#fff",
         padding: "10px 40px",
