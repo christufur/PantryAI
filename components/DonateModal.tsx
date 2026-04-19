@@ -67,7 +67,7 @@ export default function DonateModal({
       style={{
         position: "fixed",
         inset: 0,
-        zIndex: 200,
+        zIndex: 200000,
         background: "rgba(0,0,0,0.45)",
         display: "flex",
         alignItems: "center",
