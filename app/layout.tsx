@@ -15,7 +15,6 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  interactiveWidget: "resizes-content",
 };
 
 export const metadata: Metadata = {
@@ -118,10 +117,19 @@ export default function RootLayout({
             max-width: 480px;
           }
 
-          /* Shell breakpoint: must exceed phone landscape width (~844–932px) or the bottom tab bar stays hidden while the top links are already hidden. */
-          @media (max-width: 960px) {
+          /* Shell breakpoint: tablets in landscape often exceed 960px; keep tab bar + slim header until large desktop. */
+          @media (max-width: 1280px) {
             /* Show bottom nav, hide desktop util-nav links */
-            .mobile-bottom-nav { display: flex !important; }
+            .mobile-bottom-nav {
+              display: flex !important;
+              z-index: 150000 !important;
+            }
+
+            /* Android/Chrome: wide content (e.g. week grid) must not widen the document or fixed chrome drifts horizontally. */
+            html, body {
+              overflow-x: hidden;
+              max-width: 100%;
+            }
             .util-nav { display: none !important; }
 
             /* Slim top bar — just the logo */
