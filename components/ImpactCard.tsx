@@ -92,7 +92,8 @@ export default function ImpactCard({ totals }: { totals: ImpactTotals }) {
         background: "#000", color: "#fff",
         border: "2px solid #fff",
         padding: "24px 28px",
-        width: 340,
+        width: "100%",
+        boxSizing: "border-box",
         fontFamily: "var(--font-ui)",
       }}>
         <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#888", marginBottom: 16 }}>
@@ -126,7 +127,7 @@ export default function ImpactCard({ totals }: { totals: ImpactTotals }) {
         onClick={handleDownload}
         style={{
           marginTop: 12,
-          width: 340,
+          width: "100%",
           fontFamily: "var(--font-ui)",
           fontSize: 11, fontWeight: 700,
           textTransform: "uppercase", letterSpacing: "0.08em",
