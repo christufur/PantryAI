@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import "./globals.css";
 import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
@@ -6,6 +7,7 @@ import Link from "next/link";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
 import MobileBottomNav from "@/components/MobileBottomNav";
 import RegisterServiceWorker from "@/components/RegisterServiceWorker";
+import PwaInstallBanner from "@/components/PwaInstallBanner";
 
 const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -21,6 +23,10 @@ export const metadata: Metadata = {
   title: "pantry.ai",
   description: "Vision-model pantry tracker. Sort: dying first. Zero waste.",
   applicationName: "pantry.ai",
+  /** Legacy Android hint alongside manifest (Chrome still reads manifest for install UI). */
+  other: {
+    "mobile-web-app-capable": "yes",
+  },
   appleWebApp: {
     capable: true,
     title: "pantry.ai",
@@ -47,6 +53,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={cn("font-sans", geist.variable)} suppressHydrationWarning>
       <body suppressHydrationWarning>
+        {process.env.NODE_ENV === "production" ? (
+          <Script id="pwa-sw-early" strategy="beforeInteractive">
+            {`if(typeof navigator!=='undefined'&&'serviceWorker'in navigator&&location.protocol==='https:'){navigator.serviceWorker.register('/sw.js',{scope:'/'}).catch(function(){})}`}
+          </Script>
+        ) : null}
         {/* Utility bar */}
         <div className="utility-bar" style={{
           background: '#000', color: '#fff',
@@ -99,6 +110,7 @@ export default function RootLayout({
         </div>
 
         <ScrollToTopButton />
+        <PwaInstallBanner />
         <MobileBottomNav />
         <RegisterServiceWorker />
 
@@ -149,6 +161,11 @@ export default function RootLayout({
             /* Keep “back to top” above the tab bar so it doesn’t cover CHAT */
             .scroll-to-top-btn {
               bottom: calc(5.25rem + env(safe-area-inset-bottom, 0px)) !important;
+            }
+
+            /* Install banner sits above the tab bar (Android PWA prompt) */
+            .pwa-install-banner {
+              bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px)) !important;
             }
 
             .pantry-snap-bar { padding: 0 0 20px; }
