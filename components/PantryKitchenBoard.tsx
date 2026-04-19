@@ -19,6 +19,9 @@ const SHELF_LABELS: Record<string, string> = {
   other: "Other",
 };
 
+/** Fridge / freezer / pantry only — same targets as drag-and-drop. */
+const MOVE_TARGETS = ["fridge", "freezer", "pantry"] as const;
+
 function daysLeft(unixSec: number, now: number) {
   return Math.floor((unixSec * 1000 - now) / 86_400_000);
 }
@@ -34,10 +37,30 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
   const [dragOverKey, setDragOverKey] = useState<string | null>(null);
   const [donateOpen, setDonateOpen] = useState(false);
   const dragEndedRef = useRef(false);
+  /** Touch / narrow: drag-and-drop is unreliable — use press-and-hold → move sheet instead. */
+  const [useTouchShelfUi, setUseTouchShelfUi] = useState(false);
+  const [moveSheetItem, setMoveSheetItem] = useState<PlainItem | null>(null);
 
   useEffect(() => {
     setLocalItems(items);
   }, [items]);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(hover: none), (max-width: 768px)");
+    const apply = () => setUseTouchShelfUi(mq.matches);
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, []);
+
+  useEffect(() => {
+    if (!moveSheetItem) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMoveSheetItem(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [moveSheetItem]);
 
   const selectedItems = useMemo(
     () => localItems.filter((i) => selectedIds.has(i.id)),
@@ -182,7 +205,7 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
                 marginBottom: 6,
               }}
             >
-              One surface · sort by urgency · drag between zones
+              One surface · sort by urgency · move between storage columns
             </div>
             <h1
               style={{
@@ -213,8 +236,8 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
         >
           Each ingredient lives in one place: its storage column, ordered soonest-expiry first.
           The red band is your adjustable rescue window—everything in that window is highlighted
-          everywhere at once. Drag tiles to move storage; tick boxes to batch a recipe; edit or remove
-          from the row.
+          everywhere at once.           On desktop, drag a tile into another column; on phones and tablets, press and hold a card
+          to move it. Tick boxes to batch a recipe; edit or remove from the row.
         </p>
 
         <div
@@ -573,6 +596,8 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
                         onToggleSelect={() => toggleSelected(item.id)}
                         dragEndedRef={dragEndedRef}
                         setDragOverKey={setDragOverKey}
+                        useTouchShelfUi={useTouchShelfUi}
+                        onOpenMoveSheet={() => setMoveSheetItem(item)}
                       />
                     ))}
                   </div>
@@ -598,6 +623,8 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
                         onToggleSelect={() => toggleSelected(item.id)}
                         dragEndedRef={dragEndedRef}
                         setDragOverKey={setDragOverKey}
+                        useTouchShelfUi={useTouchShelfUi}
+                        onOpenMoveSheet={() => setMoveSheetItem(item)}
                       />
                     ))}
                   </div>
@@ -700,6 +727,120 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
         }
       `}</style>
 
+      {moveSheetItem && (
+        <div
+          role="dialog"
+          aria-modal
+          aria-labelledby="move-sheet-title"
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 160000,
+            background: "rgba(0,0,0,0.45)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left))",
+            boxSizing: "border-box",
+          }}
+          onClick={() => setMoveSheetItem(null)}
+        >
+          <div
+            style={{
+              width: "100%",
+              maxWidth: 400,
+              background: "var(--paper)",
+              border: "2px solid #000",
+              padding: "24px",
+              boxShadow: "0 16px 48px rgba(0,0,0,0.22)",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div
+              id="move-sheet-title"
+              style={{
+                fontFamily: "'JetBrains Mono', monospace",
+                fontSize: 10,
+                fontWeight: 700,
+                textTransform: "uppercase",
+                letterSpacing: "0.12em",
+                color: "var(--caption)",
+                marginBottom: 8,
+              }}
+            >
+              Move to storage
+            </div>
+            <div
+              style={{
+                fontFamily: "'Source Serif 4', serif",
+                fontSize: 22,
+                fontWeight: 600,
+                color: "#000",
+                marginBottom: 20,
+                lineHeight: 1.2,
+              }}
+            >
+              {moveSheetItem.name}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {MOVE_TARGETS.map((sk) => {
+                const active = moveSheetItem.storageLocation === sk;
+                return (
+                  <button
+                    key={sk}
+                    type="button"
+                    disabled={active}
+                    onClick={() => {
+                      void moveToShelf(moveSheetItem.id, sk);
+                      setMoveSheetItem(null);
+                    }}
+                    style={{
+                      fontFamily: "Inter, sans-serif",
+                      fontWeight: 700,
+                      fontSize: 14,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.06em",
+                      padding: "14px 16px",
+                      border: "2px solid #000",
+                      background: active ? "#000" : "#fff",
+                      color: active ? "#fff" : "#000",
+                      cursor: active ? "default" : "pointer",
+                      borderRadius: 0,
+                      touchAction: "manipulation",
+                    }}
+                  >
+                    {active ? "✓ " : ""}
+                    {SHELF_LABELS[sk]}
+                  </button>
+                );
+              })}
+            </div>
+            <button
+              type="button"
+              onClick={() => setMoveSheetItem(null)}
+              style={{
+                marginTop: 16,
+                width: "100%",
+                fontFamily: "Inter, sans-serif",
+                fontWeight: 700,
+                fontSize: 12,
+                textTransform: "uppercase",
+                letterSpacing: "0.05em",
+                padding: "12px",
+                border: "2px solid var(--hairline)",
+                background: "#fff",
+                color: "#000",
+                cursor: "pointer",
+                borderRadius: 0,
+                touchAction: "manipulation",
+              }}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
+
       {donateOpen && urgentInHorizon.length > 0 && (
         <DonateModal items={urgentInHorizon} onClose={() => setDonateOpen(false)} />
       )}
@@ -715,6 +856,8 @@ function KitchenTile({
   onToggleSelect,
   dragEndedRef,
   setDragOverKey,
+  useTouchShelfUi,
+  onOpenMoveSheet,
 }: {
   item: PlainItem;
   now: number;
@@ -723,8 +866,12 @@ function KitchenTile({
   onToggleSelect: () => void;
   dragEndedRef: MutableRefObject<boolean>;
   setDragOverKey: (k: string | null) => void;
+  useTouchShelfUi: boolean;
+  onOpenMoveSheet: () => void;
 }) {
   const router = useRouter();
+  const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const blockRecipeNavRef = useRef(false);
   const d = daysLeft(item.expiryDate, now);
   const inWindow = d <= threshold;
   const isDying = d <= 3;
@@ -735,23 +882,54 @@ function KitchenTile({
     router.push(`/recipe?ingredients=${encodeURIComponent(item.name)}`);
   }
 
+  function clearLongPressTimer() {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+    }
+  }
+
   return (
     <div
-      draggable
-      onDragStart={(e) => {
-        dragEndedRef.current = false;
-        e.dataTransfer.setData("text/plain", String(item.id));
-        e.dataTransfer.effectAllowed = "move";
+      draggable={!useTouchShelfUi}
+      onDragStart={
+        useTouchShelfUi
+          ? undefined
+          : (e) => {
+              dragEndedRef.current = false;
+              e.dataTransfer.setData("text/plain", String(item.id));
+              e.dataTransfer.effectAllowed = "move";
+            }
+      }
+      onDragEnd={
+        useTouchShelfUi
+          ? undefined
+          : () => {
+              dragEndedRef.current = true;
+              setDragOverKey(null);
+              window.setTimeout(() => {
+                dragEndedRef.current = false;
+              }, 80);
+            }
+      }
+      onPointerDown={(e) => {
+        if (!useTouchShelfUi || e.button !== 0) return;
+        clearLongPressTimer();
+        longPressTimer.current = setTimeout(() => {
+          longPressTimer.current = null;
+          blockRecipeNavRef.current = true;
+          onOpenMoveSheet();
+        }, 480);
       }}
-      onDragEnd={() => {
-        dragEndedRef.current = true;
-        setDragOverKey(null);
-        window.setTimeout(() => {
-          dragEndedRef.current = false;
-        }, 80);
-      }}
+      onPointerUp={clearLongPressTimer}
+      onPointerCancel={clearLongPressTimer}
+      onPointerLeave={clearLongPressTimer}
       onClick={() => {
         if (dragEndedRef.current) return;
+        if (blockRecipeNavRef.current) {
+          blockRecipeNavRef.current = false;
+          return;
+        }
         router.push(`/recipe?ingredients=${encodeURIComponent(item.name)}`);
       }}
       role="button"
@@ -768,8 +946,9 @@ function KitchenTile({
         marginBottom: 8,
         border: "2px solid #000",
         background: selected ? "rgba(0,0,0,0.06)" : inWindow ? "rgba(200,16,46,0.06)" : "#fff",
-        cursor: "grab",
+        cursor: useTouchShelfUi ? "default" : "grab",
         boxShadow: selected ? "inset 0 0 0 2px #000" : "none",
+        touchAction: "manipulation",
       }}
     >
       {/* Urgency spine */}
@@ -792,6 +971,7 @@ function KitchenTile({
             onToggleSelect();
           }}
           onClick={(e) => e.stopPropagation()}
+          onPointerDown={(e) => e.stopPropagation()}
           aria-label={`Select ${item.name}`}
           style={{
             width: 17,
@@ -883,6 +1063,7 @@ function KitchenTile({
               marginTop: 8,
             }}
             onClick={(e) => e.stopPropagation()}
+            onPointerDown={(e) => e.stopPropagation()}
           >
             <button
               type="button"
