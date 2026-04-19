@@ -32,6 +32,32 @@ export default function NotifyButton({ compact = false }: { compact?: boolean })
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  async function showNotification(title: string, body: string) {
+    // Prefer SW notification (works on mobile PWA); fall back to Notification API.
+    try {
+      if ("serviceWorker" in navigator) {
+        // Race SW ready against a 2s timeout so dev/HTTP doesn't hang forever.
+        const reg = await Promise.race([
+          navigator.serviceWorker.ready,
+          new Promise<null>((res) => setTimeout(() => res(null), 2000)),
+        ]);
+        if (reg) {
+          await (reg as ServiceWorkerRegistration).showNotification(title, {
+            body,
+            icon: "/icons/icon-192.png",
+            badge: "/icons/icon-192.png",
+            tag: "fridgey-dying",
+          });
+          return;
+        }
+      }
+      // Fallback: direct Notification API (works in dev / no SW)
+      new Notification(title, { body, icon: "/icons/icon-192.png", tag: "fridgey-dying" });
+    } catch {
+      new Notification(title, { body, tag: "fridgey-dying" });
+    }
+  }
+
   async function checkAndNotify() {
     if (!("Notification" in window)) return;
     setChecking(true);
@@ -41,13 +67,7 @@ export default function NotifyButton({ compact = false }: { compact?: boolean })
       if (data.dyingCount > 0) {
         const title = `🧊 Fridgey: ${data.dyingCount} item${data.dyingCount > 1 ? "s" : ""} dying soon`;
         const body = data.names.join(", ") + " — cook or donate before it's too late.";
-        const reg = await navigator.serviceWorker.ready;
-        await reg.showNotification(title, {
-          body,
-          icon: "/icons/icon-192.png",
-          badge: "/icons/icon-192.png",
-          tag: "fridgey-dying",
-        });
+        await showNotification(title, body);
         localStorage.setItem(LAST_NOTIFIED_KEY, String(Date.now()));
         setLastResult("Notified!");
       } else {
