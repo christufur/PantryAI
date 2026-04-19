@@ -33,7 +33,7 @@
     "unit": "gallon",
     "storageLocation": "fridge",
     "daysFromNow": 3,
-    "isLocal": true
+    "isLocal": false
   },
   {
     "name": "Tomatoes",
@@ -42,7 +42,7 @@
     "unit": "each",
     "storageLocation": "fridge",
     "daysFromNow": 5,
-    "isLocal": true
+    "isLocal": false
   },
   {
     "name": "Zucchini",
@@ -51,7 +51,7 @@
     "unit": "each",
     "storageLocation": "fridge",
     "daysFromNow": 5,
-    "isLocal": false
+    "isLocal": true
   },
   {
     "name": "Chicken Breast",
@@ -135,13 +135,13 @@
     "isLocal": true
   },
   {
-    "name": "NM Pecans",
+    "name": "Pecans",
     "category": "pecans",
     "qty": 8,
     "unit": "oz",
     "storageLocation": "pantry",
     "daysFromNow": 90,
-    "isLocal": true
+    "isLocal": false
   },
   {
     "name": "Ground Beef",
@@ -150,7 +150,7 @@
     "unit": "lb",
     "storageLocation": "freezer",
     "daysFromNow": 90,
-    "isLocal": true
+    "isLocal": false
   },
   {
     "name": "Corn Tortillas",
@@ -175,6 +175,51 @@
     "category": "beans_dry",
     "qty": 1,
     "unit": "lb",
+    "storageLocation": "pantry",
+    "daysFromNow": 365,
+    "isLocal": true
+  },
+  {
+    "name": "Greek Yogurt",
+    "category": "yogurt",
+    "qty": 32,
+    "unit": "oz",
+    "storageLocation": "fridge",
+    "daysFromNow": 10,
+    "isLocal": false
+  },
+  {
+    "name": "Olive Oil",
+    "category": "olive_oil",
+    "qty": 16,
+    "unit": "oz",
+    "storageLocation": "pantry",
+    "daysFromNow": 180,
+    "isLocal": false
+  },
+  {
+    "name": "Mushrooms",
+    "category": "mushroom",
+    "qty": 8,
+    "unit": "oz",
+    "storageLocation": "fridge",
+    "daysFromNow": 4,
+    "isLocal": false
+  },
+  {
+    "name": "Carrots",
+    "category": "carrot",
+    "qty": 1,
+    "unit": "lb",
+    "storageLocation": "fridge",
+    "daysFromNow": 12,
+    "isLocal": false
+  },
+  {
+    "name": "NM Wildflower Lavender",
+    "category": "lavender",
+    "qty": 1,
+    "unit": "oz",
     "storageLocation": "pantry",
     "daysFromNow": 365,
     "isLocal": true
