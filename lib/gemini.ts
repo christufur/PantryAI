@@ -164,12 +164,13 @@ const planSchema = {
 
 export async function generateWeeklyPlan(
   meals: PlannedMealInput[],
-  pantry: PantrySnapshot[]
+  pantry: PantrySnapshot[],
+  profileContext = ""
 ): Promise<WeeklyPlan> {
   const ai = client();
 
   const prompt = `You are planning a week of meals (Monday = day 0, Sunday = day 6).
-
+${profileContext}
 USER'S PLANNED MEALS:
 ${meals.map((m, i) => `${i + 1}. ${m.mealName} (${m.servings} servings)`).join("\n")}
 
@@ -224,15 +225,15 @@ const recipeSchema = {
   required: ["title", "ingredients", "steps", "timeMinutes", "saves"],
 };
 
-export async function generateRecipe(ingredients: string[]): Promise<Recipe> {
+export async function generateRecipe(ingredients: string[], profileContext = ""): Promise<Recipe> {
   const ai = client();
 
   const prompt = `Give me one simple home-cook recipe that uses these pantry ingredients plus common staples (salt, pepper, oil, basic spices):
 ${ingredients.join(", ")}
-
+${profileContext}
 Use AS MANY of the listed pantry ingredients as reasonably possible — they're going bad. In the "saves" field, return the exact subset of the input list that the recipe actually consumes (names must match the input strings exactly).
 
-Keep it achievable in under 45 minutes for a weeknight dinner. Return strict JSON.`;
+Keep it achievable in under 45 minutes for a weeknight dinner. Respect any dietary restrictions or allergies listed in the user profile above. Return strict JSON.`;
 
   const response = await ai.models.generateContent({
     model: MODEL,

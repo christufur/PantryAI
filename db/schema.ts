@@ -68,6 +68,21 @@ export const mealsPlanned = sqliteTable("meals_planned", {
   ingredientsJson: text("ingredients_json"), // {uses_from_pantry:[], needs_to_buy:[]}
 });
 
+// User profile — single row (id = 1), stores dietary/nutritional preferences
+// that get injected into all AI prompts.
+export const userProfile = sqliteTable("user_profile", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  dietary: text("dietary").notNull().default(""),        // e.g. "vegetarian,gluten-free"
+  allergies: text("allergies").notNull().default(""),    // e.g. "nuts, shellfish"
+  nutritionalGoals: text("nutritional_goals").notNull().default(""), // e.g. "high-protein,low-sodium"
+  householdSize: integer("household_size").notNull().default(2),
+  cookingSkill: text("cooking_skill").notNull().default("intermediate"),
+  aboutMe: text("about_me").notNull().default(""),       // free-form context
+  updatedAt: integer("updated_at", { mode: "timestamp" })
+    .notNull()
+    .default(sql`(unixepoch())`),
+});
+
 // Recipe cache. Keyed by a hash of the sorted ingredient list.
 // Saves API calls on repeat demos and keeps the pitch snappy.
 export const recipesCache = sqliteTable("recipes_cache", {
