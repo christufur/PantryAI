@@ -234,23 +234,28 @@ export default async function PlanPage() {
           </div>
         </section>
 
-        {/* DYING SOON · THIS WEEK */}
+        {/* DYING SOON · THIS WEEK — desktop: sidebar + grid; narrow: flex, calendar first */}
         <section style={{ display: "grid", gridTemplateColumns: "320px 1fr", gap: 40 }} className="wall-bottom-grid">
-          <div>
+          <div className="plan-dying-panel">
             <div style={{
               fontFamily: "var(--font-ui)", fontSize: 11, fontWeight: 700,
               textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--caption)", marginBottom: 12,
-            }}>
+            }} className="plan-dying-heading">
               DYING SOON
+              {dying.length > 0 && (
+                <span className="plan-dying-count" style={{ marginLeft: 8, color: "#c8102e", fontWeight: 700 }}>
+                  ({dying.length})
+                </span>
+              )}
             </div>
             {dying.length === 0 ? (
               <div style={{ fontFamily: "var(--font-body)", fontSize: "var(--text-md)", color: "var(--caption)" }}>Nothing within 3 days.</div>
             ) : (
-              <div style={{ borderTop: "2px solid #000" }}>
+              <div className="plan-dying-list" style={{ borderTop: "2px solid #000" }}>
                 {dying.slice(0, 8).map((it) => {
                   const d = daysUntil(it.expiryDate);
                   return (
-                    <div key={it.id} style={{
+                    <div key={it.id} className="plan-dying-row" style={{
                       borderBottom: "1px solid var(--hairline)", padding: "12px 0",
                       display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 12,
                     }}>
@@ -267,12 +272,12 @@ export default async function PlanPage() {
             )}
           </div>
 
-          <div>
+          <div className="plan-week-panel">
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 12 }}>
               <div style={{
                 fontFamily: "var(--font-ui)", fontSize: 11, fontWeight: 700,
                 textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--caption)",
-              }}>
+              }} className="plan-week-heading">
                 THIS WEEK {days.length > 0 ? "· TAP A DAY FOR DETAIL" : ""}
               </div>
             </div>
@@ -297,15 +302,56 @@ export default async function PlanPage() {
         @media (max-width: 900px) {
           .wall-headline { font-size: 40px !important; }
           .wall-tonight-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
-          .wall-bottom-grid { grid-template-columns: 1fr !important; gap: 24px !important; }
+          .wall-bottom-grid {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 28px !important;
+          }
+          .plan-week-panel { order: -1; }
+          .plan-dying-panel { order: 1; }
           .wall-container { padding: 20px 16px !important; }
           .ribbon { padding: 10px 16px !important; }
+          .plan-week-heading { font-size: 10px !important; letter-spacing: 0.1em !important; }
+          /* Vertical week: one day per row (tablet + phone) */
+          .week-grid {
+            display: flex !important;
+            flex-direction: column !important;
+            overflow-x: visible !important;
+            border: 2px solid #000 !important;
+          }
+          .week-grid > button {
+            border-right: none !important;
+            border-bottom: 1px solid var(--hairline) !important;
+            min-height: 0 !important;
+            padding: 14px 16px !important;
+          }
+          .week-grid > button:last-child {
+            border-bottom: none !important;
+          }
+          /* Compact dying: chip wrap instead of a tall sidebar list */
+          .plan-dying-list {
+            border-top: 2px solid #000 !important;
+            display: flex !important;
+            flex-wrap: wrap !important;
+            gap: 8px !important;
+            padding-top: 12px !important;
+          }
+          .plan-dying-row {
+            flex: 0 1 auto !important;
+            border: 1px solid var(--hairline) !important;
+            border-bottom: 1px solid var(--hairline) !important;
+            padding: 8px 12px !important;
+            margin: 0 !important;
+            min-width: min(100%, 200px);
+            box-sizing: border-box;
+            align-items: center !important;
+          }
+          .plan-dying-row span:first-child {
+            font-size: var(--text-sm) !important;
+          }
         }
         @media (max-width: 768px) {
           .wall-headline { font-size: 34px !important; }
-        }
-        @media (max-width: 600px) {
-          .week-grid { grid-template-columns: repeat(7, minmax(110px, 1fr)) !important; overflow-x: auto; }
         }
       `}</style>
     </main>

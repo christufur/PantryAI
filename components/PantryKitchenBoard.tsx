@@ -215,7 +215,7 @@ export default function PantryKitchenBoard({
             <div
               style={{
                 fontFamily: "var(--font-ui)",
-                fontSize: 10,
+                fontSize: "var(--text-caption)",
                 fontWeight: 700,
                 textTransform: "uppercase",
                 letterSpacing: "0.14em",
@@ -236,9 +236,9 @@ export default function PantryKitchenBoard({
               <h1
                 style={{
                   fontFamily: "var(--font-display)",
-                  fontWeight: 600,
-                  fontSize: "clamp(32px, 5vw, 48px)",
-                  lineHeight: 1.05,
+                  fontWeight: 700,
+                  fontSize: "var(--text-title)",
+                  lineHeight: 0.95,
                   letterSpacing: "-0.03em",
                   margin: 0,
                 }}
@@ -282,7 +282,7 @@ export default function PantryKitchenBoard({
               <DialogTitle
                 style={{
                   fontFamily: "var(--font-display)",
-                  fontSize: 22,
+                  fontSize: "var(--text-subtitle)",
                   fontWeight: 600,
                   color: "#000",
                 }}
@@ -292,7 +292,7 @@ export default function PantryKitchenBoard({
               <DialogDescription
                 style={{
                   fontFamily: "var(--font-body)",
-                  fontSize: 15,
+                  fontSize: "var(--text-sm)",
                   color: "#1a1a1a",
                   lineHeight: 1.55,
                   marginTop: 8,
@@ -339,7 +339,7 @@ export default function PantryKitchenBoard({
               <div
                 style={{
                   fontFamily: "var(--font-ui)",
-                  fontSize: 10,
+                  fontSize: "var(--text-caption)",
                   fontWeight: 700,
                   textTransform: "uppercase",
                   letterSpacing: "0.12em",
@@ -352,7 +352,7 @@ export default function PantryKitchenBoard({
               <div
                 style={{
                   fontFamily: "var(--font-display)",
-                  fontSize: "clamp(28px, 4.5vw, 40px)",
+                  fontSize: "clamp(2rem, 4.5vw, var(--text-stat))",
                   fontWeight: 600,
                   lineHeight: 1,
                   color: "#c8102e",
@@ -367,14 +367,14 @@ export default function PantryKitchenBoard({
                   gridTemplateColumns: "1fr 1fr 1fr",
                   gap: 10,
                   fontFamily: "var(--font-ui)",
-                  fontSize: 10,
+                  fontSize: "var(--text-caption)",
                   textTransform: "uppercase",
                   letterSpacing: "0.06em",
                 }}
               >
                 <div style={{ borderBottom: "1px solid var(--hairline)", paddingBottom: 8 }}>
                   <span style={{ color: "var(--caption)" }}>Total</span>
-                  <div style={{ fontSize: 18, fontWeight: 700, color: "#000", marginTop: 4 }}>
+                  <div style={{ fontSize: "var(--text-step)", fontWeight: 700, color: "#000", marginTop: 4 }}>
                     {localItems.length}
                   </div>
                 </div>
@@ -382,7 +382,7 @@ export default function PantryKitchenBoard({
                   <span style={{ color: "var(--caption)" }}>Dying ≤3d</span>
                   <div
                     style={{
-                      fontSize: 18,
+                      fontSize: "var(--text-step)",
                       fontWeight: 700,
                       color: dyingCount ? "#c8102e" : "#000",
                       marginTop: 4,
@@ -395,7 +395,7 @@ export default function PantryKitchenBoard({
                   <span style={{ color: "var(--caption)" }}>Expired</span>
                   <div
                     style={{
-                      fontSize: 18,
+                      fontSize: "var(--text-step)",
                       fontWeight: 700,
                       color: expiredCount ? "#c8102e" : "#000",
                       marginTop: 4,
@@ -415,7 +415,7 @@ export default function PantryKitchenBoard({
                     textAlign: "center",
                     fontFamily: "var(--font-ui)",
                     fontWeight: 700,
-                    fontSize: 12,
+                    fontSize: "var(--text-ribbon)",
                     textTransform: "uppercase",
                     letterSpacing: "0.06em",
                     padding: "12px 14px",
@@ -436,7 +436,7 @@ export default function PantryKitchenBoard({
                     textAlign: "center",
                     fontFamily: "var(--font-ui)",
                     fontWeight: 700,
-                    fontSize: 12,
+                    fontSize: "var(--text-ribbon)",
                     textTransform: "uppercase",
                     letterSpacing: "0.06em",
                     padding: "10px 14px",
@@ -454,7 +454,7 @@ export default function PantryKitchenBoard({
               <div
                 style={{
                   fontFamily: "var(--font-body)",
-                  fontSize: 13,
+                  fontSize: "var(--text-sm)",
                   color: "var(--caption)",
                   textAlign: "center",
                   padding: "8px 0",
@@ -475,7 +475,7 @@ export default function PantryKitchenBoard({
             <div
               style={{
                 fontFamily: "var(--font-ui)",
-                fontSize: 10,
+                fontSize: "var(--text-caption)",
                 fontWeight: 700,
                 textTransform: "uppercase",
                 letterSpacing: "0.12em",
@@ -488,7 +488,7 @@ export default function PantryKitchenBoard({
             <div
               style={{
                 fontFamily: "var(--font-display)",
-                fontSize: "clamp(18px, 2.5vw, 24px)",
+                fontSize: "clamp(var(--text-lg), 2.5vw, var(--text-subtitle))",
                 fontWeight: 600,
                 lineHeight: 1.2,
                 marginBottom: 14,
@@ -513,7 +513,7 @@ export default function PantryKitchenBoard({
                 height: 20,
                 marginTop: 8,
                 fontFamily: "var(--font-ui)",
-                fontSize: 10,
+                fontSize: "var(--text-caption)",
                 fontWeight: 700,
                 letterSpacing: "0.08em",
                 color: "var(--caption)",
@@ -576,7 +576,7 @@ export default function PantryKitchenBoard({
           <span
             style={{
               fontFamily: "var(--font-ui)",
-              fontSize: 10,
+              fontSize: "var(--text-caption)",
               fontWeight: 700,
               textTransform: "uppercase",
               letterSpacing: "0.12em",
@@ -613,7 +613,7 @@ export default function PantryKitchenBoard({
               <div
                 style={{
                   fontFamily: "var(--font-ui)",
-                  fontSize: 10,
+                  fontSize: "var(--text-caption)",
                   fontWeight: 700,
                   textTransform: "uppercase",
                   letterSpacing: "0.12em",
@@ -671,7 +671,7 @@ export default function PantryKitchenBoard({
                   <div
                     style={{
                       fontFamily: "var(--font-body)",
-                      fontSize: 13,
+                      fontSize: "var(--text-sm)",
                       color: "var(--caption)",
                       padding: "16px 8px",
                     }}
@@ -684,7 +684,7 @@ export default function PantryKitchenBoard({
                 <div
                   style={{
                     fontFamily: "var(--font-ui)",
-                    fontSize: 9,
+                    fontSize: "var(--text-caption)",
                     fontWeight: 700,
                     letterSpacing: "0.1em",
                     textTransform: "uppercase",
@@ -771,7 +771,7 @@ export default function PantryKitchenBoard({
           <div
             style={{
               fontFamily: "var(--font-ui)",
-              fontSize: 12,
+              fontSize: "var(--text-ribbon)",
               fontWeight: 700,
               textTransform: "uppercase",
               letterSpacing: "0.12em",
@@ -787,7 +787,7 @@ export default function PantryKitchenBoard({
               style={{
                 fontFamily: "var(--font-ui)",
                 fontWeight: 700,
-                fontSize: 12,
+                fontSize: "var(--text-ribbon)",
                 textTransform: "uppercase",
                 letterSpacing: "0.05em",
                 padding: "10px 16px",
@@ -805,7 +805,7 @@ export default function PantryKitchenBoard({
               style={{
                 fontFamily: "var(--font-ui)",
                 fontWeight: 700,
-                fontSize: 12,
+                fontSize: "var(--text-ribbon)",
                 textTransform: "uppercase",
                 letterSpacing: "0.05em",
                 padding: "10px 18px",
@@ -873,7 +873,7 @@ export default function PantryKitchenBoard({
               id="move-sheet-title"
               style={{
                 fontFamily: "var(--font-ui)",
-                fontSize: 10,
+                fontSize: "var(--text-caption)",
                 fontWeight: 700,
                 textTransform: "uppercase",
                 letterSpacing: "0.12em",
@@ -886,7 +886,7 @@ export default function PantryKitchenBoard({
             <div
               style={{
                 fontFamily: "var(--font-display)",
-                fontSize: 22,
+                fontSize: "var(--text-card-name)",
                 fontWeight: 600,
                 color: "#000",
                 marginBottom: 20,
@@ -910,7 +910,7 @@ export default function PantryKitchenBoard({
                     style={{
                       fontFamily: "var(--font-ui)",
                       fontWeight: 700,
-                      fontSize: 14,
+                      fontSize: "var(--text-sm)",
                       textTransform: "uppercase",
                       letterSpacing: "0.06em",
                       padding: "14px 16px",
@@ -936,7 +936,7 @@ export default function PantryKitchenBoard({
                 width: "100%",
                 fontFamily: "var(--font-ui)",
                 fontWeight: 700,
-                fontSize: 12,
+                fontSize: "var(--text-ribbon)",
                 textTransform: "uppercase",
                 letterSpacing: "0.05em",
                 padding: "12px",
@@ -1100,7 +1100,7 @@ function KitchenTile({
           <div
             style={{
               fontFamily: "var(--font-ui)",
-              fontSize: 9,
+              fontSize: "var(--text-2xs)",
               fontWeight: 700,
               letterSpacing: "0.08em",
               color: inWindow ? "#c8102e" : "var(--caption)",
@@ -1114,7 +1114,7 @@ function KitchenTile({
           <div
             style={{
               fontFamily: "var(--font-display)",
-              fontSize: "var(--text-md)",
+              fontSize: "var(--text-lg)",
               fontWeight: inWindow ? 600 : 500,
               color: "#000",
               lineHeight: 1.15,
@@ -1129,7 +1129,7 @@ function KitchenTile({
               <span
                 style={{
                   fontFamily: "var(--font-ui)",
-                  fontSize: 8,
+                  fontSize: "var(--text-caption)",
                   fontWeight: 700,
                   textTransform: "uppercase",
                   letterSpacing: "0.08em",
@@ -1145,7 +1145,7 @@ function KitchenTile({
           <div
             style={{
               fontFamily: "var(--font-ui)",
-              fontSize: 10,
+              fontSize: "var(--text-xs)",
               color: "var(--caption)",
               marginTop: 3,
             }}
@@ -1156,7 +1156,7 @@ function KitchenTile({
             <div
               style={{
                 fontFamily: "var(--font-ui)",
-                fontSize: 9,
+                fontSize: "var(--text-2xs)",
                 color: "#057dbc",
                 marginTop: 4,
                 whiteSpace: "nowrap",
@@ -1184,7 +1184,7 @@ function KitchenTile({
               style={{
                 fontFamily: "var(--font-ui)",
                 fontWeight: 700,
-                fontSize: 10,
+                fontSize: "var(--text-ribbon)",
                 textTransform: "uppercase",
                 letterSpacing: "0.05em",
                 padding: "5px 10px",
