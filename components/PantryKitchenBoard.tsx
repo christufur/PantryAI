@@ -9,6 +9,7 @@ import PhotoUploadDialog from "@/components/PhotoUploadDialog";
 import EditItemDialog from "@/components/EditItemDialog";
 import DeleteItemButton from "@/components/DeleteItemButton";
 import DonateModal from "@/components/DonateModal";
+import ImpactCard from "@/components/ImpactCard";
 import {
   Dialog,
   DialogContent,
@@ -319,7 +320,7 @@ export default function PantryKitchenBoard({
           className="kitchen-deck"
           style={{
             display: "grid",
-            gridTemplateColumns: "1fr 1fr",
+            gridTemplateColumns: "1fr 1fr 1fr",
             gap: 20,
             alignItems: "stretch",
           }}
@@ -546,6 +547,11 @@ export default function PantryKitchenBoard({
                 )
               )}
             </div>
+          </div>
+
+          {/* Impact card */}
+          <div style={{ border: "2px solid #000", padding: "18px 20px", background: "var(--paper)" }}>
+            <ImpactCard totals={impact} />
           </div>
         </div>
       </header>
@@ -824,6 +830,9 @@ export default function PantryKitchenBoard({
       <style>{`
         @media (max-width: 1024px) {
           .kitchen-columns { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+        }
+        @media (max-width: 900px) {
+          .kitchen-deck { grid-template-columns: 1fr 1fr !important; }
         }
         @media (max-width: 640px) {
           .kitchen-deck { grid-template-columns: 1fr !important; }
