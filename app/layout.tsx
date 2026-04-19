@@ -135,7 +135,7 @@ export default function RootLayout({
               <rect x="38" y="52" width="2.5" height="48" rx="1.25" fill="#fafaf7"/>
             </svg>
             <div className="masthead-name" style={{
-              fontFamily: "'Source Serif 4', Georgia, serif",
+              fontFamily: "'JetBrains Mono', monospace",
               fontWeight: 700, fontSize: 72, lineHeight: 0.9,
               letterSpacing: '-0.03em', color: '#000'
             }}>
