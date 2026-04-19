@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import BarcodeScanPanel from "@/components/BarcodeScanPanel";
 import {
   Dialog,
   DialogContent,
@@ -31,9 +32,15 @@ interface ApiResponse {
   error?: string;
 }
 
-type DialogState = "pick" | "loading" | "receipt";
+type DialogState = "pick" | "scan" | "loading" | "receipt";
+type LoadingSource = "photo" | "barcode";
 
-export default function PhotoUploadDialog() {
+export default function PhotoUploadDialog({
+  fullWidthTrigger = false,
+}: {
+  /** Wider tap target on narrow screens (e.g. top-of-page mobile CTA). */
+  fullWidthTrigger?: boolean;
+} = {}) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [dialogState, setDialogState] = useState<DialogState>("pick");
@@ -41,6 +48,7 @@ export default function PhotoUploadDialog() {
   const [storageLocation, setStorageLocation] = useState("fridge");
   const [identifiedItems, setIdentifiedItems] = useState<IdentifiedItem[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [loadingSource, setLoadingSource] = useState<LoadingSource>("photo");
   const galleryInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
 
@@ -63,6 +71,7 @@ export default function PhotoUploadDialog() {
 
   async function handleSubmit() {
     if (!file) return;
+    setLoadingSource("photo");
     setDialogState("loading");
     setError(null);
     try {
@@ -85,6 +94,35 @@ export default function PhotoUploadDialog() {
       setDialogState("pick");
     }
   }
+
+  const handleBarcodeLookup = useCallback(
+    async (code: string) => {
+      setLoadingSource("barcode");
+      setDialogState("loading");
+      setError(null);
+      try {
+        const res = await fetch("/api/barcode", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ barcode: code, storageLocation }),
+        });
+        const data: ApiResponse | IdentifiedItem[] = await res.json();
+        if (!res.ok) {
+          const err = !Array.isArray(data) ? data.error : undefined;
+          setError(err ?? "Lookup failed.");
+          setDialogState("scan");
+        } else {
+          const items = Array.isArray(data) ? data : data.items ?? [];
+          setIdentifiedItems(items);
+          setDialogState("receipt");
+        }
+      } catch {
+        setError("Network error — please check your connection.");
+        setDialogState("scan");
+      }
+    },
+    [storageLocation]
+  );
 
   function handleDone() {
     router.refresh();
@@ -145,7 +183,11 @@ export default function PhotoUploadDialog() {
           cursor: "pointer",
           display: "inline-flex",
           alignItems: "center",
+          justifyContent: "center",
           gap: 6,
+          boxSizing: "border-box",
+          width: fullWidthTrigger ? "100%" : undefined,
+          minHeight: fullWidthTrigger ? 48 : undefined,
         }}
       >
         ◎ SNAP FRIDGE
@@ -180,7 +222,11 @@ export default function PhotoUploadDialog() {
                 letterSpacing: "0.1em",
               }}
             >
-              IDENTIFY ITEMS VIA PHOTO
+              {dialogState === "scan"
+                ? "SCAN PRODUCT BARCODE"
+                : dialogState === "loading" && loadingSource === "barcode"
+                  ? "BARCODE LOOKUP"
+                  : "IDENTIFY ITEMS VIA PHOTO"}
             </DialogTitle>
             <DialogDescription
               style={{
@@ -190,8 +236,9 @@ export default function PhotoUploadDialog() {
                 marginTop: 4,
               }}
             >
-              Add a fridge photo from your library or use the camera, then Gemini returns structured
-              JSON (items with categories and dates) that we turn into pantry rows.
+              {dialogState === "scan"
+                ? "We look up the code in Open Food Facts (free open database) — no AI key required. Pick storage below, then scan or type the digits."
+                : "Add a fridge photo from your library or use the camera, then Gemini returns structured JSON (items with categories and dates) that we turn into pantry rows. Or scan a barcode instead."}
             </DialogDescription>
           </DialogHeader>
 
@@ -235,7 +282,7 @@ export default function PhotoUploadDialog() {
                     type="button"
                     onClick={() => galleryInputRef.current?.click()}
                     style={{
-                      flex: "1 1 140px",
+                      flex: "1 1 120px",
                       background: "#fff",
                       color: "#1a1a1a",
                       border: "2px solid #000",
@@ -255,7 +302,7 @@ export default function PhotoUploadDialog() {
                     type="button"
                     onClick={() => cameraInputRef.current?.click()}
                     style={{
-                      flex: "1 1 140px",
+                      flex: "1 1 120px",
                       background: "#fff",
                       color: "#1a1a1a",
                       border: "2px solid #000",
@@ -270,6 +317,29 @@ export default function PhotoUploadDialog() {
                     }}
                   >
                     Use camera
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setError(null);
+                      setDialogState("scan");
+                    }}
+                    style={{
+                      flex: "1 1 120px",
+                      background: "#fff",
+                      color: "#1a1a1a",
+                      border: "2px solid #000",
+                      fontFamily: "Inter, sans-serif",
+                      fontWeight: 700,
+                      fontSize: 12,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.05em",
+                      padding: "10px 14px",
+                      borderRadius: 0,
+                      cursor: "pointer",
+                    }}
+                  >
+                    Scan barcode
                   </button>
                 </div>
                 {file && (
@@ -382,6 +452,73 @@ export default function PhotoUploadDialog() {
             </div>
           )}
 
+          {dialogState === "scan" && (
+            <div style={{ display: "flex", flexDirection: "column", gap: 16, paddingTop: 8 }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                <label
+                  htmlFor="storage-location-scan"
+                  style={{
+                    fontFamily: "'JetBrains Mono', monospace",
+                    fontSize: 10,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.1em",
+                    color: "#757575",
+                    display: "block",
+                  }}
+                >
+                  STORAGE LOCATION
+                </label>
+                <Select
+                  value={storageLocation}
+                  onValueChange={(v) => {
+                    if (v) setStorageLocation(v);
+                  }}
+                >
+                  <SelectTrigger
+                    id="storage-location-scan"
+                    style={{
+                      background: "#ffffff",
+                      border: "2px solid #000",
+                      borderRadius: 0,
+                      fontFamily: "Inter, sans-serif",
+                      fontSize: 13,
+                    }}
+                  >
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent style={{ background: "#ffffff", border: "2px solid #000", borderRadius: 0 }}>
+                    <SelectItem value="fridge">Fridge</SelectItem>
+                    <SelectItem value="freezer">Freezer</SelectItem>
+                    <SelectItem value="pantry">Pantry</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {error && (
+                <p
+                  style={{
+                    fontFamily: "Lora, serif",
+                    fontSize: 13,
+                    color: "#c8102e",
+                    border: "1px solid #c8102e",
+                    padding: "8px 12px",
+                    margin: 0,
+                  }}
+                >
+                  {error}
+                </p>
+              )}
+
+              <BarcodeScanPanel
+                onBarcode={handleBarcodeLookup}
+                onBack={() => {
+                  setError(null);
+                  setDialogState("pick");
+                }}
+              />
+            </div>
+          )}
+
           {/* STATE 2: Loading */}
           {dialogState === "loading" && (
             <div
@@ -405,7 +542,9 @@ export default function PhotoUploadDialog() {
                   textAlign: "center",
                 }}
               >
-                GEMINI VISION · ANALYZING
+                {loadingSource === "barcode"
+                  ? "OPEN FOOD FACTS · LOOKUP"
+                  : "GEMINI VISION · ANALYZING"}
               </div>
               <p
                 style={{
@@ -416,7 +555,15 @@ export default function PhotoUploadDialog() {
                   margin: 0,
                 }}
               >
-                Identifying items<span className="wired-ellipsis" />
+                {loadingSource === "barcode" ? (
+                  <>
+                    Resolving product<span className="wired-ellipsis" />
+                  </>
+                ) : (
+                  <>
+                    Identifying items<span className="wired-ellipsis" />
+                  </>
+                )}
               </p>
             </div>
           )}

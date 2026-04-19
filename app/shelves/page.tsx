@@ -2,6 +2,7 @@ import { db } from "@/lib/db";
 import { pantryItems } from "@/db/schema";
 import { asc } from "drizzle-orm";
 import Link from "next/link";
+import ShelvesDragGrid from "@/components/ShelvesDragGrid";
 
 // Var 03 — Shelves. Group inventory by storage_location and render each
 // item as a labeled rectangle on a literal shelf. Dying items shift to red.
@@ -24,14 +25,25 @@ export default function ShelvesPage() {
     other: "LOW SHELF · OTHER",
   };
 
-  const buckets: Record<string, typeof items> = { fridge: [], freezer: [], pantry: [], other: [] };
-  for (const it of items) {
-    const key = (order as readonly string[]).includes(it.storageLocation) ? it.storageLocation : "other";
-    buckets[key].push(it);
-  }
-
-  const shelves = [...order, "other"].filter((k) => buckets[k].length > 0);
+  const hasOtherShelf = items.some(
+    (it) => !(order as readonly string[]).includes(it.storageLocation)
+  );
+  const shelfSectionCount = items.length === 0 ? 0 : hasOtherShelf ? 4 : 3;
   const dyingCount = items.filter((i) => daysUntil(i.expiryDate) <= 3).length;
+
+  const dragItems = items.map((r) => ({
+    id: r.id,
+    name: r.name,
+    category: r.category,
+    qty: r.qty,
+    unit: r.unit,
+    storageLocation: r.storageLocation,
+    expiryDate:
+      r.expiryDate instanceof Date
+        ? Math.floor(r.expiryDate.getTime() / 1000)
+        : Number(r.expiryDate),
+    isLocal: r.isLocal,
+  }));
 
   return (
     <main style={{ background: "var(--paper)", minHeight: "100vh" }}>
@@ -55,7 +67,7 @@ export default function ShelvesPage() {
         className="ribbon"
       >
         <span>
-          PANTRY · {shelves.length} SHELVES · {items.length} ITEMS
+          PANTRY · {shelfSectionCount} SHELVES · {items.length} ITEMS
         </span>
         {dyingCount > 0 && <span style={{ color: "#c8102e" }}>⚠ {dyingCount} DYING</span>}
       </div>
@@ -85,7 +97,7 @@ export default function ShelvesPage() {
             marginBottom: 32,
           }}
         >
-          THE APP <em style={{ fontStyle: "italic" }}>IS</em> YOUR PANTRY · TAP AN ITEM FOR RECIPES
+          DRAG BETWEEN SHELVES · TAP A TILE FOR RECIPES
         </div>
 
         {items.length === 0 ? (
@@ -121,115 +133,7 @@ export default function ShelvesPage() {
             </Link>
           </div>
         ) : (
-          shelves.map((key) => (
-            <section key={key} style={{ marginBottom: 36 }}>
-              {/* Shelf label */}
-              <div
-                style={{
-                  fontFamily: "'JetBrains Mono', monospace",
-                  fontSize: 10,
-                  fontWeight: 700,
-                  textTransform: "uppercase",
-                  letterSpacing: "0.12em",
-                  color: "var(--caption)",
-                  marginBottom: 8,
-                  display: "flex",
-                  justifyContent: "space-between",
-                }}
-              >
-                <span>{labels[key]}</span>
-                <span>
-                  {buckets[key].length} {buckets[key].length === 1 ? "ITEM" : "ITEMS"}
-                </span>
-              </div>
-
-              {/* The shelf itself: items sit on top of a hard 4px black rule */}
-              <div
-                style={{
-                  borderBottom: "4px solid #000",
-                  display: "flex",
-                  flexWrap: "wrap",
-                  alignItems: "flex-end",
-                  gap: 8,
-                  paddingBottom: 0,
-                  minHeight: 96,
-                }}
-                className="shelf-row"
-              >
-                {buckets[key].map((item) => {
-                  const d = daysUntil(item.expiryDate);
-                  const isDying = d <= 3;
-                  const isExpired = d < 0;
-                  const dLabel = isExpired ? "EXP" : `${d}D`;
-                  // Width scales loosely with name length so the row reads as
-                  // varied jars/cartons rather than uniform tiles.
-                  const w = Math.min(180, Math.max(88, item.name.length * 11 + 28));
-
-                  return (
-                    <Link
-                      key={item.id}
-                      href={`/recipe?ingredients=${encodeURIComponent(item.name)}`}
-                      title={`${item.name} · ${item.qty} ${item.unit} · ${dLabel}`}
-                      style={{
-                        width: w,
-                        height: 88,
-                        border: "2px solid #000",
-                        background: isDying ? "#c8102e" : "#fff",
-                        color: isDying ? "#fff" : "#000",
-                        textDecoration: "none",
-                        padding: "8px 10px",
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "space-between",
-                        flexShrink: 0,
-                      }}
-                    >
-                      <div
-                        style={{
-                          fontFamily: "'JetBrains Mono', monospace",
-                          fontSize: 9,
-                          fontWeight: 700,
-                          textTransform: "uppercase",
-                          letterSpacing: "0.1em",
-                          opacity: isDying ? 0.95 : 0.6,
-                        }}
-                      >
-                        {item.category.replace(/_/g, " ")}
-                      </div>
-                      <div
-                        style={{
-                          fontFamily: "'Source Serif 4', serif",
-                          fontWeight: 600,
-                          fontSize: 16,
-                          lineHeight: 1.05,
-                          textTransform: "uppercase",
-                          letterSpacing: "-0.01em",
-                        }}
-                      >
-                        {item.name}
-                      </div>
-                      <div
-                        style={{
-                          fontFamily: "'JetBrains Mono', monospace",
-                          fontSize: 10,
-                          fontWeight: 700,
-                          letterSpacing: "0.08em",
-                          display: "flex",
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        <span>
-                          {item.qty}
-                          {item.unit === "each" ? "" : ` ${item.unit}`}
-                        </span>
-                        <span>{dLabel}</span>
-                      </div>
-                    </Link>
-                  );
-                })}
-              </div>
-            </section>
-          ))
+          <ShelvesDragGrid items={dragItems} shelfLabels={labels} nameFontSize={16} />
         )}
 
         {/* Bottom actions */}

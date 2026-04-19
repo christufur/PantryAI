@@ -9,7 +9,8 @@ Next.js + TypeScript web application built for the DesertDev Hackathon.
 ## Commands
 
 ```bash
-npm run dev          # Start dev server (listens on 0.0.0.0:3000)
+npm run dev          # Start dev server (listens on 0.0.0.0:3000, HTTP)
+npm run dev:https    # Same, but HTTPS (self-signed) — required for iPhone camera / getUserMedia over LAN
 npm run build        # Production build
 npm run lint         # ESLint
 
@@ -35,6 +36,16 @@ Next.js prints a **Network** URL using the Linux VM’s address (often `172.x.x.
   2. **Stay on default NAT:** set up **port forwarding** from Windows to the WSL IP (the first address from `wsl hostname -I`). This is more brittle because the WSL IP can change after restarts.
 
 If `localhost:3000` fails from Windows while the dev server is running in WSL, update WSL (`wsl --update`) and try mirrored mode above.
+
+### HTTPS from a phone (barcode camera, etc.)
+
+iOS Safari only exposes the camera on a **secure origin** (`https://` or `localhost`). Plain `http://192.168…` from your LAN is **not** secure, so use:
+
+1. `npm run dev:https` — Next.js adds `--experimental-https` (self-signed certificate).
+2. On your phone, open **`https://<your-PC-LAN-IP>:3000`** (same IP as in the dev script hints, not `172…` from WSL).
+3. Accept the browser warning once (“Advanced” → proceed). After that, `isSecureContext` is true and camera APIs can work.
+
+**Production:** use a real TLS certificate (e.g. Let’s Encrypt on your host) or a tunnel that terminates HTTPS (Cloudflare Tunnel, ngrok, etc.).
 
 ## Architecture
 
