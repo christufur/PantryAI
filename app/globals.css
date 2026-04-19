@@ -176,3 +176,90 @@ body {
     font-family: var(--font-body);
     }
 }
+
+/* /plan + /wall weekly views — mobile: stacked week + chip “dying soon” (scoped so generic .week-grid rules don’t override) */
+.plan-page .plan-page-bottom {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 40px;
+}
+
+.plan-page .plan-week-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  border: 2px solid #000;
+}
+
+@media (max-width: 900px) {
+  .plan-page .plan-week-grid-outer {
+    overflow-x: visible !important;
+  }
+  .plan-page .wall-headline {
+    font-size: 40px !important;
+  }
+  .plan-page .wall-tonight-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+  .plan-page .plan-page-bottom {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 28px !important;
+  }
+  .plan-page .plan-week-panel {
+    order: -1;
+  }
+  .plan-page .plan-dying-panel {
+    order: 1;
+  }
+  .plan-page .wall-container {
+    padding: 20px 16px !important;
+  }
+  .plan-page .ribbon {
+    padding: 10px 16px !important;
+  }
+  .plan-page .plan-week-heading {
+    font-size: 10px !important;
+    letter-spacing: 0.1em !important;
+  }
+  .plan-page .plan-week-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    overflow-x: visible !important;
+    border: 2px solid #000 !important;
+  }
+  .plan-page .plan-week-grid > button {
+    border-right: none !important;
+    border-bottom: 1px solid var(--hairline) !important;
+    min-height: 0 !important;
+    padding: 14px 16px !important;
+  }
+  .plan-page .plan-week-grid > button:last-child {
+    border-bottom: none !important;
+  }
+  .plan-page .plan-dying-list {
+    border-top: 2px solid #000 !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    padding-top: 12px !important;
+  }
+  .plan-page .plan-dying-row {
+    flex: 0 1 auto !important;
+    border: 1px solid var(--hairline) !important;
+    padding: 8px 12px !important;
+    margin: 0 !important;
+    min-width: min(100%, 200px);
+    box-sizing: border-box;
+    align-items: center !important;
+  }
+  .plan-page .plan-dying-row span:first-child {
+    font-size: var(--text-sm) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .plan-page .wall-headline {
+    font-size: 34px !important;
+  }
+}

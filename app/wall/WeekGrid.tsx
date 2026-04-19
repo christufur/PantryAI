@@ -158,8 +158,9 @@ export default function WeekGrid({
         </div>
       )}
 
-      {/* Scroll container: keeps 7-column min width from widening the page (Android + fixed chrome bugs). */}
+      {/* Scroll container on desktop; `.plan-week-grid-outer` loses horizontal scroll under 900px (see globals.css). */}
       <div
+        className="plan-week-grid-outer"
         style={{
           width: "100%",
           maxWidth: "100%",
@@ -170,8 +171,7 @@ export default function WeekGrid({
         }}
       >
       <div
-        style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", border: "2px solid #000" }}
-        className="week-grid"
+        className="plan-week-grid"
       >
         {DAY_LABELS.map((label, i) => {
           const day = days.find((d) => d.dayIndex === i);
