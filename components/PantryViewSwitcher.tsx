@@ -282,7 +282,7 @@ export default function PantryViewSwitcher({ items }: { items: PlainItem[] }) {
                   <div className="item-actions" style={{ display: "flex", gap: 6, flexShrink: 0, flexWrap: "wrap", justifyContent: "flex-end" }}>
                     <Link href={`/recipe?ingredients=${encodeURIComponent(item.name)}`} style={{ fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: 11, textTransform: "uppercase", letterSpacing: "0.05em", padding: "6px 10px", border: "2px solid #000", color: isDying ? "#fff" : "#000", background: isDying ? "#000" : "#fff", textDecoration: "none", whiteSpace: "nowrap" }}>RECIPE</Link>
                     <Link href={`/donate?item_id=${item.id}`} style={{ fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: 11, textTransform: "uppercase", letterSpacing: "0.05em", padding: "6px 10px", border: "2px solid #000", color: "#000", background: "#fff", textDecoration: "none", whiteSpace: "nowrap" }}>DONATE</Link>
-                    <EditItemDialog id={item.id} name={item.name} qty={item.qty} unit={item.unit} storageLocation={item.storageLocation} expiryDate={item.expiryDate} />
+                    <EditItemDialog id={item.id} name={item.name} qty={item.qty} unit={item.unit} storageLocation={item.storageLocation} expiryDate={item.expiryDate} isLocal={item.isLocal} />
                     <DeleteItemButton id={item.id} name={item.name} />
                   </div>
                 </div>

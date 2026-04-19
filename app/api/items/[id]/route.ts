@@ -16,7 +16,7 @@ export async function PATCH(
     return NextResponse.json({ error: "Invalid id" }, { status: 400 });
   }
 
-  let body: { qty?: number; unit?: string; storageLocation?: string; expiryDate?: string };
+  let body: { qty?: number; unit?: string; storageLocation?: string; expiryDate?: string; isLocal?: boolean };
   try {
     body = await req.json();
   } catch {
@@ -28,6 +28,7 @@ export async function PATCH(
   if (body.qty !== undefined) updates.qty = Number(body.qty);
   if (body.unit !== undefined) updates.unit = body.unit;
   if (body.expiryDate !== undefined) updates.expiryDate = new Date(body.expiryDate);
+  if (body.isLocal !== undefined) updates.isLocal = Boolean(body.isLocal);
 
   if (body.storageLocation !== undefined) {
     const loc = body.storageLocation;
