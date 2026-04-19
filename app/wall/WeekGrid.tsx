@@ -51,12 +51,18 @@ export default function WeekGrid({
   const [newName, setNewName] = useState("");
   const [newType, setNewType] = useState<"breakfast" | "lunch" | "dinner">("dinner");
   const [saving, setSaving] = useState(false);
+  const [fillingDay, setFillingDay] = useState<number | null>(null);
+  const [fillingWeek, setFillingWeek] = useState(false);
+
+  const plannedIndices = new Set(days.map((d) => d.dayIndex));
+  const emptyIndices = [0, 1, 2, 3, 4, 5, 6].filter((i) => !plannedIndices.has(i));
 
   useEffect(() => {
     setCompleted(loadCompleted());
   }, []);
 
   const current = openDay != null ? days.find((d) => d.dayIndex === openDay) : null;
+  const modalIsEmpty = openDay != null && !current;
 
   function closeModal() {
     setOpenDay(null);
@@ -96,8 +102,62 @@ export default function WeekGrid({
     router.refresh();
   }
 
+  async function handleFillDay(dayIndex: number) {
+    setFillingDay(dayIndex);
+    await fetch(`/api/plan/${planId}/fill`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ dayIndices: [dayIndex] }),
+    });
+    setFillingDay(null);
+    closeModal();
+    router.refresh();
+  }
+
+  async function handleFillWeek() {
+    if (emptyIndices.length === 0) return;
+    setFillingWeek(true);
+    await fetch(`/api/plan/${planId}/fill`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ dayIndices: emptyIndices }),
+    });
+    setFillingWeek(false);
+    router.refresh();
+  }
+
   return (
     <>
+      {emptyIndices.length >= 2 && (
+        <div style={{
+          border: "2px solid #000", background: "#f8f8f5",
+          padding: "12px 16px", marginBottom: 12,
+          display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap",
+        }}>
+          <div>
+            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--caption)", marginBottom: 2 }}>
+              {emptyIndices.length} EMPTY DAYS
+            </div>
+            <div style={{ fontFamily: "'Source Serif 4', serif", fontSize: 15, fontWeight: 600 }}>
+              Fill the rest of your week
+            </div>
+          </div>
+          <button
+            onClick={handleFillWeek}
+            disabled={fillingWeek}
+            style={{
+              background: "#000", color: "#fff", border: "2px solid #000",
+              fontFamily: "'JetBrains Mono', monospace", fontSize: 11, fontWeight: 700,
+              textTransform: "uppercase", letterSpacing: "0.08em",
+              padding: "10px 18px", cursor: fillingWeek ? "default" : "pointer",
+              opacity: fillingWeek ? 0.5 : 1,
+            }}
+          >
+            {fillingWeek ? "GENERATING…" : "✨ FILL WITH AI"}
+          </button>
+        </div>
+      )}
+
       {/* Scroll container: keeps 7-column min width from widening the page (Android + fixed chrome bugs). */}
       <div
         style={{
@@ -120,8 +180,7 @@ export default function WeekGrid({
           return (
             <button
               key={i}
-              onClick={() => day && setOpenDay(i)}
-              disabled={!day}
+              onClick={() => setOpenDay(i)}
               style={{
                 border: "none",
                 borderRight: i === 6 ? "none" : "1px solid var(--hairline)",
@@ -130,7 +189,7 @@ export default function WeekGrid({
                 background: isToday ? "#000" : "var(--paper)",
                 color: isToday ? "#fff" : "#000",
                 textAlign: "left",
-                cursor: day ? "pointer" : "default",
+                cursor: "pointer",
                 display: "flex",
                 flexDirection: "column",
                 gap: 6,
@@ -175,7 +234,7 @@ export default function WeekGrid({
       </div>
 
       {/* Day modal */}
-      {current && (
+      {openDay != null && (
         <div
           onClick={closeModal}
           style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.4)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 100000, padding: 24 }}
@@ -187,17 +246,42 @@ export default function WeekGrid({
             {/* Header */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 20 }}>
               <div style={{ fontFamily: "var(--font-ui)", fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", color: "var(--caption)" }}>
-                {DAY_LABELS[current.dayIndex]} · {current.date}
+                {DAY_LABELS[openDay]}{current?.date ? ` · ${current.date}` : ""}
               </div>
               <button onClick={closeModal} style={{ border: "none", background: "transparent", cursor: "pointer", fontSize: 20, fontFamily: "monospace", lineHeight: 1 }}>×</button>
             </div>
 
+            {/* Empty-day AI fill CTA */}
+            {modalIsEmpty && !adding && (
+              <div style={{ border: "2px solid #000", background: "#f8f8f5", padding: "16px 18px", marginBottom: 16 }}>
+                <div style={{ fontFamily: "'Source Serif 4', serif", fontSize: 16, fontWeight: 600, marginBottom: 4 }}>
+                  No meals planned for this day
+                </div>
+                <p style={{ fontFamily: "Lora, serif", fontSize: 13, color: "var(--caption)", margin: "0 0 12px" }}>
+                  Let AI pick three meals from your pantry, or add them yourself below.
+                </p>
+                <button
+                  onClick={() => handleFillDay(openDay)}
+                  disabled={fillingDay === openDay}
+                  style={{
+                    width: "100%", background: "#000", color: "#fff", border: "2px solid #000",
+                    fontFamily: "'JetBrains Mono', monospace", fontSize: 11, fontWeight: 700,
+                    textTransform: "uppercase", letterSpacing: "0.08em",
+                    padding: "12px 0", cursor: fillingDay === openDay ? "default" : "pointer",
+                    opacity: fillingDay === openDay ? 0.5 : 1,
+                  }}
+                >
+                  {fillingDay === openDay ? "GENERATING…" : "✨ AI FILL THIS DAY"}
+                </button>
+              </div>
+            )}
+
             {/* Meal list */}
-            {current.meals.length === 0 && !adding && (
+            {!modalIsEmpty && current && current.meals.length === 0 && !adding && (
               <p style={{ fontFamily: "var(--font-body)", fontSize: 14, color: "var(--caption)", marginBottom: 16 }}>No meals planned. Add one below.</p>
             )}
 
-            {current.meals.map((m) => {
+            {current?.meals.map((m) => {
               const done = completed.has(m.id);
               const isRemoving = removing === m.id;
               return (
