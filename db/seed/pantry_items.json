@@ -1,0 +1,182 @@
+[
+  {
+    "name": "NM Green Chile",
+    "category": "chile_green",
+    "qty": 6,
+    "unit": "each",
+    "storageLocation": "fridge",
+    "daysFromNow": 1,
+    "isLocal": true
+  },
+  {
+    "name": "Spinach",
+    "category": "leafy_greens",
+    "qty": 1,
+    "unit": "bag",
+    "storageLocation": "fridge",
+    "daysFromNow": 2,
+    "isLocal": false
+  },
+  {
+    "name": "Eggs",
+    "category": "eggs",
+    "qty": 6,
+    "unit": "each",
+    "storageLocation": "fridge",
+    "daysFromNow": 2,
+    "isLocal": true
+  },
+  {
+    "name": "Milk",
+    "category": "dairy_milk",
+    "qty": 0.5,
+    "unit": "gallon",
+    "storageLocation": "fridge",
+    "daysFromNow": 3,
+    "isLocal": true
+  },
+  {
+    "name": "Tomatoes",
+    "category": "tomato",
+    "qty": 3,
+    "unit": "each",
+    "storageLocation": "fridge",
+    "daysFromNow": 5,
+    "isLocal": true
+  },
+  {
+    "name": "Zucchini",
+    "category": "zucchini",
+    "qty": 2,
+    "unit": "each",
+    "storageLocation": "fridge",
+    "daysFromNow": 5,
+    "isLocal": false
+  },
+  {
+    "name": "Chicken Breast",
+    "category": "meat_raw_chicken",
+    "qty": 1.5,
+    "unit": "lb",
+    "storageLocation": "fridge",
+    "daysFromNow": 4,
+    "isLocal": false
+  },
+  {
+    "name": "Sourdough Bread",
+    "category": "bread",
+    "qty": 1,
+    "unit": "loaf",
+    "storageLocation": "pantry",
+    "daysFromNow": 6,
+    "isLocal": true
+  },
+  {
+    "name": "Cheddar Cheese",
+    "category": "dairy_cheese_hard",
+    "qty": 8,
+    "unit": "oz",
+    "storageLocation": "fridge",
+    "daysFromNow": 21,
+    "isLocal": false
+  },
+  {
+    "name": "Garlic",
+    "category": "garlic",
+    "qty": 1,
+    "unit": "head",
+    "storageLocation": "pantry",
+    "daysFromNow": 14,
+    "isLocal": false
+  },
+  {
+    "name": "Yellow Onion",
+    "category": "onion",
+    "qty": 2,
+    "unit": "each",
+    "storageLocation": "pantry",
+    "daysFromNow": 14,
+    "isLocal": false
+  },
+  {
+    "name": "Pinto Beans",
+    "category": "pinto_beans",
+    "qty": 1,
+    "unit": "lb",
+    "storageLocation": "pantry",
+    "daysFromNow": 180,
+    "isLocal": true
+  },
+  {
+    "name": "NM Stone-Ground Flour",
+    "category": "flour",
+    "qty": 2,
+    "unit": "lb",
+    "storageLocation": "pantry",
+    "daysFromNow": 90,
+    "isLocal": true
+  },
+  {
+    "name": "Wildflower Honey",
+    "category": "honey",
+    "qty": 1,
+    "unit": "jar",
+    "storageLocation": "pantry",
+    "daysFromNow": 365,
+    "isLocal": true
+  },
+  {
+    "name": "Piñon Coffee",
+    "category": "coffee",
+    "qty": 12,
+    "unit": "oz",
+    "storageLocation": "pantry",
+    "daysFromNow": 60,
+    "isLocal": true
+  },
+  {
+    "name": "NM Pecans",
+    "category": "pecans",
+    "qty": 8,
+    "unit": "oz",
+    "storageLocation": "pantry",
+    "daysFromNow": 90,
+    "isLocal": true
+  },
+  {
+    "name": "Ground Beef",
+    "category": "meat_raw_beef",
+    "qty": 1,
+    "unit": "lb",
+    "storageLocation": "freezer",
+    "daysFromNow": 90,
+    "isLocal": true
+  },
+  {
+    "name": "Corn Tortillas",
+    "category": "tortillas",
+    "qty": 1,
+    "unit": "pack",
+    "storageLocation": "fridge",
+    "daysFromNow": 14,
+    "isLocal": true
+  },
+  {
+    "name": "Dried Red Chile",
+    "category": "chile_red",
+    "qty": 4,
+    "unit": "oz",
+    "storageLocation": "pantry",
+    "daysFromNow": 180,
+    "isLocal": true
+  },
+  {
+    "name": "Bolita Beans",
+    "category": "beans_dry",
+    "qty": 1,
+    "unit": "lb",
+    "storageLocation": "pantry",
+    "daysFromNow": 365,
+    "isLocal": true
+  }
+]
