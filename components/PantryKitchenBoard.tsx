@@ -517,19 +517,6 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
 
                 {urgent.length > 0 && (
                   <div style={{ marginBottom: 10 }}>
-                    <div
-                      style={{
-                        fontFamily: "'JetBrains Mono', monospace",
-                        fontSize: 9,
-                        fontWeight: 700,
-                        letterSpacing: "0.1em",
-                        color: "#c8102e",
-                        marginBottom: 8,
-                        textTransform: "uppercase",
-                      }}
-                    >
-                      ≤ {aboveLabel} · rescue
-                    </div>
                     {urgent.map((item) => (
                       <KitchenTile
                         key={item.id}
@@ -552,17 +539,8 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
                         style={{
                           borderTop: "2px dashed rgba(200,16,46,0.35)",
                           margin: "14px 0 10px",
-                          paddingTop: 10,
-                          fontFamily: "'JetBrains Mono', monospace",
-                          fontSize: 9,
-                          fontWeight: 700,
-                          letterSpacing: "0.1em",
-                          color: "var(--caption)",
-                          textTransform: "uppercase",
                         }}
-                      >
-                        Beyond window
-                      </div>
+                      />
                     )}
                     {stable.map((item) => (
                       <KitchenTile
