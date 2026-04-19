@@ -127,10 +127,31 @@
   },
   {
     "genericName": "garlic",
-    "localProducer": "Living Roots Farm",
-    "product": "NM hardneck garlic",
+    "localProducer": "North Valley Organics",
+    "product": "Cured NM garlic",
+    "whereToBuy": "Downtown Growers' Market, La Montañita Co-op",
+    "notes": "ABQ North Valley — cured hardneck varieties"
+  },
+  {
+    "genericName": "garlic",
+    "localProducer": "Chispas Farm",
+    "product": "Fresh garlic & seasonal produce",
     "whereToBuy": "Downtown Growers' Market",
-    "notes": ""
+    "notes": "Regenerative urban farm, South Valley ABQ — verified 2026 DGM vendor"
+  },
+  {
+    "genericName": "garlic",
+    "localProducer": "AlliCins Ranch",
+    "product": "NM garlic varieties",
+    "whereToBuy": "Downtown Growers' Market, local outlets",
+    "notes": "NM garlic specialist"
+  },
+  {
+    "genericName": "garlic",
+    "localProducer": "El Bosque Garlic Farm",
+    "product": "NM garlic",
+    "whereToBuy": "Downtown Growers' Market",
+    "notes": "NM local garlic farm"
   },
   {
     "genericName": "carrot",
@@ -260,6 +281,13 @@
   },
   {
     "genericName": "dairy_cheese_hard",
+    "localProducer": "Tucumcari Creamery",
+    "product": "NM aged cheeses",
+    "whereToBuy": "La Montañita Co-op, local specialty stores",
+    "notes": "Tucumcari, NM — one of the few dedicated NM creameries"
+  },
+  {
+    "genericName": "dairy_cheese_hard",
     "localProducer": "Oliva Cheese Board LLC",
     "product": "Artisan cheese boards & local cheeses",
     "whereToBuy": "Downtown Growers' Market, Rail Yards Market",
@@ -267,10 +295,24 @@
   },
   {
     "genericName": "dairy_cheese_soft",
+    "localProducer": "Tucumcari Creamery",
+    "product": "NM fresh cheeses",
+    "whereToBuy": "La Montañita Co-op",
+    "notes": "Tucumcari, NM"
+  },
+  {
+    "genericName": "dairy_cheese_soft",
     "localProducer": "Oliva Cheese Board LLC",
     "product": "Fresh & soft cheeses",
     "whereToBuy": "Downtown Growers' Market, Rail Yards Market",
     "notes": "Verified 2026 vendor"
+  },
+  {
+    "genericName": "cheese",
+    "localProducer": "Tucumcari Creamery",
+    "product": "NM cheeses — aged & fresh",
+    "whereToBuy": "La Montañita Co-op",
+    "notes": "Tucumcari, NM"
   },
   {
     "genericName": "cheese",
@@ -417,7 +459,14 @@
     "localProducer": "Stahmann Farms",
     "product": "NM pecans",
     "whereToBuy": "La Montañita Co-op, most ABQ grocers",
-    "notes": "Las Cruces — one of the world's largest pecan orchards; well-established brand"
+    "notes": "Las Cruces — one of the world's largest pecan orchards"
+  },
+  {
+    "genericName": "nuts",
+    "localProducer": "Mesilla Valley Pecan Co",
+    "product": "NM pecans — halves, pieces & flavored",
+    "whereToBuy": "La Montañita Co-op, local specialty stores",
+    "notes": "Mesilla Valley, Las Cruces NM"
   },
   {
     "genericName": "pecans",
@@ -425,6 +474,13 @@
     "product": "NM pecans — halves, pieces & roasted",
     "whereToBuy": "La Montañita Co-op, most ABQ grocers",
     "notes": "Las Cruces, NM — widely distributed"
+  },
+  {
+    "genericName": "pecans",
+    "localProducer": "Mesilla Valley Pecan Co",
+    "product": "NM pecans",
+    "whereToBuy": "La Montañita Co-op, local specialty stores",
+    "notes": "Mesilla Valley, NM"
   },
   {
     "genericName": "pine_nuts",
