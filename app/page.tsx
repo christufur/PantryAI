@@ -1,11 +1,17 @@
 import { db } from "@/lib/db";
-import { pantryItems, localSwaps as localSwapsTable } from "@/db/schema";
+import { pantryItems, localSwaps as localSwapsTable, impactEvents } from "@/db/schema";
 import { asc } from "drizzle-orm";
 import type { PlainItem } from "@/components/pantry-types";
 import PantryViewSwitcher from "@/components/PantryViewSwitcher";
+import { computeImpact, type ImpactTotals } from "@/lib/impact";
 
 export default function Home() {
   let items: PlainItem[] = [];
+  let impact: ImpactTotals = { itemsRescued: 0, dollarsSaved: 0, lbsSaved: 0, co2Lbs: 0, gallonsSaved: 0 };
+  try {
+    const events = db.select().from(impactEvents).all();
+    impact = computeImpact(events.map(e => ({ category: e.category, qty: e.qty, unit: e.unit })));
+  } catch {}
   try {
     const rows = db.select().from(pantryItems).orderBy(asc(pantryItems.expiryDate)).all();
     const allSwaps = db.select().from(localSwapsTable).all();
@@ -56,7 +62,7 @@ export default function Home() {
       </div>
 
       <div className="pantry-main-below-ribbon">
-        <PantryViewSwitcher items={items} nowMs={serverNow} />
+        <PantryViewSwitcher items={items} nowMs={serverNow} impact={impact} />
       </div>
 
       <style>{`

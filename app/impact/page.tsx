@@ -1,7 +1,6 @@
 import { db } from "@/lib/db";
 import { impactEvents } from "@/db/schema";
 import { computeImpact } from "@/lib/impact";
-import ImpactCard from "@/components/ImpactCard";
 
 export default function ImpactPage() {
   let totals = { itemsRescued: 0, dollarsSaved: 0, lbsSaved: 0, co2Lbs: 0, gallonsSaved: 0 };
@@ -37,35 +36,35 @@ export default function ImpactPage() {
         <span style={{ fontWeight: 400, opacity: 0.7, fontSize: 10 }}>ZERO WASTE. NEW MEXICO.</span>
       </div>
 
-      <div style={{ maxWidth: 900, margin: "0 auto", padding: "24px 32px 32px" }} className="impact-container">
+      <div style={{ maxWidth: 1080, margin: "0 auto", padding: "32px 40px 44px" }} className="impact-container">
 
         {/* ── Hero stat ──────────────────────────────────────────────── */}
-        <section style={{ borderBottom: "2px solid #000", paddingBottom: 20, marginBottom: 0 }}>
+        <section style={{ borderBottom: "2px solid #000", paddingBottom: 28, marginBottom: 0 }}>
 
           <div style={{
-            fontFamily: "var(--font-ui)", fontSize: 11, fontWeight: 700,
+            fontFamily: "var(--font-ui)", fontSize: 12, fontWeight: 700,
             textTransform: "uppercase", letterSpacing: "0.14em", color: "#c8102e",
-            marginBottom: 16,
+            marginBottom: 18,
           }}>
             LIFETIME RESCUES
           </div>
 
           <div style={{
             fontFamily: "var(--font-display)", fontWeight: 700,
-            fontSize: "var(--text-hero-num)", lineHeight: 0.85, letterSpacing: "-0.04em",
+            fontSize: "clamp(104px, 18vw, 200px)", lineHeight: 0.82, letterSpacing: "-0.04em",
             color: "#c8102e", marginBottom: 20,
           }} className="impact-hero-num">
             {fmt(totals.itemsRescued)}
           </div>
 
           <div style={{
-            fontFamily: "var(--font-ui)", fontSize: 13, fontWeight: 700,
+            fontFamily: "var(--font-ui)", fontSize: 14, fontWeight: 700,
             textTransform: "uppercase", letterSpacing: "0.10em", color: "var(--ink)",
-            marginBottom: 6,
+            marginBottom: 8,
           }}>
             ITEMS SAVED
           </div>
-          <div style={{ fontFamily: "var(--font-body)", fontSize: 16, color: "var(--caption)", lineHeight: 1.5 }}>
+          <div style={{ fontFamily: "var(--font-body)", fontSize: 18, color: "var(--caption)", lineHeight: 1.55 }}>
             {totals.itemsRescued === 0
               ? "Start tracking: delete items you've used before they expire."
               : "Rescued from your pantry before expiry."}
@@ -80,29 +79,29 @@ export default function ImpactPage() {
               <div
                 key={s.label}
                 style={{
-                  padding: "18px 24px 16px",
+                  padding: "24px 28px 20px",
                   borderRight: i % 2 === 0 ? "1px solid var(--hairline)" : "none",
                   borderBottom: i < 2 ? "1px solid var(--hairline)" : "none",
                 }}
                 className="impact-stat-cell"
               >
                 <div style={{
-                  fontFamily: "var(--font-ui)", fontSize: 10, fontWeight: 700,
+                  fontFamily: "var(--font-ui)", fontSize: 11, fontWeight: 700,
                   textTransform: "uppercase", letterSpacing: "0.12em",
-                  color: "var(--caption)", marginBottom: 12,
+                  color: "var(--caption)", marginBottom: 14,
                 }}>
                   {s.label}
                 </div>
                 <div style={{
                   fontFamily: "var(--font-display)", fontWeight: 700,
-                  fontSize: "var(--text-stat)", lineHeight: 1.0, letterSpacing: "-0.02em",
+                  fontSize: "clamp(44px, 6vw, 72px)", lineHeight: 0.95, letterSpacing: "-0.02em",
                   color: "var(--ink)",
                 }} className="impact-stat-num">
                   {s.value}
                 </div>
                 <div style={{
-                  fontFamily: "var(--font-ui)", fontSize: 10,
-                  color: "var(--caption)", marginTop: 8,
+                  fontFamily: "var(--font-ui)", fontSize: 11,
+                  color: "var(--caption)", marginTop: 10,
                   textTransform: "uppercase", letterSpacing: "0.08em",
                 }}>
                   {s.unit}
@@ -112,16 +111,11 @@ export default function ImpactPage() {
           </div>
         </section>
 
-        {/* ── Shareable card ─────────────────────────────────────────── */}
-        <section style={{ paddingTop: 20 }}>
-          <ImpactCard totals={totals} />
-        </section>
-
         {/* ── Lede ───────────────────────────────────────────────────── */}
-        <section style={{ borderTop: "none", paddingTop: 20 }}>
+        <section style={{ borderTop: "none", paddingTop: 28 }}>
           <p style={{
             fontFamily: "var(--font-body)",
-            fontSize: "var(--text-sm)", lineHeight: 1.8,
+            fontSize: "clamp(16px, 2.1vw, 20px)", lineHeight: 1.8,
             color: "var(--caption)", margin: 0,
           }}>
             The average American household wastes <strong style={{ color: "var(--ink)" }}>~$1,600</strong> of food
@@ -141,11 +135,11 @@ export default function ImpactPage() {
           grid-template-columns: 1fr 1fr;
         }
         @media (max-width: 640px) {
-          .impact-hero-num   { font-size: 72px !important; }
-          .impact-stat-num   { font-size: 30px !important; }
+          .impact-hero-num   { font-size: 96px !important; }
+          .impact-stat-num   { font-size: 36px !important; }
           .impact-stats-grid { grid-template-columns: 1fr 1fr !important; }
-          .impact-stat-cell  { padding: 14px 14px 12px !important; }
-          .impact-container  { padding: 16px 16px 24px !important; }
+          .impact-stat-cell  { padding: 18px 16px 16px !important; }
+          .impact-container  { padding: 20px 16px 30px !important; }
           .impact-ribbon     { padding: 10px 16px !important; }
         }
       `}</style>

@@ -1,10 +1,16 @@
 import { db } from "@/lib/db";
-import { pantryItems } from "@/db/schema";
+import { pantryItems, impactEvents } from "@/db/schema";
 import { asc } from "drizzle-orm";
 import PantryViewSwitcher, { type PlainItem } from "@/components/PantryViewSwitcher";
+import { computeImpact, type ImpactTotals } from "@/lib/impact";
 
 export default function PantryPage() {
   let items: PlainItem[] = [];
+  let impact: ImpactTotals = { itemsRescued: 0, dollarsSaved: 0, lbsSaved: 0, co2Lbs: 0, gallonsSaved: 0 };
+  try {
+    const events = db.select().from(impactEvents).all();
+    impact = computeImpact(events.map(e => ({ category: e.category, qty: e.qty, unit: e.unit })));
+  } catch {}
   try {
     const rows = db.select().from(pantryItems).orderBy(asc(pantryItems.expiryDate)).all();
     items = rows.map((r) => ({
@@ -53,7 +59,7 @@ export default function PantryPage() {
         )}
       </div>
 
-      <PantryViewSwitcher items={items} nowMs={serverNow} />
+      <PantryViewSwitcher items={items} nowMs={serverNow} impact={impact} />
 
       <style>{`
         @media (max-width: 768px) {

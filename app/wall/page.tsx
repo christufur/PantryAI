@@ -162,6 +162,8 @@ export default async function WallPage() {
         </span>
       </div>
 
+
+
       <div style={{ maxWidth: 1400, margin: "0 auto", padding: "32px" }} className="wall-container">
         {/* Action bar */}
         <section style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 24, gap: 16, flexWrap: "wrap" }}>
