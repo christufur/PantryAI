@@ -1,11 +1,31 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-const DAY_OPTIONS = [3, 5, 7, 10, 14];
-const CAL_OPTIONS = [1000, 1200, 1500, 2000, 2500, 3000];
+const CUISINES = [
+  "Mediterranean",
+  "Mexican",
+  "Asian",
+  "Italian",
+  "Indian",
+  "American comfort",
+  "Middle Eastern",
+];
+
+const TIME_OPTIONS = [
+  { id: "15", label: "≤ 15 MIN" },
+  { id: "30", label: "≤ 30 MIN" },
+  { id: "any", label: "NO RUSH" },
+];
+
+const STYLE_OPTIONS = [
+  { id: "fresh", label: "FRESH EACH MEAL" },
+  { id: "batch", label: "BATCH COOK / LEFTOVERS OK" },
+];
+
+type ProfileLite = { dietary: string; allergies: string };
 
 function getMondayISO(): string {
   const d = new Date();
@@ -13,33 +33,46 @@ function getMondayISO(): string {
   return d.toISOString().split("T")[0];
 }
 
-type Step = "days" | "calories" | "ideas";
+type Step = "days" | "calories" | "vibes";
 
 export default function NewPlanPage() {
   const router = useRouter();
   const [step, setStep] = useState<Step>("days");
-  const [numDays, setNumDays] = useState<number | null>(null);
-  const [customDays, setCustomDays] = useState("");
-  const [calorieTarget, setCalorieTarget] = useState<number | null>(null);
-  const [customCal, setCustomCal] = useState("");
-  const [mealIdeas, setMealIdeas] = useState<string[]>([""]);
+  const [numDays, setNumDays] = useState<number>(7);
+  const [calorieTarget, setCalorieTarget] = useState<string>("");
+  const [cuisines, setCuisines] = useState<string[]>([]);
+  const [timeBudget, setTimeBudget] = useState<string | null>(null);
+  const [cookStyle, setCookStyle] = useState<string | null>(null);
+  const [note, setNote] = useState<string>("");
+  const [profile, setProfile] = useState<ProfileLite | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const resolvedDays = (numDays ?? parseInt(customDays)) || null;
-  const resolvedCal = (calorieTarget ?? parseInt(customCal)) || null;
+  useEffect(() => {
+    fetch("/api/profile")
+      .then((r) => r.json())
+      .then((p) => setProfile({ dietary: p.dietary ?? "", allergies: p.allergies ?? "" }))
+      .catch(() => {});
+  }, []);
+
+  const resolvedCal = parseInt(calorieTarget) || null;
 
   async function handleGenerate() {
-    if (!resolvedDays || !resolvedCal) return;
     setLoading(true);
     setError(null);
     try {
-      const ideas = mealIdeas.map((m) => m.trim()).filter(Boolean);
+      const ideas: string[] = [];
+      if (cuisines.length > 0) ideas.push(`Cuisines: ${cuisines.join(", ")}`);
+      if (timeBudget === "15") ideas.push("Keep weeknight meals under 15 minutes of active cooking.");
+      else if (timeBudget === "30") ideas.push("Keep weeknight meals under 30 minutes of active cooking.");
+      if (cookStyle === "batch") ideas.push("Batch cooking & leftovers are encouraged — it's fine to repeat or reuse meals across days.");
+      else if (cookStyle === "fresh") ideas.push("Cook fresh for each meal — avoid repeating the same dish across days.");
+      if (note.trim()) ideas.push(`Avoid this week: ${note.trim()}`);
       const res = await fetch("/api/plan", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          numDays: resolvedDays,
+          numDays,
           calorieTarget: resolvedCal,
           weekStart: getMondayISO(),
           mealIdeas: ideas,
@@ -54,7 +87,6 @@ export default function NewPlanPage() {
     }
   }
 
-  // ─── shared styles ───────────────────────────────────────────────────────────
   const pill = (active: boolean): React.CSSProperties => ({
     border: `2px solid ${active ? "#000" : "#e2e8f0"}`,
     background: active ? "#000" : "#fff",
@@ -91,46 +123,45 @@ export default function NewPlanPage() {
     color: "#1a1a1a", marginBottom: 8,
   };
 
-  // ─── Step: days ──────────────────────────────────────────────────────────────
   if (step === "days") return (
     <main style={{ maxWidth: 560, margin: "0 auto", padding: "48px 24px" }}>
       <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.12em", color: "#757575", marginBottom: 8 }}>
         STEP 1 OF 3
       </div>
       <h1 style={heading}>How many days do you want to plan for?</h1>
-      <p style={{ fontFamily: "Lora, serif", fontSize: 15, color: "#757575", marginBottom: 32 }}>
+      <p style={{ fontFamily: "Lora, serif", fontSize: 15, color: "#757575", marginBottom: 40 }}>
         We&apos;ll generate breakfast, lunch, and dinner for each day.
       </p>
 
-      <span style={label}>QUICK SELECT</span>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginBottom: 24 }}>
-        {DAY_OPTIONS.map((d) => (
-          <button key={d} style={pill(numDays === d)} onClick={() => { setNumDays(d); setCustomDays(""); }}>
-            {d} DAYS
-          </button>
-        ))}
+      <div style={{ display: "flex", alignItems: "baseline", gap: 12, marginBottom: 8 }}>
+        <span style={{ fontFamily: "'Source Serif 4', serif", fontSize: 64, fontWeight: 700, color: "#1a1a1a", lineHeight: 1 }}>
+          {numDays}
+        </span>
+        <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 13, fontWeight: 700, color: "#757575", textTransform: "uppercase", letterSpacing: "0.12em" }}>
+          DAYS
+        </span>
       </div>
 
-      <span style={label}>OR TYPE A NUMBER</span>
       <input
-        type="number" min={1} max={30}
-        placeholder="e.g. 21"
-        value={customDays}
-        onChange={(e) => { setCustomDays(e.target.value); setNumDays(null); }}
+        type="range"
+        min={1}
+        max={14}
+        value={numDays}
+        onChange={(e) => setNumDays(parseInt(e.target.value))}
         style={{
-          border: "2px solid #000", padding: "10px 14px",
-          fontFamily: "'JetBrains Mono', monospace", fontSize: 14,
-          width: 120, background: "#fff", color: "#1a1a1a",
-          borderRadius: 0, outline: "none",
+          width: "100%",
+          accentColor: "#000",
+          marginTop: 16,
+          marginBottom: 8,
+          cursor: "pointer",
         }}
       />
+      <div style={{ display: "flex", justifyContent: "space-between", fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#757575", letterSpacing: "0.08em", marginBottom: 24 }}>
+        <span>1</span><span>7</span><span>14</span>
+      </div>
 
       <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-        <button
-          style={{ ...nextBtn, opacity: resolvedDays ? 1 : 0.4, cursor: resolvedDays ? "pointer" : "default" }}
-          disabled={!resolvedDays}
-          onClick={() => resolvedDays && setStep("calories")}
-        >
+        <button style={nextBtn} onClick={() => setStep("calories")}>
           NEXT →
         </button>
         <Link href="/plan" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: "#757575", textDecoration: "none", marginTop: 32 }}>
@@ -140,32 +171,22 @@ export default function NewPlanPage() {
     </main>
   );
 
-  // ─── Step: calories ───────────────────────────────────────────────────────────
   if (step === "calories") return (
     <main style={{ maxWidth: 560, margin: "0 auto", padding: "48px 24px" }}>
       <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.12em", color: "#757575", marginBottom: 8 }}>
         STEP 2 OF 3
       </div>
-      <h1 style={heading}>Daily calorie target?</h1>
+      <h1 style={heading}>Daily calorie target? <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, fontWeight: 400, color: "#999", letterSpacing: "0.08em" }}>(optional)</span></h1>
       <p style={{ fontFamily: "Lora, serif", fontSize: 15, color: "#757575", marginBottom: 32 }}>
-        Meals will be balanced across breakfast (~25%), lunch (~35%), dinner (~40%).
+        Leave blank and we&apos;ll aim for a balanced ~2,000/day.
       </p>
 
-      <span style={label}>QUICK SELECT</span>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginBottom: 24 }}>
-        {CAL_OPTIONS.map((c) => (
-          <button key={c} style={pill(calorieTarget === c)} onClick={() => { setCalorieTarget(c); setCustomCal(""); }}>
-            {c.toLocaleString()} CAL
-          </button>
-        ))}
-      </div>
-
-      <span style={label}>OR TYPE A NUMBER</span>
+      <span style={label}>TYPE A NUMBER</span>
       <input
         type="number" min={500} max={6000} step={50}
         placeholder="e.g. 1800"
-        value={customCal}
-        onChange={(e) => { setCustomCal(e.target.value); setCalorieTarget(null); }}
+        value={calorieTarget}
+        onChange={(e) => setCalorieTarget(e.target.value)}
         style={{
           border: "2px solid #000", padding: "10px 14px",
           fontFamily: "'JetBrains Mono', monospace", fontSize: 14,
@@ -178,65 +199,102 @@ export default function NewPlanPage() {
         <button style={{ ...nextBtn, background: "#fff", color: "#000" }} onClick={() => setStep("days")}>
           ← BACK
         </button>
-        <button
-          style={{ ...nextBtn, opacity: resolvedCal ? 1 : 0.4, cursor: resolvedCal ? "pointer" : "default" }}
-          disabled={!resolvedCal}
-          onClick={() => resolvedCal && setStep("ideas")}
-        >
+        <button style={nextBtn} onClick={() => setStep("vibes")}>
           NEXT →
         </button>
       </div>
     </main>
   );
 
-  // ─── Step: meal ideas ─────────────────────────────────────────────────────────
   return (
     <main style={{ maxWidth: 560, margin: "0 auto", padding: "48px 24px" }}>
       <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.12em", color: "#757575", marginBottom: 8 }}>
         STEP 3 OF 3
       </div>
-      <h1 style={heading}>Any meal ideas?</h1>
+      <h1 style={heading}>Tune your plan</h1>
       <p style={{ fontFamily: "Lora, serif", fontSize: 15, color: "#757575", marginBottom: 8 }}>
-        Optional — leave blank and AI will plan everything from your pantry.
+        Everything here is optional — skip to let AI choose freely.
       </p>
-      <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#757575", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 32 }}>
-        {resolvedDays} DAYS · {resolvedCal?.toLocaleString()} CAL/DAY
+      <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#757575", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 24 }}>
+        {numDays} DAYS {resolvedCal ? `· ${resolvedCal.toLocaleString()} CAL/DAY` : "· BALANCED CAL"}
       </p>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
-        {mealIdeas.map((idea, i) => (
-          <div key={i} style={{ borderBottom: "1px solid #e2e8f0", display: "flex", alignItems: "center", gap: 12 }}>
-            <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#757575", width: 24, flexShrink: 0 }}>
-              {i + 1}
-            </span>
-            <input
-              value={idea}
-              placeholder="e.g. Chicken tacos, pasta bake…"
-              onChange={(e) => {
-                const next = [...mealIdeas];
-                next[i] = e.target.value;
-                setMealIdeas(next);
-              }}
-              style={{
-                flex: 1, border: "none", padding: "12px 0",
-                fontFamily: "Lora, serif", fontSize: 16,
-                background: "transparent", outline: "none", color: "#1a1a1a",
-              }}
-            />
+      {profile && (profile.dietary || profile.allergies) && (
+        <div style={{
+          border: "1px solid #000", padding: "12px 14px", marginBottom: 32,
+          background: "#f8f8f5",
+        }}>
+          <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "#1a1a1a", marginBottom: 6 }}>
+            ✓ APPLYING FROM SETTINGS
           </div>
+          <div style={{ fontFamily: "Lora, serif", fontSize: 14, color: "#1a1a1a", lineHeight: 1.5 }}>
+            {profile.dietary && <div>Dietary: {profile.dietary}</div>}
+            {profile.allergies && <div>Allergies: {profile.allergies}</div>}
+          </div>
+          <Link href="/settings" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: "#757575", textDecoration: "underline", marginTop: 6, display: "inline-block" }}>
+            EDIT →
+          </Link>
+        </div>
+      )}
+
+      <span style={label}>CUISINES (MULTI-SELECT)</span>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginBottom: 28 }}>
+        {CUISINES.map((c) => {
+          const active = cuisines.includes(c);
+          return (
+            <button
+              key={c}
+              style={pill(active)}
+              onClick={() =>
+                setCuisines((prev) =>
+                  active ? prev.filter((x) => x !== c) : [...prev, c]
+                )
+              }
+            >
+              {c.toUpperCase()}
+            </button>
+          );
+        })}
+      </div>
+
+      <span style={label}>WEEKNIGHT TIME BUDGET</span>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginBottom: 28 }}>
+        {TIME_OPTIONS.map((t) => (
+          <button key={t.id} style={pill(timeBudget === t.id)} onClick={() => setTimeBudget(timeBudget === t.id ? null : t.id)}>
+            {t.label}
+          </button>
         ))}
       </div>
 
-      <div style={{ display: "flex", gap: 12, marginTop: 16 }}>
-        {mealIdeas.length < resolvedDays! && (
-          <button
-            onClick={() => setMealIdeas((p) => [...p, ""])}
-            style={{ ...nextBtn, background: "#fff", color: "#000", marginTop: 0 }}
-          >
-            + ADD IDEA
+      <span style={label}>COOKING STYLE</span>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginBottom: 28 }}>
+        {STYLE_OPTIONS.map((s) => (
+          <button key={s.id} style={pill(cookStyle === s.id)} onClick={() => setCookStyle(cookStyle === s.id ? null : s.id)}>
+            {s.label}
           </button>
-        )}
+        ))}
       </div>
+
+      <span style={label}>ANYTHING TO AVOID THIS WEEK? (OPTIONAL)</span>
+      <textarea
+        value={note}
+        onChange={(e) => setNote(e.target.value)}
+        placeholder="e.g. no chicken this week, tired of pasta…"
+        rows={2}
+        style={{
+          width: "100%",
+          border: "2px solid #000",
+          padding: "10px 14px",
+          fontFamily: "Lora, serif",
+          fontSize: 15,
+          background: "#fff",
+          color: "#1a1a1a",
+          borderRadius: 0,
+          outline: "none",
+          resize: "vertical",
+          boxSizing: "border-box",
+        }}
+      />
 
       {error && (
         <p style={{ fontFamily: "Lora, serif", fontSize: 14, color: "#c8102e", border: "1px solid #c8102e", padding: "8px 12px", marginTop: 24 }}>

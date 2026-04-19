@@ -185,12 +185,13 @@ export async function generateWeeklyPlan(
   numDays: number,
   calorieTarget: number,
   pantry: PantrySnapshot[],
-  mealIdeas?: string[]
+  mealIdeas?: string[],
+  profileContext = ""
 ): Promise<WeeklyPlan> {
   const ai = client();
 
   const ideasSection = mealIdeas && mealIdeas.length > 0
-    ? `USER'S MEAL IDEAS (incorporate these, don't invent others):\n${mealIdeas.map((m, i) => `${i + 1}. ${m}`).join("\n")}`
+    ? `USER PREFERENCES FOR THIS PLAN (treat as style/constraint hints, not literal meal names unless phrased that way):\n${mealIdeas.map((m, i) => `${i + 1}. ${m}`).join("\n")}`
     : "Generate appropriate meals from scratch based on the pantry and calorie target.";
 
   const pantrySection = pantry.length > 0
@@ -198,7 +199,7 @@ export async function generateWeeklyPlan(
     : "No pantry items — all ingredients need to be purchased.";
 
   const prompt = `You are a meal planner. Plan ${numDays} days of meals (day 0 = Monday, day ${numDays - 1} = the last day).
-
+${profileContext}
 TARGET: ~${calorieTarget} calories per day total across breakfast + lunch + dinner.
 
 ${ideasSection}
@@ -207,12 +208,15 @@ CURRENT PANTRY (with expiry dates):
 ${pantrySection}
 
 RULES:
-1. Each day must have exactly 3 meals: breakfast, lunch, dinner.
-2. Target ~${calorieTarget} cal/day total (spread sensibly: breakfast ~25%, lunch ~35%, dinner ~40%).
-3. Schedule meals that use expiring pantry items on EARLIER days.
-4. For each meal, list usesFromPantry and needsToBuy ingredients.
-5. Aggregate all needsToBuy across all meals into one shoppingList (deduplicated).
-6. estimatedCalories is per meal, not per day.
+1. STRICTLY respect any dietary restrictions and allergies in the USER PROFILE above — every meal must comply. No exceptions.
+2. Each day must have exactly 3 meals: breakfast, lunch, dinner.
+3. Target ~${calorieTarget} cal/day total (spread sensibly: breakfast ~25%, lunch ~35%, dinner ~40%).
+4. Schedule meals that use expiring pantry items on EARLIER days.
+5. For each meal, list usesFromPantry and needsToBuy ingredients.
+6. PANTRY MATCHING — be aggressive. If the user has "tomatoes" and the recipe calls for "roma tomatoes", treat it as a pantry match, not a purchase. Match across variants, plural/singular, and generic↔specific naming. Never list basic staples (salt, pepper, cooking oil, common dried spices, flour, sugar, water) in needsToBuy if any form of them appears in the pantry.
+7. QUANTITY MATH — for any ingredient partially covered by pantry stock, SUBTRACT the pantry quantity from the recipe need. Only put the remaining shortfall in needsToBuy. If the pantry has enough, the item goes in usesFromPantry only, with zero in needsToBuy.
+8. Aggregate all needsToBuy across all meals into one shoppingList (deduplicated by name, qty summed per unit).
+9. estimatedCalories is per meal, not per day.
 
 Return strict JSON matching the schema.`;
 
@@ -226,6 +230,91 @@ Return strict JSON matching the schema.`;
   });
 
   return JSON.parse(response.text ?? "{}") as WeeklyPlan;
+}
+
+// ---------- 2b. Fill specific day(s): pantry + calorie target → meals for given dayIndices ----------
+
+const fillDaysSchema = {
+  type: Type.OBJECT,
+  properties: {
+    days: {
+      type: Type.ARRAY,
+      items: {
+        type: Type.OBJECT,
+        properties: {
+          dayIndex: { type: Type.INTEGER },
+          meals: {
+            type: Type.ARRAY,
+            items: {
+              type: Type.OBJECT,
+              properties: {
+                mealType: { type: Type.STRING, description: "breakfast, lunch, or dinner" },
+                mealName: { type: Type.STRING },
+                estimatedCalories: { type: Type.INTEGER },
+                usesFromPantry: ingredientItems,
+                needsToBuy: ingredientItems,
+              },
+              required: ["mealType", "mealName", "estimatedCalories", "usesFromPantry", "needsToBuy"],
+            },
+          },
+        },
+        required: ["dayIndex", "meals"],
+      },
+    },
+  },
+  required: ["days"],
+};
+
+export async function generateMealsForDays(
+  dayIndices: number[],
+  calorieTarget: number,
+  pantry: PantrySnapshot[],
+  existingMealNames: string[] = [],
+  profileContext = ""
+): Promise<{ dayIndex: number; meals: DayMeal[] }[]> {
+  const ai = client();
+
+  const pantrySection = pantry.length > 0
+    ? pantry.map((p) => `- ${p.name} [${p.category}], ${p.qty} ${p.unit}, expires ${p.expiryDate}`).join("\n")
+    : "No pantry items — all ingredients need to be purchased.";
+
+  const avoidSection = existingMealNames.length > 0
+    ? `ALREADY-PLANNED MEALS THIS WEEK (don't repeat these exactly):\n${existingMealNames.map((m) => `- ${m}`).join("\n")}`
+    : "";
+
+  const dayList = dayIndices.map((i) => `day ${i}`).join(", ");
+
+  const prompt = `You are a meal planner. Plan breakfast, lunch, and dinner for ONLY these specific days: ${dayList} (day 0 = Monday ... day 6 = Sunday).
+${profileContext}
+TARGET: ~${calorieTarget} calories per day total across breakfast + lunch + dinner.
+
+${avoidSection}
+
+CURRENT PANTRY (with expiry dates):
+${pantrySection}
+
+RULES:
+1. STRICTLY respect dietary restrictions and allergies in the USER PROFILE above.
+2. Return exactly one entry per requested dayIndex (${dayIndices.join(", ")}). No other dayIndices.
+3. Each day has 3 meals: breakfast, lunch, dinner.
+4. Target ~${calorieTarget} cal/day total (breakfast ~25%, lunch ~35%, dinner ~40%).
+5. PANTRY MATCHING: match variants and plurals aggressively. Never list basic staples as needsToBuy if present.
+6. QUANTITY MATH: subtract pantry qty from recipe qty before putting anything in needsToBuy.
+7. estimatedCalories is per meal.
+
+Return strict JSON matching the schema.`;
+
+  const response = await ai.models.generateContent({
+    model: MODEL,
+    contents: prompt,
+    config: {
+      responseMimeType: "application/json",
+      responseSchema: fillDaysSchema,
+    },
+  });
+
+  const parsed = JSON.parse(response.text ?? "{}") as { days: { dayIndex: number; meals: DayMeal[] }[] };
+  return parsed.days ?? [];
 }
 
 // ---------- 3. Recipe for a single item / ingredient set ----------

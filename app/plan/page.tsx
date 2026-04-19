@@ -4,6 +4,7 @@ import { asc, desc, eq, sql } from "drizzle-orm";
 import Link from "next/link";
 import { generateRecipe, ingredientsHash } from "@/lib/gemini";
 import WeekGrid, { type DayData } from "./WeekGrid";
+import PastPlans from "./PastPlans";
 
 function formatShort(value: unknown): string {
   if (!value) return "—";
@@ -123,7 +124,7 @@ export default async function PlanPage() {
       .groupBy(mealsPlanned.planId)
       .orderBy(sql`${mealsPlanned.planId} DESC`)
       .all();
-    pastPlans = allPlans.filter((p) => p.planId !== activePlanId);
+    pastPlans = allPlans.filter((p) => p.planId !== activePlanId).slice(0, 3);
   } catch {}
 
   const ctaHref = todayDinner
@@ -278,17 +279,9 @@ export default async function PlanPage() {
 
             {days.length === 0 ? (
               <div style={{ border: "2px dashed var(--hairline)", padding: "48px 24px", textAlign: "center" }}>
-                <p style={{ fontFamily: "Lora, serif", fontSize: 18, color: "var(--caption)", margin: "0 0 16px" }}>
-                  No plan yet. Generate one to see your week.
+                <p style={{ fontFamily: "Lora, serif", fontSize: 18, color: "var(--caption)", margin: 0 }}>
+                  No plan yet. Use &ldquo;+ Generate New Plan&rdquo; above to see your week.
                 </p>
-                <Link href="/plan/new" style={{
-                  fontFamily: "'JetBrains Mono', monospace", fontSize: 12, fontWeight: 700,
-                  textTransform: "uppercase", letterSpacing: "0.08em",
-                  padding: "12px 22px", border: "2px solid #000",
-                  background: "#000", color: "#fff", textDecoration: "none", display: "inline-block",
-                }}>
-                  + GENERATE PLAN
-                </Link>
               </div>
             ) : (
               <WeekGrid days={days} todayIndex={todayIndex} planId={activePlanId!} />
@@ -296,37 +289,7 @@ export default async function PlanPage() {
           </div>
         </section>
 
-        {/* PAST PLANS */}
-        {pastPlans.length > 0 && (
-          <section style={{ marginTop: 48, paddingTop: 24, borderTop: "1px solid var(--hairline)" }}>
-            <div style={{
-              fontFamily: "'JetBrains Mono', monospace", fontSize: 11, fontWeight: 700,
-              textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--caption)", marginBottom: 12,
-            }}>
-              PAST PLANS ({pastPlans.length})
-            </div>
-            <div style={{ borderTop: "2px solid #000" }}>
-              {pastPlans.slice(0, 8).map((plan) => {
-                const dayCount = Math.ceil((plan.mealCount as number) / 3);
-                return (
-                  <Link key={plan.planId} href={`/plan/${plan.planId}/shopping`} style={{ textDecoration: "none", color: "inherit" }}>
-                    <div style={{
-                      borderBottom: "1px solid var(--hairline)", padding: "14px 0",
-                      display: "flex", justifyContent: "space-between", alignItems: "baseline",
-                    }}>
-                      <div style={{ fontFamily: "'Source Serif 4', serif", fontSize: 16, fontWeight: 600 }}>
-                        {dayCount}-Day Plan
-                      </div>
-                      <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: "var(--caption)", textTransform: "uppercase", letterSpacing: "0.08em" }}>
-                        {formatShort(plan.weekStart)} →
-                      </div>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-          </section>
-        )}
+        <PastPlans plans={pastPlans} />
 
       </div>
 
