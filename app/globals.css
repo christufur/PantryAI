@@ -49,8 +49,8 @@
 
 :root {
   /* Typography: one scale site-wide (inline styles use var(--font-*) and var(--text-*)). */
-  --font-body: "Lora", Georgia, serif;
-  --font-display: "Source Serif 4", Georgia, serif;
+  --font-body: "JetBrains Mono", ui-monospace, monospace;
+  --font-display: "JetBrains Mono", ui-monospace, monospace;
   --font-ui: "JetBrains Mono", ui-monospace, monospace;
 
   --text-hero-num: 6rem;
@@ -173,6 +173,6 @@ body {
     @apply bg-background text-foreground;
     }
   html {
-    @apply font-sans;
+    font-family: var(--font-body);
     }
 }
