@@ -245,13 +245,8 @@ export default function WeekGrid({
           >
             {/* Header */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 20 }}>
-<<<<<<< HEAD
-              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", color: "var(--caption)" }}>
-                {DAY_LABELS[openDay]}{current?.date ? ` · ${current.date}` : ""}
-=======
               <div style={{ fontFamily: "var(--font-ui)", fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", color: "var(--caption)" }}>
-                {DAY_LABELS[current.dayIndex]} · {current.date}
->>>>>>> 9ccb2acbcbf2f620324df75cf69fb1a765498a84
+                {DAY_LABELS[openDay]}{current?.date ? ` · ${current.date}` : ""}
               </div>
               <button onClick={closeModal} style={{ border: "none", background: "transparent", cursor: "pointer", fontSize: 20, fontFamily: "monospace", lineHeight: 1 }}>×</button>
             </div>
@@ -282,13 +277,8 @@ export default function WeekGrid({
             )}
 
             {/* Meal list */}
-<<<<<<< HEAD
             {!modalIsEmpty && current && current.meals.length === 0 && !adding && (
-              <p style={{ fontFamily: "Lora, serif", fontSize: 14, color: "var(--caption)", marginBottom: 16 }}>No meals planned. Add one below.</p>
-=======
-            {current.meals.length === 0 && !adding && (
               <p style={{ fontFamily: "var(--font-body)", fontSize: 14, color: "var(--caption)", marginBottom: 16 }}>No meals planned. Add one below.</p>
->>>>>>> 9ccb2acbcbf2f620324df75cf69fb1a765498a84
             )}
 
             {current?.meals.map((m) => {

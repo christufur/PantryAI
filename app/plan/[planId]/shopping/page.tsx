@@ -181,25 +181,24 @@ export default function ShoppingPage() {
         ← BACK TO PLAN
       </Link>
 
-<<<<<<< HEAD
-      <div style={{ marginBottom: 8, fontFamily: "'JetBrains Mono', monospace", fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "#757575" }}>
+      <div style={{ marginBottom: 8, fontFamily: "var(--font-ui)", fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "#757575" }}>
         SHOPPING LIST
       </div>
-      <h1 style={{ fontFamily: "'Source Serif 4', Georgia, serif", fontSize: 32, fontWeight: 700, color: "#1a1a1a", margin: "0 0 4px" }}>
+      <h1 style={{ fontFamily: "var(--font-display)", fontSize: 32, fontWeight: 700, color: "#1a1a1a", margin: "0 0 4px" }}>
         {dayCount}-Day Plan
       </h1>
       {dateLabel && (
-        <div style={{ fontFamily: "Lora, serif", fontSize: 14, color: "#757575", marginBottom: 24 }}>
+        <div style={{ fontFamily: "var(--font-body)", fontSize: 14, color: "#757575", marginBottom: 24 }}>
           {dateLabel}
         </div>
       )}
 
       <div style={{ border: "2px solid #000", padding: "16px 20px", marginBottom: 28, background: "#f8f8f5" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 10 }}>
-          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em" }}>
+          <span style={{ fontFamily: "var(--font-ui)", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em" }}>
             {boughtCount} OF {totalCount} BOUGHT
           </span>
-          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, fontWeight: 700, color: "#1a1a1a" }}>
+          <span style={{ fontFamily: "var(--font-ui)", fontSize: 11, fontWeight: 700, color: "#1a1a1a" }}>
             {progress}%
           </span>
         </div>
@@ -211,7 +210,7 @@ export default function ShoppingPage() {
             onClick={clearAll}
             style={{
               background: "none", border: "none", padding: 0, marginTop: 10, cursor: "pointer",
-              fontFamily: "'JetBrains Mono', monospace", fontSize: 10, fontWeight: 700,
+              fontFamily: "var(--font-ui)", fontSize: 10, fontWeight: 700,
               textTransform: "uppercase", letterSpacing: "0.08em", color: "#c8102e",
               textDecoration: "underline",
             }}
@@ -222,39 +221,6 @@ export default function ShoppingPage() {
       </div>
 
       <div style={{ display: "flex", border: "2px solid #000", marginBottom: 0 }}>
-=======
-      {/* Section: Current Stock */}
-      <div style={{
-        background: "#000", color: "#fff",
-        padding: "14px 20px", marginBottom: 0,
-        fontFamily: "var(--font-ui)",
-        fontSize: 13, fontWeight: 700,
-        textTransform: "uppercase", letterSpacing: "0.12em",
-      }}>
-        CURRENT (USABLE FROM PANTRY)
-      </div>
-      <div style={{ border: "2px solid #000", borderTop: "none", padding: "16px 20px", marginBottom: 32 }}>
-        <p style={{ fontFamily: "var(--font-body)", fontSize: 14, color: "#757575", margin: 0 }}>
-          Check the{" "}
-          <Link href="/plan" style={{ color: "#057dbc" }}>plan</Link>
-          {" "}for items already in stock — they appear in each meal&apos;s &quot;From Pantry&quot; list.
-        </p>
-      </div>
-
-      {/* Section: Need to Buy */}
-      <div style={{
-        background: "#000", color: "#fff",
-        padding: "14px 20px",
-        fontFamily: "var(--font-ui)",
-        fontSize: 13, fontWeight: 700,
-        textTransform: "uppercase", letterSpacing: "0.12em",
-      }}>
-        NEED TO BUY ({items.length} ITEMS)
-      </div>
-
-      {/* Tabs */}
-      <div style={{ display: "flex", borderBottom: "1px solid #e2e8f0", marginBottom: 24, border: "2px solid #000", borderTop: "none" }}>
->>>>>>> 9ccb2acbcbf2f620324df75cf69fb1a765498a84
         <button style={tabBtn(tab === "stores")} onClick={() => setTab("stores")}>
           ANY GROCER ({storeItems.length})
         </button>
@@ -264,22 +230,17 @@ export default function ShoppingPage() {
       </div>
 
       {displayed.length === 0 ? (
-<<<<<<< HEAD
-        <p style={{ fontFamily: "Lora, serif", fontSize: 15, color: "#757575", padding: "32px 0", textAlign: "center" }}>
-=======
-        <p style={{ fontFamily: "var(--font-body)", fontSize: 15, color: "#757575", padding: "24px 0" }}>
->>>>>>> 9ccb2acbcbf2f620324df75cf69fb1a765498a84
+        <p style={{ fontFamily: "var(--font-body)", fontSize: 15, color: "#757575", padding: "32px 0", textAlign: "center" }}>
           {tab === "local"
             ? "No local NM alternatives found for items in this plan."
             : "All items have local alternatives — switch to the Buy Local tab!"}
         </p>
       ) : (
-<<<<<<< HEAD
         <div style={{ marginTop: 24 }}>
           {grouped.map(({ category, items: catItems }) => (
             <div key={category} style={{ marginBottom: 28 }}>
               <div style={{
-                fontFamily: "'JetBrains Mono', monospace", fontSize: 10, fontWeight: 700,
+                fontFamily: "var(--font-ui)", fontSize: 10, fontWeight: 700,
                 textTransform: "uppercase", letterSpacing: "0.12em", color: "#1a1a1a",
                 borderBottom: "2px solid #000", paddingBottom: 6, marginBottom: 0,
                 display: "flex", justifyContent: "space-between",
@@ -312,25 +273,25 @@ export default function ShoppingPage() {
                       </div>
                       <div style={{ flex: 1 }}>
                         <div style={{
-                          fontFamily: "'Source Serif 4', Georgia, serif", fontSize: 16, fontWeight: 600,
+                          fontFamily: "var(--font-display)", fontSize: 16, fontWeight: 600,
                           color: "#1a1a1a",
                           textDecoration: isChecked ? "line-through" : "none",
                         }}>
-                          {item.name} <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: "#757575", fontWeight: 400 }}>
+                          {item.name} <span style={{ fontFamily: "var(--font-ui)", fontSize: 11, color: "#757575", fontWeight: 400 }}>
                             · {item.qty} {item.unit}
                           </span>
                         </div>
                         <div style={{ marginTop: 6, padding: "8px 10px", background: "#f8f8f5", borderLeft: "3px solid #057dbc" }}>
-                          <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#057dbc", marginBottom: 3 }}>
+                          <div style={{ fontFamily: "var(--font-ui)", fontSize: 9, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#057dbc", marginBottom: 3 }}>
                             LOCAL SWAP
                           </div>
-                          <div style={{ fontFamily: "Lora, serif", fontSize: 14, fontWeight: 700, color: "#1a1a1a" }}>
+                          <div style={{ fontFamily: "var(--font-body)", fontSize: 14, fontWeight: 700, color: "#1a1a1a" }}>
                             {item.localAlternative.localProducer}
                           </div>
-                          <div style={{ fontFamily: "Lora, serif", fontSize: 13, color: "#444" }}>
+                          <div style={{ fontFamily: "var(--font-body)", fontSize: 13, color: "#444" }}>
                             {item.localAlternative.product}
                           </div>
-                          <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: "#057dbc", marginTop: 4, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                          <div style={{ fontFamily: "var(--font-ui)", fontSize: 11, color: "#057dbc", marginTop: 4, textTransform: "uppercase", letterSpacing: "0.05em" }}>
                             → {item.localAlternative.whereToBuy}
                           </div>
                         </div>
@@ -359,14 +320,14 @@ export default function ShoppingPage() {
                     </div>
                     <div style={{
                       flex: 1,
-                      fontFamily: "'Source Serif 4', Georgia, serif", fontSize: 16, fontWeight: 600,
+                      fontFamily: "var(--font-display)", fontSize: 16, fontWeight: 600,
                       color: "#1a1a1a",
                       textDecoration: isChecked ? "line-through" : "none",
                     }}>
                       {item.name}
                     </div>
                     <div style={{
-                      fontFamily: "'JetBrains Mono', monospace", fontSize: 11,
+                      fontFamily: "var(--font-ui)", fontSize: 11,
                       color: "#757575",
                       textDecoration: isChecked ? "line-through" : "none",
                     }}>
@@ -375,70 +336,6 @@ export default function ShoppingPage() {
                   </div>
                 );
               })}
-=======
-        <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
-          {/* Table header */}
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: tab === "local" ? "1fr 1fr 1fr" : "1fr 80px",
-            borderBottom: "2px solid #000",
-            padding: "8px 0",
-          }}>
-            <span style={{ fontFamily: "var(--font-ui)", fontSize: 9, textTransform: "uppercase", letterSpacing: "0.1em", color: "#757575" }}>ITEM</span>
-            {tab === "local" && <>
-              <span style={{ fontFamily: "var(--font-ui)", fontSize: 9, textTransform: "uppercase", letterSpacing: "0.1em", color: "#757575" }}>PRODUCER</span>
-              <span style={{ fontFamily: "var(--font-ui)", fontSize: 9, textTransform: "uppercase", letterSpacing: "0.1em", color: "#757575" }}>WHERE TO BUY</span>
-            </>}
-            {tab === "stores" && (
-              <span style={{ fontFamily: "var(--font-ui)", fontSize: 9, textTransform: "uppercase", letterSpacing: "0.1em", color: "#757575", textAlign: "right" }}>QTY</span>
-            )}
-          </div>
-
-          {displayed.map((item, i) => (
-            <div
-              key={i}
-              style={{
-                display: "grid",
-                gridTemplateColumns: tab === "local" ? "1fr 1fr 1fr" : "1fr 80px",
-                borderBottom: "1px solid #e2e8f0",
-                padding: "14px 0",
-                alignItems: "start",
-              }}
-            >
-              <div>
-                <div style={{ fontFamily: "var(--font-display)", fontSize: 16, fontWeight: 600, color: "#1a1a1a" }}>
-                  {item.name}
-                </div>
-                {tab === "stores" && (
-                  <div style={{ fontFamily: "var(--font-ui)", fontSize: 10, color: "#757575", marginTop: 2 }}>
-                    Available at most grocers
-                  </div>
-                )}
-              </div>
-
-              {tab === "local" && item.localAlternative && <>
-                <div>
-                  <div style={{ fontFamily: "var(--font-body)", fontSize: 14, fontWeight: 700, color: "#1a1a1a" }}>
-                    {item.localAlternative.localProducer}
-                  </div>
-                  <div style={{ fontFamily: "var(--font-body)", fontSize: 13, color: "#757575" }}>
-                    {item.localAlternative.product}
-                  </div>
-                </div>
-                <div style={{ fontFamily: "var(--font-body)", fontSize: 13, color: "#057dbc" }}>
-                  {item.localAlternative.whereToBuy}
-                </div>
-              </>}
-
-              {tab === "stores" && (
-                <div style={{
-                  fontFamily: "var(--font-ui)", fontSize: 11,
-                  color: "#757575", textAlign: "right", paddingTop: 2,
-                }}>
-                  {item.qty} {item.unit}
-                </div>
-              )}
->>>>>>> 9ccb2acbcbf2f620324df75cf69fb1a765498a84
             </div>
           ))}
         </div>
@@ -446,13 +343,13 @@ export default function ShoppingPage() {
 
       {tab === "local" && hasAnyOutlets && outlets && (
         <div style={{ marginTop: 40, paddingTop: 28, borderTop: "2px solid #000" }}>
-          <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "#757575", marginBottom: 6 }}>
+          <div style={{ fontFamily: "var(--font-ui)", fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "#757575", marginBottom: 6 }}>
             NEARBY
           </div>
-          <h2 style={{ fontFamily: "'Source Serif 4', Georgia, serif", fontSize: 22, fontWeight: 700, margin: "0 0 6px" }}>
+          <h2 style={{ fontFamily: "var(--font-display)", fontSize: 22, fontWeight: 700, margin: "0 0 6px" }}>
             Where to shop local
           </h2>
-          <p style={{ fontFamily: "Lora, serif", fontSize: 14, color: "#757575", marginBottom: 20 }}>
+          <p style={{ fontFamily: "var(--font-body)", fontSize: 14, color: "#757575", marginBottom: 20 }}>
             Farmers markets, CSAs & food hubs within 30 miles.
           </p>
 
@@ -461,19 +358,19 @@ export default function ShoppingPage() {
             if (list.length === 0) return null;
             return (
               <div key={key} style={{ marginBottom: 24 }}>
-                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#1a1a1a", borderBottom: "1px solid #000", paddingBottom: 4, marginBottom: 8 }}>
+                <div style={{ fontFamily: "var(--font-ui)", fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#1a1a1a", borderBottom: "1px solid #000", paddingBottom: 4, marginBottom: 8 }}>
                   {kindLabel[list[0].kind] ?? key} ({list.length})
                 </div>
                 {list.slice(0, 5).map((o, idx) => (
                   <div key={idx} style={{ padding: "10px 0", borderBottom: "1px solid #e2e8f0" }}>
-                    <div style={{ fontFamily: "'Source Serif 4', Georgia, serif", fontSize: 15, fontWeight: 600, color: "#1a1a1a" }}>
+                    <div style={{ fontFamily: "var(--font-display)", fontSize: 15, fontWeight: 600, color: "#1a1a1a" }}>
                       {o.website ? (
                         <a href={o.website} target="_blank" rel="noopener noreferrer" style={{ color: "#057dbc", textDecoration: "none" }}>
                           {o.name} ↗
                         </a>
                       ) : o.name}
                     </div>
-                    <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: "#757575", marginTop: 2 }}>
+                    <div style={{ fontFamily: "var(--font-ui)", fontSize: 11, color: "#757575", marginTop: 2 }}>
                       {o.city}{o.zip ? ` · ${o.zip}` : ""}
                     </div>
                   </div>
