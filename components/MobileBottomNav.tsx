@@ -22,7 +22,8 @@ export default function MobileBottomNav() {
     const vv = window.visualViewport;
     if (!vv) return;
     const sync = () => {
-      const gap = window.innerHeight - vv.height - vv.offsetTop;
+      // Clamp offsetTop to >=0 so iOS overscroll bounce (negative offsetTop) doesn't push the nav up
+      const gap = window.innerHeight - vv.height - Math.max(0, vv.offsetTop);
       setVisualBottomGap(Math.max(0, gap));
     };
     sync();
