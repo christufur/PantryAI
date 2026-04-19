@@ -66,8 +66,21 @@ export default function RootLayout({
           fontFamily: "'JetBrains Mono', monospace",
           fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.10em'
         }}>
-          <Link href="/" style={{ color: '#fff', textDecoration: 'none', fontWeight: 700 }}>
-            pantry<span style={{ color: '#888', fontWeight: 400 }}>.ai</span>
+          <Link href="/" style={{
+            color: '#fff', textDecoration: 'none',
+            display: 'inline-flex', alignItems: 'center', gap: 10,
+            fontFamily: "'Fraunces', serif", fontWeight: 700,
+            fontSize: 22, letterSpacing: '-0.02em',
+            textTransform: 'none',
+          }}>
+            {/* Fridge mark — body inherits white from parent; cutouts #000 match header bg */}
+            <svg width="22" height="22" viewBox="0 0 120 120" aria-hidden="true">
+              <rect x="30" y="12" width="60" height="96" rx="12" fill="currentColor"/>
+              <rect x="30" y="46" width="60" height="2" fill="#000"/>
+              <rect x="38" y="20" width="2.5" height="22" rx="1.25" fill="#000"/>
+              <rect x="38" y="52" width="2.5" height="48" rx="1.25" fill="#000"/>
+            </svg>
+            pantry<span style={{ color: '#757575', fontWeight: 700 }}>.ai</span>
           </Link>
           <div className="util-nav" style={{ display: 'flex', gap: 28 }}>
             <Link href="/plan" style={{ color: '#fff', textDecoration: 'none' }}>PLAN</Link>
