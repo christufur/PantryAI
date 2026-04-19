@@ -22,11 +22,12 @@ export default function ScrollToTopButton() {
       type="button"
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
       aria-label="Back to top"
+      className="scroll-to-top-btn"
       style={{
         position: "fixed",
         bottom: 22,
         right: 16,
-        zIndex: 45,
+        zIndex: 99990,
         width: 44,
         height: 44,
         padding: 0,

@@ -19,7 +19,8 @@ export default function MobileBottomNav() {
     <nav style={{
       position: "fixed", bottom: 0, left: 0, right: 0,
       background: "#000", borderTop: "2px solid #222",
-      display: "flex", zIndex: 100,
+      display: "flex",
+      zIndex: 99999,
       paddingBottom: "env(safe-area-inset-bottom)",
     }} className="mobile-bottom-nav">
       {NAV.map(({ href, label, Icon }) => {

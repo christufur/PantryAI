@@ -1,3 +1,4 @@
+import { ApiError } from "@google/genai";
 import { NextRequest, NextResponse } from "next/server";
 import { db, ensureSqliteSchema, getSqlitePath } from "@/lib/db";
 import { pantryItems, shelfLife, localSwaps } from "@/db/schema";
@@ -43,7 +44,34 @@ export async function POST(request: NextRequest) {
   }
 
   const buffer = Buffer.from(await file.arrayBuffer());
-  const identified = await identifyPantryItems(buffer, file.type);
+
+  let identified: Awaited<ReturnType<typeof identifyPantryItems>>;
+  try {
+    identified = await identifyPantryItems(buffer, file.type);
+  } catch (e) {
+    if (e instanceof ApiError && (e.status === 503 || e.status === 429)) {
+      return NextResponse.json(
+        {
+          error:
+            "The photo analyzer is temporarily busy (high demand). Wait a minute and try again.",
+        },
+        { status: 503 }
+      );
+    }
+    if (e instanceof ApiError) {
+      return NextResponse.json(
+        { error: "Could not analyze the photo. Please try again." },
+        { status: 502 }
+      );
+    }
+    if (e instanceof Error && e.message === "GEMINI_API_KEY not set") {
+      return NextResponse.json(
+        { error: "Photo analysis is not configured on this server." },
+        { status: 500 }
+      );
+    }
+    throw e;
+  }
 
   try {
     // Pre-fetch for matching (avoids N+1 queries in the loop)
