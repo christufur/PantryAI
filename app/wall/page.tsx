@@ -135,14 +135,26 @@ export default async function WallPage() {
   const weekRangeLabel = weekStart ? `WEEK OF ${formatShort(weekStart).toUpperCase()}` : "NO ACTIVE PLAN";
 
   return (
-    <main style={{ background: "var(--paper)", minHeight: "100vh" }}>
-      <div style={{
-        background: "#000", color: "#fff", padding: "10px 32px",
-        fontFamily: "'JetBrains Mono', monospace", fontSize: 12, fontWeight: 700,
-        textTransform: "uppercase", letterSpacing: "0.12em",
-        display: "flex", justifyContent: "space-between", alignItems: "center",
-        flexWrap: "wrap", gap: 8,
-      }} className="ribbon">
+    <main style={{ background: "var(--paper)", minHeight: "100dvh" }}>
+      {/* Black ribbon */}
+      <div
+        style={{
+          background: "#000",
+          color: "#fff",
+          padding: "10px 32px",
+          fontFamily: "'JetBrains Mono', monospace",
+          fontSize: 12,
+          fontWeight: 700,
+          textTransform: "uppercase",
+          letterSpacing: "0.12em",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: 8,
+        }}
+        className="ribbon"
+      >
         <span>KITCHEN WALL · PIN TO THE FRIDGE</span>
         <span style={{ fontWeight: 400, opacity: 0.7, fontSize: 10 }}>
           {new Date().toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric" })}
@@ -195,7 +207,7 @@ export default async function WallPage() {
             <div>
               <h1 style={{
                 fontFamily: "'Source Serif 4', serif", fontWeight: 600,
-                fontSize: 120, lineHeight: 0.9, letterSpacing: "-0.035em", margin: 0, color: "#000",
+                fontSize: 48, lineHeight: 1.0, letterSpacing: "-0.02em", margin: 0, color: "var(--ink)",
               }} className="wall-headline">
                 {tonight ? tonight.title : "Pantry's clean."}
               </h1>
@@ -336,11 +348,14 @@ export default async function WallPage() {
 
       <style>{`
         @media (max-width: 900px) {
-          .wall-headline { font-size: 64px !important; }
+          .wall-headline { font-size: 40px !important; }
           .wall-tonight-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
           .wall-bottom-grid { grid-template-columns: 1fr !important; gap: 24px !important; }
           .wall-container { padding: 20px 16px !important; }
           .ribbon { padding: 10px 16px !important; }
+        }
+        @media (max-width: 768px) {
+          .wall-headline { font-size: 34px !important; }
         }
         @media (max-width: 600px) {
           .week-grid { grid-template-columns: repeat(7, minmax(110px, 1fr)) !important; overflow-x: auto; }
