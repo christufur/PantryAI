@@ -26,15 +26,10 @@ export async function POST(request: NextRequest) {
           : new Date((item.expiryDate as unknown as number) * 1000).toISOString().split("T")[0],
     }));
 
-<<<<<<< HEAD
   const profileCtx = profilePromptContext(loadProfile());
 
-  const [plan, nearbyOutlets] = await Promise.all([
-    generateWeeklyPlan(numDays ?? 7, calorieTarget ?? 2000, pantry, mealIdeas ?? [], profileCtx),
-=======
   const [{ plan, model: geminiModel }, nearbyOutlets] = await Promise.all([
-    generateWeeklyPlan(numDays ?? 7, calorieTarget ?? 2000, pantry, mealIdeas ?? []),
->>>>>>> 9ccb2acbcbf2f620324df75cf69fb1a765498a84
+    generateWeeklyPlan(numDays ?? 7, calorieTarget ?? 2000, pantry, mealIdeas ?? [], profileCtx),
     fetchNearbyLocalOutlets(DEFAULT_ZIP),
   ]);
 

@@ -129,11 +129,7 @@ export default function NewPlanPage() {
         STEP 1 OF 3
       </div>
       <h1 style={heading}>How many days do you want to plan for?</h1>
-<<<<<<< HEAD
-      <p style={{ fontFamily: "Lora, serif", fontSize: 15, color: "#757575", marginBottom: 40 }}>
-=======
-      <p style={{ fontFamily: "var(--font-body)", fontSize: 15, color: "#757575", marginBottom: 32 }}>
->>>>>>> 9ccb2acbcbf2f620324df75cf69fb1a765498a84
+      <p style={{ fontFamily: "var(--font-body)", fontSize: 15, color: "#757575", marginBottom: 40 }}>
         We&apos;ll generate breakfast, lunch, and dinner for each day.
       </p>
 
@@ -153,18 +149,11 @@ export default function NewPlanPage() {
         value={numDays}
         onChange={(e) => setNumDays(parseInt(e.target.value))}
         style={{
-<<<<<<< HEAD
           width: "100%",
           accentColor: "#000",
           marginTop: 16,
           marginBottom: 8,
           cursor: "pointer",
-=======
-          border: "2px solid #000", padding: "10px 14px",
-          fontFamily: "var(--font-ui)", fontSize: 14,
-          width: 120, background: "#fff", color: "#1a1a1a",
-          borderRadius: 0, outline: "none",
->>>>>>> 9ccb2acbcbf2f620324df75cf69fb1a765498a84
         }}
       />
       <div style={{ display: "flex", justifyContent: "space-between", fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#757575", letterSpacing: "0.08em", marginBottom: 24 }}>
@@ -187,15 +176,9 @@ export default function NewPlanPage() {
       <div style={{ fontFamily: "var(--font-ui)", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.12em", color: "#757575", marginBottom: 8 }}>
         STEP 2 OF 3
       </div>
-<<<<<<< HEAD
-      <h1 style={heading}>Daily calorie target? <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, fontWeight: 400, color: "#999", letterSpacing: "0.08em" }}>(optional)</span></h1>
-      <p style={{ fontFamily: "Lora, serif", fontSize: 15, color: "#757575", marginBottom: 32 }}>
-        Leave blank and we&apos;ll aim for a balanced ~2,000/day.
-=======
-      <h1 style={heading}>Daily calorie target?</h1>
+      <h1 style={heading}>Daily calorie target? <span style={{ fontFamily: "var(--font-ui)", fontSize: 12, fontWeight: 400, color: "#999", letterSpacing: "0.08em" }}>(optional)</span></h1>
       <p style={{ fontFamily: "var(--font-body)", fontSize: 15, color: "#757575", marginBottom: 32 }}>
-        Meals will be balanced across breakfast (~25%), lunch (~35%), dinner (~40%).
->>>>>>> 9ccb2acbcbf2f620324df75cf69fb1a765498a84
+        Leave blank and we&apos;ll aim for a balanced ~2,000/day.
       </p>
 
       <span style={label}>TYPE A NUMBER</span>
@@ -228,12 +211,11 @@ export default function NewPlanPage() {
       <div style={{ fontFamily: "var(--font-ui)", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.12em", color: "#757575", marginBottom: 8 }}>
         STEP 3 OF 3
       </div>
-<<<<<<< HEAD
       <h1 style={heading}>Tune your plan</h1>
-      <p style={{ fontFamily: "Lora, serif", fontSize: 15, color: "#757575", marginBottom: 8 }}>
+      <p style={{ fontFamily: "var(--font-body)", fontSize: 15, color: "#757575", marginBottom: 8 }}>
         Everything here is optional — skip to let AI choose freely.
       </p>
-      <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#757575", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 24 }}>
+      <p style={{ fontFamily: "var(--font-ui)", fontSize: 10, color: "#757575", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 24 }}>
         {numDays} DAYS {resolvedCal ? `· ${resolvedCal.toLocaleString()} CAL/DAY` : "· BALANCED CAL"}
       </p>
 
@@ -242,44 +224,14 @@ export default function NewPlanPage() {
           border: "1px solid #000", padding: "12px 14px", marginBottom: 32,
           background: "#f8f8f5",
         }}>
-          <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "#1a1a1a", marginBottom: 6 }}>
+          <div style={{ fontFamily: "var(--font-ui)", fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "#1a1a1a", marginBottom: 6 }}>
             ✓ APPLYING FROM SETTINGS
-=======
-      <h1 style={heading}>Any meal ideas?</h1>
-      <p style={{ fontFamily: "var(--font-body)", fontSize: 15, color: "#757575", marginBottom: 8 }}>
-        Optional — leave blank and AI will plan everything from your pantry.
-      </p>
-      <p style={{ fontFamily: "var(--font-ui)", fontSize: 10, color: "#757575", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 32 }}>
-        {resolvedDays} DAYS · {resolvedCal?.toLocaleString()} CAL/DAY
-      </p>
-
-      <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
-        {mealIdeas.map((idea, i) => (
-          <div key={i} style={{ borderBottom: "1px solid #e2e8f0", display: "flex", alignItems: "center", gap: 12 }}>
-            <span style={{ fontFamily: "var(--font-ui)", fontSize: 10, color: "#757575", width: 24, flexShrink: 0 }}>
-              {i + 1}
-            </span>
-            <input
-              value={idea}
-              placeholder="e.g. Chicken tacos, pasta bake…"
-              onChange={(e) => {
-                const next = [...mealIdeas];
-                next[i] = e.target.value;
-                setMealIdeas(next);
-              }}
-              style={{
-                flex: 1, border: "none", padding: "12px 0",
-                fontFamily: "var(--font-body)", fontSize: 16,
-                background: "transparent", outline: "none", color: "#1a1a1a",
-              }}
-            />
->>>>>>> 9ccb2acbcbf2f620324df75cf69fb1a765498a84
           </div>
-          <div style={{ fontFamily: "Lora, serif", fontSize: 14, color: "#1a1a1a", lineHeight: 1.5 }}>
+          <div style={{ fontFamily: "var(--font-body)", fontSize: 14, color: "#1a1a1a", lineHeight: 1.5 }}>
             {profile.dietary && <div>Dietary: {profile.dietary}</div>}
             {profile.allergies && <div>Allergies: {profile.allergies}</div>}
           </div>
-          <Link href="/settings" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: "#757575", textDecoration: "underline", marginTop: 6, display: "inline-block" }}>
+          <Link href="/settings" style={{ fontFamily: "var(--font-ui)", fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: "#757575", textDecoration: "underline", marginTop: 6, display: "inline-block" }}>
             EDIT →
           </Link>
         </div>

@@ -247,14 +247,9 @@ export async function generateWeeklyPlan(
   numDays: number,
   calorieTarget: number,
   pantry: PantrySnapshot[],
-<<<<<<< HEAD
   mealIdeas?: string[],
   profileContext = ""
-): Promise<WeeklyPlan> {
-=======
-  mealIdeas?: string[]
 ): Promise<GenerateWeeklyPlanResult> {
->>>>>>> 9ccb2acbcbf2f620324df75cf69fb1a765498a84
   const ai = client();
 
   const ideasSection = mealIdeas && mealIdeas.length > 0
@@ -375,14 +370,18 @@ RULES:
 
 Return strict JSON matching the schema.`;
 
-  const response = await ai.models.generateContent({
-    model: MODEL,
-    contents: prompt,
-    config: {
-      responseMimeType: "application/json",
-      responseSchema: fillDaysSchema,
-    },
-  });
+  const { result: response } = await withGeminiModelFallback(
+    (m) =>
+      ai.models.generateContent({
+        model: m,
+        contents: prompt,
+        config: {
+          responseMimeType: "application/json",
+          responseSchema: fillDaysSchema,
+        },
+      }),
+    { maxAttemptsPerModel: 3, baseDelayMs: 400 }
+  );
 
   const parsed = JSON.parse(response.text ?? "{}") as { days: { dayIndex: number; meals: DayMeal[] }[] };
   return parsed.days ?? [];
