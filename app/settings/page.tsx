@@ -14,7 +14,7 @@ const NUTRITION_OPTIONS = [
 ];
 
 const mono: React.CSSProperties = {
-  fontFamily: "'JetBrains Mono', monospace",
+  fontFamily: "var(--font-ui)",
 };
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
@@ -101,7 +101,7 @@ export default function SettingsPage() {
   const inputStyle: React.CSSProperties = {
     width: "100%", padding: "10px 12px",
     border: "2px solid #000", background: "#fff",
-    fontFamily: "Lora, serif", fontSize: 15,
+    fontFamily: "var(--font-body)", fontSize: "var(--text-sm)",
     outline: "none", boxSizing: "border-box",
     resize: "vertical",
   };
@@ -133,7 +133,7 @@ export default function SettingsPage() {
         <div style={{ ...mono, fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--caption)", marginBottom: 6 }}>
           PROFILE · INFLUENCES ALL AI SUGGESTIONS
         </div>
-        <h1 style={{ fontFamily: "'Source Serif 4', serif", fontWeight: 700, fontSize: 48, lineHeight: 0.95, letterSpacing: "-0.03em", margin: 0 }}>
+        <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "var(--text-title)", lineHeight: 0.95, letterSpacing: "-0.03em", margin: 0 }}>
           Settings
         </h1>
       </div>

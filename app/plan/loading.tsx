@@ -5,8 +5,8 @@ export default function PlanLoading() {
       <div style={{
         background: "#000", color: "#fff",
         padding: "10px 32px",
-        fontFamily: "'JetBrains Mono', monospace",
-        fontSize: 12, fontWeight: 700,
+        fontFamily: "var(--font-ui)",
+        fontSize: "var(--text-ribbon)", fontWeight: 700,
         textTransform: "uppercase", letterSpacing: "0.12em",
         display: "flex", justifyContent: "space-between", alignItems: "center",
         flexWrap: "wrap", gap: 8,

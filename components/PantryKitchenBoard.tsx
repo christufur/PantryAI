@@ -36,9 +36,18 @@ function daysLeft(unixSec: number, now: number) {
 
 type ShelfKey = (typeof SHELF_ORDER)[number];
 
-export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
+export default function PantryKitchenBoard({
+  items,
+  nowMs,
+}: {
+  items: PlainItem[];
+  nowMs: number;
+}) {
   const router = useRouter();
-  const now = Date.now();
+  const [now, setNow] = useState(nowMs);
+  useEffect(() => {
+    setNow(Date.now());
+  }, []);
   const [threshold, setThreshold] = useState(3);
   const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
   const [localItems, setLocalItems] = useState(items);
@@ -205,7 +214,7 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
           <div style={{ flex: "1 1 auto", minWidth: 0 }}>
             <div
               style={{
-                fontFamily: "'JetBrains Mono', monospace",
+                fontFamily: "var(--font-ui)",
                 fontSize: 10,
                 fontWeight: 700,
                 textTransform: "uppercase",
@@ -226,7 +235,7 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
             >
               <h1
                 style={{
-                  fontFamily: "'Source Serif 4', serif",
+                  fontFamily: "var(--font-display)",
                   fontWeight: 600,
                   fontSize: "clamp(32px, 5vw, 48px)",
                   lineHeight: 1.05,
@@ -272,7 +281,7 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
             <DialogHeader>
               <DialogTitle
                 style={{
-                  fontFamily: "'Source Serif 4', serif",
+                  fontFamily: "var(--font-display)",
                   fontSize: 22,
                   fontWeight: 600,
                   color: "#000",
@@ -282,7 +291,7 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
               </DialogTitle>
               <DialogDescription
                 style={{
-                  fontFamily: "Lora, serif",
+                  fontFamily: "var(--font-body)",
                   fontSize: 15,
                   color: "#1a1a1a",
                   lineHeight: 1.55,
@@ -329,7 +338,7 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
             <div>
               <div
                 style={{
-                  fontFamily: "'JetBrains Mono', monospace",
+                  fontFamily: "var(--font-ui)",
                   fontSize: 10,
                   fontWeight: 700,
                   textTransform: "uppercase",
@@ -342,7 +351,7 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
               </div>
               <div
                 style={{
-                  fontFamily: "'Source Serif 4', serif",
+                  fontFamily: "var(--font-display)",
                   fontSize: "clamp(28px, 4.5vw, 40px)",
                   fontWeight: 600,
                   lineHeight: 1,
@@ -357,7 +366,7 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
                   display: "grid",
                   gridTemplateColumns: "1fr 1fr 1fr",
                   gap: 10,
-                  fontFamily: "'JetBrains Mono', monospace",
+                  fontFamily: "var(--font-ui)",
                   fontSize: 10,
                   textTransform: "uppercase",
                   letterSpacing: "0.06em",
@@ -404,7 +413,7 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
                   style={{
                     display: "block",
                     textAlign: "center",
-                    fontFamily: "Inter, sans-serif",
+                    fontFamily: "var(--font-ui)",
                     fontWeight: 700,
                     fontSize: 12,
                     textTransform: "uppercase",
@@ -425,7 +434,7 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
                     display: "block",
                     width: "100%",
                     textAlign: "center",
-                    fontFamily: "Inter, sans-serif",
+                    fontFamily: "var(--font-ui)",
                     fontWeight: 700,
                     fontSize: 12,
                     textTransform: "uppercase",
@@ -444,7 +453,7 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
             ) : (
               <div
                 style={{
-                  fontFamily: "Lora, serif",
+                  fontFamily: "var(--font-body)",
                   fontSize: 13,
                   color: "var(--caption)",
                   textAlign: "center",
@@ -465,7 +474,7 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
           >
             <div
               style={{
-                fontFamily: "'JetBrains Mono', monospace",
+                fontFamily: "var(--font-ui)",
                 fontSize: 10,
                 fontWeight: 700,
                 textTransform: "uppercase",
@@ -478,7 +487,7 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
             </div>
             <div
               style={{
-                fontFamily: "'Source Serif 4', serif",
+                fontFamily: "var(--font-display)",
                 fontSize: "clamp(18px, 2.5vw, 24px)",
                 fontWeight: 600,
                 lineHeight: 1.2,
@@ -503,7 +512,7 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
                 position: "relative",
                 height: 20,
                 marginTop: 8,
-                fontFamily: "'JetBrains Mono', monospace",
+                fontFamily: "var(--font-ui)",
                 fontSize: 10,
                 fontWeight: 700,
                 letterSpacing: "0.08em",
@@ -566,7 +575,7 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
           />
           <span
             style={{
-              fontFamily: "'JetBrains Mono', monospace",
+              fontFamily: "var(--font-ui)",
               fontSize: 10,
               fontWeight: 700,
               textTransform: "uppercase",
@@ -603,7 +612,7 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
             <section key={shelfKey}>
               <div
                 style={{
-                  fontFamily: "'JetBrains Mono', monospace",
+                  fontFamily: "var(--font-ui)",
                   fontSize: 10,
                   fontWeight: 700,
                   textTransform: "uppercase",
@@ -661,7 +670,7 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
                 {list.length === 0 && (
                   <div
                     style={{
-                      fontFamily: "Lora, serif",
+                      fontFamily: "var(--font-body)",
                       fontSize: 13,
                       color: "var(--caption)",
                       padding: "16px 8px",
@@ -674,7 +683,7 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
                 {/* Rescue label — always rendered so all columns share the same top offset */}
                 <div
                   style={{
-                    fontFamily: "'JetBrains Mono', monospace",
+                    fontFamily: "var(--font-ui)",
                     fontSize: 9,
                     fontWeight: 700,
                     letterSpacing: "0.1em",
@@ -761,7 +770,7 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
         >
           <div
             style={{
-              fontFamily: "'JetBrains Mono', monospace",
+              fontFamily: "var(--font-ui)",
               fontSize: 12,
               fontWeight: 700,
               textTransform: "uppercase",
@@ -776,7 +785,7 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
               type="button"
               onClick={clearSelection}
               style={{
-                fontFamily: "Inter, sans-serif",
+                fontFamily: "var(--font-ui)",
                 fontWeight: 700,
                 fontSize: 12,
                 textTransform: "uppercase",
@@ -794,7 +803,7 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
               type="button"
               onClick={cookSelected}
               style={{
-                fontFamily: "Inter, sans-serif",
+                fontFamily: "var(--font-ui)",
                 fontWeight: 700,
                 fontSize: 12,
                 textTransform: "uppercase",
@@ -863,7 +872,7 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
             <div
               id="move-sheet-title"
               style={{
-                fontFamily: "'JetBrains Mono', monospace",
+                fontFamily: "var(--font-ui)",
                 fontSize: 10,
                 fontWeight: 700,
                 textTransform: "uppercase",
@@ -876,7 +885,7 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
             </div>
             <div
               style={{
-                fontFamily: "'Source Serif 4', serif",
+                fontFamily: "var(--font-display)",
                 fontSize: 22,
                 fontWeight: 600,
                 color: "#000",
@@ -899,7 +908,7 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
                       setMoveSheetItem(null);
                     }}
                     style={{
-                      fontFamily: "Inter, sans-serif",
+                      fontFamily: "var(--font-ui)",
                       fontWeight: 700,
                       fontSize: 14,
                       textTransform: "uppercase",
@@ -925,7 +934,7 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
               style={{
                 marginTop: 16,
                 width: "100%",
-                fontFamily: "Inter, sans-serif",
+                fontFamily: "var(--font-ui)",
                 fontWeight: 700,
                 fontSize: 12,
                 textTransform: "uppercase",
@@ -1090,7 +1099,7 @@ function KitchenTile({
         <div style={{ flex: 1, minWidth: 0 }}>
           <div
             style={{
-              fontFamily: "'JetBrains Mono', monospace",
+              fontFamily: "var(--font-ui)",
               fontSize: 9,
               fontWeight: 700,
               letterSpacing: "0.08em",
@@ -1104,8 +1113,8 @@ function KitchenTile({
           </div>
           <div
             style={{
-              fontFamily: "'Source Serif 4', serif",
-              fontSize: 17,
+              fontFamily: "var(--font-display)",
+              fontSize: "var(--text-md)",
               fontWeight: inWindow ? 600 : 500,
               color: "#000",
               lineHeight: 1.15,
@@ -1119,7 +1128,7 @@ function KitchenTile({
             {item.isLocal && (
               <span
                 style={{
-                  fontFamily: "'JetBrains Mono', monospace",
+                  fontFamily: "var(--font-ui)",
                   fontSize: 8,
                   fontWeight: 700,
                   textTransform: "uppercase",
@@ -1135,7 +1144,7 @@ function KitchenTile({
           </div>
           <div
             style={{
-              fontFamily: "'JetBrains Mono', monospace",
+              fontFamily: "var(--font-ui)",
               fontSize: 10,
               color: "var(--caption)",
               marginTop: 3,
@@ -1146,7 +1155,7 @@ function KitchenTile({
           {!item.isLocal && item.localSwap && (
             <div
               style={{
-                fontFamily: "'JetBrains Mono', monospace",
+                fontFamily: "var(--font-ui)",
                 fontSize: 9,
                 color: "#057dbc",
                 marginTop: 4,
@@ -1173,7 +1182,7 @@ function KitchenTile({
               type="button"
               onClick={goRecipe}
               style={{
-                fontFamily: "Inter, sans-serif",
+                fontFamily: "var(--font-ui)",
                 fontWeight: 700,
                 fontSize: 10,
                 textTransform: "uppercase",

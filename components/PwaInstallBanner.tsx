@@ -88,7 +88,7 @@ export default function PwaInstallBanner() {
         style={{
           flex: 1,
           margin: 0,
-          fontFamily: "'JetBrains Mono', monospace",
+          fontFamily: "var(--font-ui)",
           fontSize: 10,
           fontWeight: 700,
           textTransform: "uppercase",
@@ -104,7 +104,7 @@ export default function PwaInstallBanner() {
         onClick={install}
         style={{
           flexShrink: 0,
-          fontFamily: "Inter, sans-serif",
+          fontFamily: "var(--font-ui)",
           fontWeight: 700,
           fontSize: 11,
           textTransform: "uppercase",

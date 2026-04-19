@@ -35,15 +35,18 @@ export default function Home() {
     });
   } catch {}
 
-  const dying = items.filter(i => Math.floor((i.expiryDate * 1000 - Date.now()) / 86_400_000) <= 3);
+  const serverNow = Date.now();
+  const dying = items.filter(
+    i => Math.floor((i.expiryDate * 1000 - serverNow) / 86_400_000) <= 3
+  );
 
   return (
     <main style={{ background: "var(--paper)", minHeight: "100vh" }}>
       <div style={{
         background: "#000", color: "#fff",
-        padding: "10px 40px",
-        fontFamily: "'JetBrains Mono', monospace",
-        fontSize: 12, fontWeight: 700,
+        padding: "10px 32px",
+        fontFamily: "var(--font-ui)",
+        fontSize: "var(--text-ribbon)", fontWeight: 700,
         textTransform: "uppercase", letterSpacing: "0.12em",
         display: "flex", justifyContent: "space-between", alignItems: "center",
         flexWrap: "wrap", gap: 8,
@@ -53,7 +56,7 @@ export default function Home() {
       </div>
 
       <div className="pantry-main-below-ribbon">
-        <PantryViewSwitcher items={items} />
+        <PantryViewSwitcher items={items} nowMs={serverNow} />
       </div>
 
       <style>{`

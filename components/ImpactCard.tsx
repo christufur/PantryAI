@@ -93,12 +93,12 @@ export default function ImpactCard({ totals }: { totals: ImpactTotals }) {
         border: "2px solid #fff",
         padding: "24px 28px",
         width: 340,
-        fontFamily: "'JetBrains Mono', monospace",
+        fontFamily: "var(--font-ui)",
       }}>
         <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#888", marginBottom: 16 }}>
           pantry.ai · my food rescue impact
         </div>
-        <div style={{ fontFamily: "'Source Serif 4', serif", fontSize: 64, fontWeight: 700, lineHeight: 1, color: "#c8102e" }}>
+        <div style={{ fontFamily: "var(--font-display)", fontSize: "var(--text-title)", fontWeight: 700, lineHeight: 1, color: "#c8102e" }}>
           {totals.itemsRescued}
         </div>
         <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", color: "#888", marginBottom: 20 }}>
@@ -113,7 +113,7 @@ export default function ImpactCard({ totals }: { totals: ImpactTotals }) {
           ].map(s => (
             <div key={s.label} style={{ border: "1px solid #333", padding: "10px 12px" }}>
               <div style={{ fontSize: 9, color: "#888", letterSpacing: "0.1em", marginBottom: 4 }}>{s.label}</div>
-              <div style={{ fontFamily: "'Source Serif 4', serif", fontSize: 22, fontWeight: 700 }}>{s.value}</div>
+              <div style={{ fontFamily: "var(--font-display)", fontSize: 22, fontWeight: 700 }}>{s.value}</div>
             </div>
           ))}
         </div>
@@ -127,7 +127,7 @@ export default function ImpactCard({ totals }: { totals: ImpactTotals }) {
         style={{
           marginTop: 12,
           width: 340,
-          fontFamily: "'JetBrains Mono', monospace",
+          fontFamily: "var(--font-ui)",
           fontSize: 11, fontWeight: 700,
           textTransform: "uppercase", letterSpacing: "0.08em",
           padding: "12px 0",

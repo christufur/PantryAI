@@ -22,8 +22,9 @@ export default function PantryPage() {
     }));
   } catch {}
 
+  const serverNow = Date.now();
   const dying = items.filter(
-    (i) => Math.floor((i.expiryDate * 1000 - Date.now()) / 86_400_000) <= 3
+    (i) => Math.floor((i.expiryDate * 1000 - serverNow) / 86_400_000) <= 3
   );
 
   return (
@@ -32,9 +33,9 @@ export default function PantryPage() {
         style={{
           background: "#000",
           color: "#fff",
-          padding: "10px 40px",
-          fontFamily: "'JetBrains Mono', monospace",
-          fontSize: 12,
+          padding: "10px 32px",
+          fontFamily: "var(--font-ui)",
+          fontSize: "var(--text-ribbon)",
           fontWeight: 700,
           textTransform: "uppercase",
           letterSpacing: "0.12em",
@@ -52,7 +53,7 @@ export default function PantryPage() {
         )}
       </div>
 
-      <PantryViewSwitcher items={items} />
+      <PantryViewSwitcher items={items} nowMs={serverNow} />
 
       <style>{`
         @media (max-width: 768px) {
