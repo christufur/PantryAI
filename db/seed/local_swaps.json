@@ -168,6 +168,41 @@
     "notes": ""
   },
   {
+    "genericName": "hominy",
+    "localProducer": "Peas and Hominy Farm",
+    "product": "Hominy & seasonal vegetables",
+    "whereToBuy": "Downtown Growers' Market, direct (ABQ)",
+    "notes": "Regenerative, pesticide-free — Jack's 14-year ABQ farm"
+  },
+  {
+    "genericName": "posole",
+    "localProducer": "Peas and Hominy Farm",
+    "product": "Posole corn & hominy",
+    "whereToBuy": "Downtown Growers' Market, direct (ABQ)",
+    "notes": "Regenerative farming, pesticide free"
+  },
+  {
+    "genericName": "peas",
+    "localProducer": "Peas and Hominy Farm",
+    "product": "Fresh peas & seasonal vegetables",
+    "whereToBuy": "Downtown Growers' Market, direct (ABQ)",
+    "notes": "Regenerative, pesticide-free ABQ farm"
+  },
+  {
+    "genericName": "olive_oil",
+    "localProducer": "ABQ Olive Oil Company",
+    "product": "Local olive oils & infused oils",
+    "whereToBuy": "ABQ Olive Oil Company store",
+    "notes": "ABQ-based, locally operated"
+  },
+  {
+    "genericName": "cooking_oil",
+    "localProducer": "ABQ Olive Oil Company",
+    "product": "Olive & specialty oils",
+    "whereToBuy": "ABQ Olive Oil Company store",
+    "notes": ""
+  },
+  {
     "genericName": "mushroom",
     "localProducer": "Enchanted Farms Mushrooms",
     "product": "Gourmet & specialty mushrooms",
@@ -183,17 +218,38 @@
   },
   {
     "genericName": "eggs",
+    "localProducer": "De Smet Dairy",
+    "product": "Local eggs",
+    "whereToBuy": "De Smet Dairy (Downtown ABQ)",
+    "notes": "Bright yolks — highly rated local dairy farm"
+  },
+  {
+    "genericName": "eggs",
     "localProducer": "Pollo Real",
     "product": "Pasture-raised eggs",
     "whereToBuy": "La Montañita Co-op, farmers markets",
-    "notes": "NM-raised, certified humane — verify current availability at co-op"
+    "notes": "NM-raised, certified humane"
+  },
+  {
+    "genericName": "dairy_milk",
+    "localProducer": "De Smet Dairy",
+    "product": "Local milk",
+    "whereToBuy": "De Smet Dairy (Downtown ABQ)",
+    "notes": "Local dairy farm, downtown ABQ"
   },
   {
     "genericName": "dairy_milk",
     "localProducer": "Rasband Dairy",
     "product": "Local milk (glass bottles)",
     "whereToBuy": "La Montañita Co-op",
-    "notes": "NM dairy — glass returnable bottles"
+    "notes": "Glass returnable bottles"
+  },
+  {
+    "genericName": "milk",
+    "localProducer": "De Smet Dairy",
+    "product": "Local milk",
+    "whereToBuy": "De Smet Dairy (Downtown ABQ)",
+    "notes": ""
   },
   {
     "genericName": "milk",

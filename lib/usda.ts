@@ -81,8 +81,11 @@ async function fetchDirectory(
   }
 }
 
+// Downtown ABQ zip — used as default when no user location is available
+export const ABQ_DEFAULT_ZIP = "87102";
+
 export async function fetchNearbyLocalOutlets(
-  zip: string,
+  zip = ABQ_DEFAULT_ZIP,
   radiusMi = 30
 ): Promise<NearbyOutlets> {
   const apiKey = process.env.USDA_LOCALFOOD_API_KEY;
