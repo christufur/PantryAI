@@ -2,7 +2,20 @@
 // Uses @google/genai (the current SDK; @google/generative-ai is deprecated).
 // Model: gemini-3.1-flash-lite-preview — low-cost multimodal model with higher rate limits.
 
-import { GoogleGenAI, Type } from "@google/genai";
+import { ApiError, GoogleGenAI, Type } from "@google/genai";
+
+function sleep(ms: number) {
+  return new Promise((r) => setTimeout(r, ms));
+}
+
+function isRetryableGeminiError(e: unknown): boolean {
+  if (e instanceof ApiError) {
+    if (e.status === 503 || e.status === 429) return true;
+    const msg = e.message.toLowerCase();
+    if (msg.includes("unavailable") || msg.includes("high demand")) return true;
+  }
+  return false;
+}
 
 const MODEL = "gemini-3.1-flash-lite-preview";
 
@@ -62,25 +75,39 @@ For each item, return name, category (from the allowed list), quantity, unit, an
 If uncertain about category, use "unknown". If quantity is unclear, use 1 "each".
 Ignore non-food items.`;
 
-  const response = await ai.models.generateContent({
-    model: MODEL,
-    contents: [
-      {
-        role: "user",
-        parts: [
-          { text: prompt },
-          { inlineData: { mimeType, data: imageBuffer.toString("base64") } },
+  const maxAttempts = 3;
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    try {
+      const response = await ai.models.generateContent({
+        model: MODEL,
+        contents: [
+          {
+            role: "user",
+            parts: [
+              { text: prompt },
+              { inlineData: { mimeType, data: imageBuffer.toString("base64") } },
+            ],
+          },
         ],
-      },
-    ],
-    config: {
-      responseMimeType: "application/json",
-      responseSchema: identifySchema,
-    },
-  });
+        config: {
+          responseMimeType: "application/json",
+          responseSchema: identifySchema,
+        },
+      });
 
-  const parsed = JSON.parse(response.text ?? '{"items":[]}');
-  return parsed.items as IdentifiedItem[];
+      const parsed = JSON.parse(response.text ?? '{"items":[]}');
+      return parsed.items as IdentifiedItem[];
+    } catch (e) {
+      const canRetry = attempt < maxAttempts - 1 && isRetryableGeminiError(e);
+      if (canRetry) {
+        await sleep(400 * 2 ** attempt);
+        continue;
+      }
+      throw e;
+    }
+  }
+
+  throw new Error("identifyPantryItems: unexpected fall-through");
 }
 
 // ---------- 2. Weekly plan: user meals + pantry → sequenced week + shopping list ----------

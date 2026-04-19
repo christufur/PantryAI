@@ -1,16 +1,43 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
 import MobileBottomNav from "@/components/MobileBottomNav";
+import RegisterServiceWorker from "@/components/RegisterServiceWorker";
 
 const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
+
+export const viewport: Viewport = {
+  themeColor: "#000000",
+  colorScheme: "light",
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  interactiveWidget: "resizes-content",
+};
 
 export const metadata: Metadata = {
   title: "pantry.ai",
   description: "Vision-model pantry tracker. Sort: dying first. Zero waste.",
+  applicationName: "pantry.ai",
+  appleWebApp: {
+    capable: true,
+    title: "pantry.ai",
+    statusBarStyle: "black-translucent",
+  },
+  formatDetection: {
+    telephone: false,
+  },
+  icons: {
+    icon: [
+      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
+      { url: "/icons/icon.svg", type: "image/svg+xml" },
+    ],
+    apple: [{ url: "/icons/icon-180.png", sizes: "180x180", type: "image/png" }],
+  },
 };
 
 export default function RootLayout({
@@ -74,6 +101,7 @@ export default function RootLayout({
 
         <ScrollToTopButton />
         <MobileBottomNav />
+        <RegisterServiceWorker />
 
         <style>{`
           .mobile-bottom-nav { display: none !important; }
@@ -90,7 +118,8 @@ export default function RootLayout({
             max-width: 480px;
           }
 
-          @media (max-width: 768px) {
+          /* Shell breakpoint: must exceed phone landscape width (~844–932px) or the bottom tab bar stays hidden while the top links are already hidden. */
+          @media (max-width: 960px) {
             /* Show bottom nav, hide desktop util-nav links */
             .mobile-bottom-nav { display: flex !important; }
             .util-nav { display: none !important; }
@@ -104,8 +133,15 @@ export default function RootLayout({
             /* Hide masthead entirely on mobile — logo is in top bar */
             .masthead { display: none !important; }
 
-            /* Push page content above the fixed bottom nav */
-            .page-content { padding-bottom: 72px; }
+            /* Room for fixed tab bar + home indicator */
+            .page-content {
+              padding-bottom: calc(5.75rem + env(safe-area-inset-bottom, 0px));
+            }
+
+            /* Keep “back to top” above the tab bar so it doesn’t cover CHAT */
+            .scroll-to-top-btn {
+              bottom: calc(5.25rem + env(safe-area-inset-bottom, 0px)) !important;
+            }
 
             .pantry-snap-bar { padding: 0 0 20px; }
             .pantry-snap-bar-inner { max-width: 360px; }
