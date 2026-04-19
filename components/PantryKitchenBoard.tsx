@@ -515,6 +515,23 @@ export default function PantryKitchenBoard({ items }: { items: PlainItem[] }) {
                   </div>
                 )}
 
+                {/* Rescue label — always rendered so all columns share the same top offset */}
+                <div
+                  style={{
+                    fontFamily: "'JetBrains Mono', monospace",
+                    fontSize: 9,
+                    fontWeight: 700,
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                    marginBottom: 8,
+                    color: urgent.length > 0 ? "#c8102e" : "transparent",
+                    userSelect: "none",
+                  }}
+                  aria-hidden={urgent.length === 0}
+                >
+                  ≤ {aboveLabel} · rescue
+                </div>
+
                 {urgent.length > 0 && (
                   <div style={{ marginBottom: 10 }}>
                     {urgent.map((item) => (
