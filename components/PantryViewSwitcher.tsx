@@ -273,9 +273,9 @@ export default function PantryViewSwitcher({ items }: { items: PlainItem[] }) {
                     <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "var(--caption)", letterSpacing: "0.08em", marginTop: 2 }}>
                       {item.qty} {item.unit} · {item.storageLocation.toUpperCase()}
                     </div>
-                    {item.localSwap && (
+                    {!item.isLocal && item.localSwap && (
                       <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#057dbc", letterSpacing: "0.06em", marginTop: 4 }}>
-                        ◉ NM LOCAL: {item.localSwap.localProducer} · {item.localSwap.product} at {item.localSwap.whereToBuy}
+                        ◉ SWAP LOCAL: {item.localSwap.localProducer} · {item.localSwap.product} at {item.localSwap.whereToBuy}
                       </div>
                     )}
                   </div>
