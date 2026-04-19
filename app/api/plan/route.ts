@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { pantryItems, localSwaps, mealsPlanned } from "@/db/schema";
 import { generateWeeklyPlan, type PantrySnapshot } from "@/lib/gemini";
 import { fetchNearbyLocalOutlets } from "@/lib/usda";
+import { loadProfile, profilePromptContext } from "@/lib/profile";
 
 // TODO: user-configurable zip in later pass
 const DEFAULT_ZIP = "87102";
@@ -26,8 +27,9 @@ export async function POST(request: NextRequest) {
     }));
 
   // Run plan generation and outlets fetch in parallel
+  const profile = loadProfile();
   const [plan, nearbyOutlets] = await Promise.all([
-    generateWeeklyPlan(meals, pantry),
+    generateWeeklyPlan(meals, pantry, profilePromptContext(profile)),
     fetchNearbyLocalOutlets(DEFAULT_ZIP),
   ]);
 

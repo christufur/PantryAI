@@ -2,14 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, LayoutDashboard, ChefHat, CalendarDays, MessageCircle } from "lucide-react";
+import { Home, ChefHat, CalendarDays, MessageCircle, Settings } from "lucide-react";
 
 const NAV = [
-  { href: "/",       label: "HOME",  Icon: Home           },
-  { href: "/wall",   label: "WALL",  Icon: LayoutDashboard },
-  { href: "/recipe", label: "COOK",  Icon: ChefHat         },
-  { href: "/plan",   label: "PLAN",  Icon: CalendarDays    },
-  { href: "/chat",   label: "CHAT",  Icon: MessageCircle   },
+  { href: "/",        label: "HOME",  Icon: Home         },
+  { href: "/recipe",  label: "COOK",  Icon: ChefHat      },
+  { href: "/plan",    label: "PLAN",  Icon: CalendarDays },
+  { href: "/chat",    label: "CHAT",  Icon: MessageCircle },
+  { href: "/settings",label: "ME",   Icon: Settings      },
 ];
 
 export default function MobileBottomNav() {

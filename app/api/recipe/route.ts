@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { recipesCache } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { generateRecipe, ingredientsHash } from "@/lib/gemini";
+import { loadProfile, profilePromptContext, profileHash } from "@/lib/profile";
 
 export async function GET(request: NextRequest) {
   const ingredients = (request.nextUrl.searchParams.get("ingredients") ?? "")
@@ -14,7 +15,9 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "No ingredients provided" }, { status: 400 });
   }
 
-  const hash = ingredientsHash(ingredients);
+  const profile = loadProfile();
+  const pHash = profileHash(profile);
+  const hash = ingredientsHash(ingredients) + (pHash ? `:${pHash}` : "");
   const bust = request.nextUrl.searchParams.get("bust") === "1";
 
   if (!bust) {
@@ -24,7 +27,7 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  const recipe = await generateRecipe(ingredients);
+  const recipe = await generateRecipe(ingredients, profilePromptContext(profile));
 
   db.insert(recipesCache)
     .values({

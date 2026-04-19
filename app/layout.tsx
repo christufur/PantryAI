@@ -38,6 +38,7 @@ export default function RootLayout({
             <Link href="/recipe" style={{ color: '#fff', textDecoration: 'none' }}>COOK</Link>
             <Link href="/plan" style={{ color: '#fff', textDecoration: 'none' }}>PLAN</Link>
             <Link href="/chat" style={{ color: '#fff', textDecoration: 'none' }}>ASK THE FRIDGE</Link>
+            <Link href="/settings" style={{ color: '#888', textDecoration: 'none' }}>SETTINGS</Link>
           </div>
         </div>
 

@@ -52,3 +52,14 @@ CREATE TABLE `shelf_life` (
 	`storage_location` text NOT NULL,
 	`days` integer NOT NULL
 );
+--> statement-breakpoint
+CREATE TABLE `user_profile` (
+	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`dietary` text DEFAULT '' NOT NULL,
+	`allergies` text DEFAULT '' NOT NULL,
+	`nutritional_goals` text DEFAULT '' NOT NULL,
+	`household_size` integer DEFAULT 2 NOT NULL,
+	`cooking_skill` text DEFAULT 'intermediate' NOT NULL,
+	`about_me` text DEFAULT '' NOT NULL,
+	`updated_at` integer DEFAULT (unixepoch()) NOT NULL
+);
