@@ -831,17 +831,19 @@ function KitchenTile({
           >
             {item.qty} {item.unit}
           </div>
-          {item.localSwap && (
+          {!item.isLocal && item.localSwap && (
             <div
               style={{
                 fontFamily: "'JetBrains Mono', monospace",
                 fontSize: 9,
                 color: "#057dbc",
                 marginTop: 4,
-                lineHeight: 1.35,
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
               }}
             >
-              ◉ {item.localSwap.localProducer} · {item.localSwap.product} at {item.localSwap.whereToBuy}
+              ◉ {item.localSwap.localProducer} · {item.localSwap.whereToBuy.split(",")[0]}
             </div>
           )}
 
