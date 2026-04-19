@@ -54,12 +54,13 @@ export default function ChatInterface() {
   }
 
   return (
-    <div>
+    <div style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0 }} className="chat-interface">
       {/* Messages */}
       <div
         className="messages-container"
         style={{
-          height: 480,
+          flex: 1,
+          minHeight: 0,
           overflowY: "auto",
           display: "flex",
           flexDirection: "column",
@@ -226,8 +227,12 @@ export default function ChatInterface() {
 
       <style>{`
         @media (max-width: 768px) {
-          .messages-container { height: calc(100vh - 320px) !important; min-height: 280px; }
+          .chat-interface { flex: 1; min-height: 0; }
+          .chat-input-area { padding-bottom: 16px; }
           .chat-input-area > input { font-size: 16px !important; }
+        }
+        @media (min-width: 769px) {
+          .messages-container { height: 480px; flex: none; }
         }
       `}</style>
     </div>
