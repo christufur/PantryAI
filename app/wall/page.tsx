@@ -136,7 +136,7 @@ export default async function WallPage() {
   const weekRangeLabel = weekStart ? `WEEK OF ${formatShort(weekStart).toUpperCase()}` : "NO ACTIVE PLAN";
 
   return (
-    <main style={{ background: "var(--paper)", minHeight: "100svh" }}>
+    <main className="plan-page" style={{ background: "var(--paper)", minHeight: "100svh" }}>
       {/* Black ribbon */}
       <div
         style={{
@@ -238,23 +238,28 @@ export default async function WallPage() {
           </div>
         </section>
 
-        {/* DYING SOON · THIS WEEK */}
-        <section style={{ display: "grid", gridTemplateColumns: "320px 1fr", gap: 40 }} className="wall-bottom-grid">
-          <div>
+        {/* DYING SOON · THIS WEEK — same layout as /plan (globals.css .plan-page) */}
+        <section className="plan-page-bottom">
+          <div className="plan-dying-panel">
             <div style={{
               fontFamily: "var(--font-ui)", fontSize: 11, fontWeight: 700,
               textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--caption)", marginBottom: 12,
-            }}>
+            }} className="plan-dying-heading">
               DYING SOON
+              {dying.length > 0 && (
+                <span className="plan-dying-count" style={{ marginLeft: 8, color: "#c8102e", fontWeight: 700 }}>
+                  ({dying.length})
+                </span>
+              )}
             </div>
             {dying.length === 0 ? (
               <div style={{ fontFamily: "var(--font-body)", fontSize: "var(--text-md)", color: "var(--caption)" }}>Nothing within 3 days.</div>
             ) : (
-              <div style={{ borderTop: "2px solid #000" }}>
+              <div className="plan-dying-list" style={{ borderTop: "2px solid #000" }}>
                 {dying.slice(0, 8).map((it) => {
                   const d = daysUntil(it.expiryDate);
                   return (
-                    <div key={it.id} style={{
+                    <div key={it.id} className="plan-dying-row" style={{
                       borderBottom: "1px solid var(--hairline)", padding: "12px 0",
                       display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 12,
                     }}>
@@ -271,12 +276,12 @@ export default async function WallPage() {
             )}
           </div>
 
-          <div>
+          <div className="plan-week-panel">
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 12 }}>
               <div style={{
                 fontFamily: "var(--font-ui)", fontSize: 11, fontWeight: 700,
                 textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--caption)",
-              }}>
+              }} className="plan-week-heading">
                 THIS WEEK {days.length > 0 ? "· TAP A DAY FOR DETAIL" : ""}
               </div>
             </div>
@@ -296,22 +301,6 @@ export default async function WallPage() {
         <PastPlans plans={pastPlans} />
 
       </div>
-
-      <style>{`
-        @media (max-width: 900px) {
-          .wall-headline { font-size: 40px !important; }
-          .wall-tonight-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
-          .wall-bottom-grid { grid-template-columns: 1fr !important; gap: 24px !important; }
-          .wall-container { padding: 20px 16px !important; }
-          .ribbon { padding: 10px 16px !important; }
-        }
-        @media (max-width: 768px) {
-          .wall-headline { font-size: 34px !important; }
-        }
-        @media (max-width: 600px) {
-          .week-grid { grid-template-columns: repeat(7, minmax(110px, 1fr)) !important; overflow-x: auto; }
-        }
-      `}</style>
     </main>
   );
 }

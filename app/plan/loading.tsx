@@ -1,6 +1,6 @@
 export default function PlanLoading() {
   return (
-    <main style={{ background: "var(--paper)", minHeight: "100dvh" }}>
+    <main className="plan-page" style={{ background: "var(--paper)", minHeight: "100dvh" }}>
       {/* Black ribbon */}
       <div style={{
         background: "#000", color: "#fff",
@@ -38,7 +38,7 @@ export default function PlanLoading() {
         </section>
 
         {/* Bottom grid skeleton */}
-        <section style={{ display: "grid", gridTemplateColumns: "320px 1fr", gap: 40 }} className="wall-bottom-grid">
+        <section className="plan-page-bottom">
           {/* Dying soon */}
           <div>
             <div className="skel" style={{ width: 100, height: 11, marginBottom: 16 }} />
@@ -83,7 +83,7 @@ export default function PlanLoading() {
         }
         @media (max-width: 900px) {
           .wall-tonight-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
-          .wall-bottom-grid { grid-template-columns: 1fr !important; gap: 24px !important; }
+          .plan-page-bottom { display: flex !important; flex-direction: column !important; gap: 28px !important; }
           .wall-container { padding: 20px 16px !important; }
           .ribbon { padding: 10px 16px !important; }
         }
