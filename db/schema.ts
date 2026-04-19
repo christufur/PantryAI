@@ -86,6 +86,18 @@ export const userProfile = sqliteTable("user_profile", {
     .default(sql`(unixepoch())`),
 });
 
+// Impact tracking — items rescued from the bin before expiry.
+export const impactEvents = sqliteTable("impact_events", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  itemName: text("item_name").notNull(),
+  category: text("category").notNull().default("unknown"),
+  qty: real("qty").notNull().default(1),
+  unit: text("unit").notNull().default("each"),
+  rescuedAt: integer("rescued_at", { mode: "timestamp" })
+    .notNull()
+    .default(sql`(unixepoch())`),
+});
+
 // Recipe cache. Keyed by a hash of the sorted ingredient list.
 // Saves API calls on repeat demos and keeps the pitch snappy.
 export const recipesCache = sqliteTable("recipes_cache", {

@@ -39,6 +39,7 @@ function resolveSqliteFilePath(): string {
 const MIGRATIONS = [
   "db/migrations/0000_spotty_red_hulk.sql",
   "db/migrations/0001_meal_plan_columns.sql",
+  "db/migrations/0002_impact_events.sql",
 ];
 
 /** Apply all migrations in order. CREATE TABLE uses IF NOT EXISTS; ALTER TABLE errors are swallowed (column already exists). */
