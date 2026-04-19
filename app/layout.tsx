@@ -78,7 +78,17 @@ export default function RootLayout({
         <style>{`
           .mobile-bottom-nav { display: none !important; }
 
-          .mobile-snap-bar { display: none; }
+          .pantry-snap-bar {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            padding: 0 0 24px;
+            box-sizing: border-box;
+          }
+          .pantry-snap-bar-inner {
+            width: 100%;
+            max-width: 480px;
+          }
 
           @media (max-width: 768px) {
             /* Show bottom nav, hide desktop util-nav links */
@@ -97,17 +107,9 @@ export default function RootLayout({
             /* Push page content above the fixed bottom nav */
             .page-content { padding-bottom: 72px; }
 
-            .mobile-snap-bar {
-              display: flex !important;
-              justify-content: center;
-              width: 100%;
-              padding: 0 0 20px;
-              box-sizing: border-box;
-            }
-            .mobile-snap-bar-inner {
-              width: 100%;
-              max-width: 360px;
-            }
+            .pantry-snap-bar { padding: 0 0 20px; }
+            .pantry-snap-bar-inner { max-width: 360px; }
+
             .sidebar-add-snap { display: none !important; }
             .empty-state-desktop-snap { display: none !important; }
             .desktop-only-snap-aux { display: none !important; }
