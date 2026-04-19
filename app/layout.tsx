@@ -69,22 +69,20 @@ export default function RootLayout({
         <ScrollToTopButton />
 
         <style>{`
-          .mobile-snap-bar { display: none; }
+          .pantry-snap-bar {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            padding: 0 0 24px;
+            box-sizing: border-box;
+          }
+          .pantry-snap-bar-inner {
+            width: 100%;
+            max-width: 480px;
+          }
           @media (max-width: 768px) {
-            .mobile-snap-bar {
-              display: flex !important;
-              justify-content: center;
-              width: 100%;
-              padding: 0 0 20px;
-              box-sizing: border-box;
-            }
-            .mobile-snap-bar-inner {
-              width: 100%;
-              max-width: 360px;
-            }
-            .sidebar-add-snap { display: none !important; }
-            .empty-state-desktop-snap { display: none !important; }
-            .desktop-only-snap-aux { display: none !important; }
+            .pantry-snap-bar { padding: 0 0 20px; }
+            .pantry-snap-bar-inner { max-width: 360px; }
             .utility-bar {
               flex-wrap: wrap !important;
               align-items: flex-start !important;
