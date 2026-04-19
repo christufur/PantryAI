@@ -8,8 +8,12 @@ type Message = {
 };
 
 const INITIAL_MESSAGES: Message[] = [
-  { role: "assistant", content: "PantryOS online. What do you want to cook?" },
+  { role: "assistant", content: "Fridgey online. I've been watching your food. Some of it needs attention. What do you want to know?" },
 ];
+
+const ICE_BG = "#e8f4f9";
+const ICE_BORDER = "#7ec8e3";
+const ICE_TEXT = "#1a3a4a";
 
 export default function ChatInterface() {
   const [messages, setMessages] = useState<Message[]>(INITIAL_MESSAGES);
@@ -42,7 +46,7 @@ export default function ChatInterface() {
     } catch {
       setMessages([
         ...nextMessages,
-        { role: "assistant", content: "Connection lost. Try again." },
+        { role: "assistant", content: "Lost signal. Door probably open. Try again." },
       ]);
     } finally {
       setLoading(false);
@@ -51,7 +55,7 @@ export default function ChatInterface() {
 
   return (
     <div>
-      {/* Messages area */}
+      {/* Messages */}
       <div
         className="messages-container"
         style={{
@@ -59,61 +63,80 @@ export default function ChatInterface() {
           overflowY: "auto",
           display: "flex",
           flexDirection: "column",
-          gap: 8,
+          gap: 10,
           paddingBottom: 8,
         }}
       >
         {messages.map((msg, i) =>
           msg.role === "user" ? (
-            <div
-              key={i}
-              style={{
-                border: '1px solid #000',
-                background: '#000',
-                color: '#fff',
-                padding: '8px 12px',
-                fontFamily: 'Lora, serif',
+            <div key={i} style={{ display: "flex", justifyContent: "flex-end" }}>
+              <div style={{
+                border: "2px solid #000",
+                background: "#000",
+                color: "#fff",
+                padding: "10px 14px",
+                fontFamily: "Lora, serif",
                 fontSize: 15,
-                lineHeight: 1.4,
-                maxWidth: '75%',
-                marginLeft: 'auto',
-              }}
-            >
-              {msg.content}
+                lineHeight: 1.45,
+                maxWidth: "75%",
+              }}>
+                {msg.content}
+              </div>
             </div>
           ) : (
-            <div
-              key={i}
-              style={{
-                border: '1px solid #000',
-                background: 'var(--paper-2)',
-                color: 'var(--ink)',
-                padding: '8px 12px',
-                fontFamily: 'Lora, serif',
+            <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
+              {/* Fridgey avatar */}
+              <div style={{
+                flexShrink: 0,
+                width: 32, height: 32,
+                background: "#1a3a4a",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontFamily: "'JetBrains Mono', monospace",
+                fontSize: 14, color: "#4fc3f7",
+                marginTop: 2,
+              }}>
+                ❄
+              </div>
+              <div style={{
+                border: `2px solid ${ICE_BORDER}`,
+                background: ICE_BG,
+                color: ICE_TEXT,
+                padding: "10px 14px",
+                fontFamily: "Lora, serif",
                 fontSize: 15,
-                lineHeight: 1.4,
-                maxWidth: '75%',
-              }}
-            >
-              {msg.content}
+                lineHeight: 1.45,
+                maxWidth: "75%",
+              }}>
+                {msg.content}
+              </div>
             </div>
           )
         )}
 
         {loading && (
-          <div style={{
-            border: '1px solid var(--hairline)',
-            background: 'var(--paper-2)',
-            padding: '8px 12px',
-            maxWidth: '75%',
-          }}>
+          <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
             <div style={{
-              fontFamily: "'JetBrains Mono', monospace",
-              fontSize: 11,
-              color: 'var(--caption)',
-              letterSpacing: '0.1em',
+              flexShrink: 0,
+              width: 32, height: 32,
+              background: "#1a3a4a",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: 14, color: "#4fc3f7",
             }}>
-              ANALYZING...
+              ❄
+            </div>
+            <div style={{
+              border: `2px solid ${ICE_BORDER}`,
+              background: ICE_BG,
+              padding: "10px 14px",
+            }}>
+              <span style={{
+                fontFamily: "'JetBrains Mono', monospace",
+                fontSize: 11,
+                color: "#4fc3f7",
+                letterSpacing: "0.12em",
+              }}>
+                CHILLING...
+              </span>
             </div>
           </div>
         )}
@@ -121,24 +144,28 @@ export default function ChatInterface() {
         <div ref={bottomRef} />
       </div>
 
-      {/* Quick-reply chips — shown only before any user message */}
+      {/* Quick-reply chips */}
       {messages.length <= 1 && (
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', margin: '16px 0' }}>
-          {["What's dying?", "What should I cook?", "What do I have?"].map((p) => (
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", margin: "16px 0" }}>
+          {[
+            "What's about to die?",
+            "What should I cook tonight?",
+            "Roast my pantry.",
+          ].map((p) => (
             <button
               key={p}
               onClick={() => setInput(p)}
               style={{
-                fontFamily: 'Inter, sans-serif',
+                fontFamily: "'JetBrains Mono', monospace",
                 fontWeight: 700,
-                fontSize: 11,
-                textTransform: 'uppercase',
-                letterSpacing: '0.05em',
-                padding: '6px 12px',
-                border: '2px solid #000',
-                background: '#fff',
-                color: '#000',
-                cursor: 'pointer',
+                fontSize: 10,
+                textTransform: "uppercase",
+                letterSpacing: "0.08em",
+                padding: "7px 12px",
+                border: `2px solid ${ICE_BORDER}`,
+                background: ICE_BG,
+                color: ICE_TEXT,
+                cursor: "pointer",
               }}
             >
               {p}
@@ -147,32 +174,32 @@ export default function ChatInterface() {
         </div>
       )}
 
-      {/* Input area */}
+      {/* Input */}
       <div
         className="chat-input-area"
         style={{
-          borderTop: '2px solid #000',
+          borderTop: `2px solid #1a3a4a`,
           paddingTop: 16,
-          display: 'flex',
+          display: "flex",
           gap: 8,
-          alignItems: 'stretch',
+          alignItems: "stretch",
           marginTop: 16,
         }}
       >
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
-          placeholder="Ask your fridge anything..."
+          onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSend()}
+          placeholder="Ask Fridgey anything..."
           style={{
             flex: 1,
-            border: '2px solid #000',
-            padding: '10px 14px',
-            fontFamily: 'Lora, serif',
+            border: `2px solid #1a3a4a`,
+            padding: "10px 14px",
+            fontFamily: "Lora, serif",
             fontSize: 15,
-            background: 'var(--paper)',
-            color: 'var(--ink)',
-            outline: 'none',
+            background: ICE_BG,
+            color: ICE_TEXT,
+            outline: "none",
             minHeight: 44,
           }}
         />
@@ -180,26 +207,26 @@ export default function ChatInterface() {
           onClick={handleSend}
           disabled={loading || !input.trim()}
           style={{
-            fontFamily: 'Inter, sans-serif',
+            fontFamily: "'JetBrains Mono', monospace",
             fontWeight: 700,
-            fontSize: 12,
-            textTransform: 'uppercase',
-            letterSpacing: '0.05em',
-            padding: '10px 18px',
-            border: '2px solid #000',
-            background: loading ? 'var(--caption)' : '#000',
-            color: '#fff',
-            cursor: loading ? 'not-allowed' : 'pointer',
+            fontSize: 11,
+            textTransform: "uppercase",
+            letterSpacing: "0.08em",
+            padding: "10px 18px",
+            border: "2px solid #1a3a4a",
+            background: loading ? ICE_BG : "#1a3a4a",
+            color: loading ? "#4fc3f7" : "#4fc3f7",
+            cursor: loading ? "not-allowed" : "pointer",
             minHeight: 44,
           }}
         >
-          {loading ? '...' : 'SEND'}
+          {loading ? "..." : "SEND"}
         </button>
       </div>
 
       <style>{`
         @media (max-width: 768px) {
-          .messages-container { height: calc(100vh - 300px) !important; min-height: 300px; }
+          .messages-container { height: calc(100vh - 320px) !important; min-height: 280px; }
           .chat-input-area > input { font-size: 16px !important; }
         }
       `}</style>
