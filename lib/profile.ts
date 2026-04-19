@@ -1,4 +1,4 @@
-import { db } from "@/lib/db";
+import { db, ensureSqliteSchema } from "@/lib/db";
 import { userProfile } from "@/db/schema";
 
 export type UserProfile = {
@@ -20,6 +20,7 @@ export const DEFAULT_PROFILE: UserProfile = {
 };
 
 export function loadProfile(): UserProfile {
+  ensureSqliteSchema();
   const row = db.select().from(userProfile).get();
   if (!row) return DEFAULT_PROFILE;
   return {
@@ -33,6 +34,7 @@ export function loadProfile(): UserProfile {
 }
 
 export function saveProfile(p: UserProfile): void {
+  ensureSqliteSchema();
   const existing = db.select().from(userProfile).get();
   if (existing) {
     db.update(userProfile).set({ ...p, updatedAt: new Date() }).run();
