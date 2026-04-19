@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import "./globals.css";
-import { Geist } from "next/font/google";
+import { Geist, JetBrains_Mono, Source_Serif_4, Lora, Inter } from "next/font/google";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
@@ -9,7 +9,11 @@ import MobileBottomNav from "@/components/MobileBottomNav";
 import RegisterServiceWorker from "@/components/RegisterServiceWorker";
 import PwaInstallBanner from "@/components/PwaInstallBanner";
 
-const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
+const geist        = Geist({ subsets: ['latin'], variable: '--font-sans', display: 'swap' });
+const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], weight: ['400', '700'], variable: '--font-mono', display: 'swap' });
+const sourceSerif4  = Source_Serif_4({ subsets: ['latin'], weight: ['400', '600', '700'], variable: '--font-serif', display: 'swap' });
+const lora          = Lora({ subsets: ['latin'], weight: ['400', '500'], variable: '--font-lora', display: 'swap' });
+const inter         = Inter({ subsets: ['latin'], weight: ['400', '600', '700'], variable: '--font-inter', display: 'swap' });
 
 export const viewport: Viewport = {
   themeColor: "#000000",
@@ -63,7 +67,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={cn("font-sans", geist.variable)} suppressHydrationWarning>
+    <html lang="en" className={cn("font-sans", geist.variable, jetbrainsMono.variable, sourceSerif4.variable, lora.variable, inter.variable)} suppressHydrationWarning>
       <body suppressHydrationWarning>
         {process.env.NODE_ENV === "production" ? (
           <Script id="pwa-sw-early" strategy="beforeInteractive">
