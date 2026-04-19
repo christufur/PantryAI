@@ -328,22 +328,6 @@ export default async function WallPage() {
           </section>
         )}
 
-        {/* Footer */}
-        <section style={{
-          marginTop: 40, paddingTop: 24, borderTop: "1px solid var(--hairline)",
-          display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12,
-        }}>
-          <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--caption)" }}>
-            PANTRYOS.APP · PAIRED · KITCHEN TABLET
-          </div>
-          <Link href="/" style={{
-            fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: 12,
-            textTransform: "uppercase", letterSpacing: "0.06em",
-            padding: "10px 18px", border: "2px solid #000", background: "#fff", color: "#000", textDecoration: "none",
-          }}>
-            ◎ SNAP FRIDGE
-          </Link>
-        </section>
       </div>
 
       <style>{`

@@ -12,7 +12,7 @@ export default function ChatPage() {
         textTransform: 'uppercase', letterSpacing: '0.12em',
         display: 'flex', justifyContent: 'space-between', alignItems: 'center'
       }}>
-        <span>PANTRYOS · CHAT</span>
+        <span>PANTRY.AI · CHAT</span>
         <span style={{ fontWeight: 400, opacity: 0.7, fontSize: 10 }}>ASK THE FRIDGE ANYTHING</span>
       </div>
 
