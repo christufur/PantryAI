@@ -1,7 +1,8 @@
 import { db } from "@/lib/db";
 import { pantryItems, localSwaps as localSwapsTable } from "@/db/schema";
 import { asc } from "drizzle-orm";
-import PantryViewSwitcher, { type PlainItem } from "@/components/PantryViewSwitcher";
+import type { PlainItem } from "@/components/pantry-types";
+import PantryViewSwitcher from "@/components/PantryViewSwitcher";
 
 export default function Home() {
   let items: PlainItem[] = [];
@@ -51,9 +52,14 @@ export default function Home() {
         {dying.length > 0 && <span style={{ color: "#c8102e" }}>⚠ {dying.length} DYING</span>}
       </div>
 
-      <PantryViewSwitcher items={items} />
+      <div className="pantry-main-below-ribbon">
+        <PantryViewSwitcher items={items} />
+      </div>
 
       <style>{`
+        .pantry-main-below-ribbon {
+          padding-top: clamp(16px, 3.5vw, 28px);
+        }
         @media (max-width: 768px) {
           .ribbon { padding: 10px 16px !important; }
         }

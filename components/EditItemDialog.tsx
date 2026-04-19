@@ -45,6 +45,7 @@ export default function EditItemDialog({
   unit,
   storageLocation,
   expiryDate,
+  isLocal,
 }: {
   id: number;
   name: string;
@@ -52,6 +53,7 @@ export default function EditItemDialog({
   unit: string;
   storageLocation: string;
   expiryDate: number; // unix seconds
+  isLocal: boolean;
 }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -61,6 +63,7 @@ export default function EditItemDialog({
   const [expiryVal, setExpiryVal] = useState(
     new Date(expiryDate * 1000).toISOString().split("T")[0]
   );
+  const [isLocalVal, setIsLocalVal] = useState(isLocal);
   const [saving, setSaving] = useState(false);
 
   async function handleSave() {
@@ -74,6 +77,7 @@ export default function EditItemDialog({
           unit: unitVal,
           storageLocation: locationVal,
           expiryDate: expiryVal,
+          isLocal: isLocalVal,
         }),
       });
       setOpen(false);
@@ -203,6 +207,34 @@ export default function EditItemDialog({
                 }}
               />
             </div>
+
+            {/* Locally sourced toggle */}
+            <button
+              type="button"
+              onClick={() => setIsLocalVal(v => !v)}
+              style={{
+                display: "flex", alignItems: "center", gap: 10,
+                padding: "10px 14px",
+                border: `2px solid ${isLocalVal ? "#057dbc" : "#000"}`,
+                background: isLocalVal ? "#057dbc" : "#fff",
+                color: isLocalVal ? "#fff" : "#000",
+                cursor: "pointer",
+                textAlign: "left",
+                width: "100%",
+              }}
+            >
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 18, lineHeight: 1 }}>
+                {isLocalVal ? "◉" : "◎"}
+              </span>
+              <div>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em" }}>
+                  {isLocalVal ? "NM LOCAL" : "MARK AS LOCAL"}
+                </div>
+                <div style={{ fontFamily: "Lora, serif", fontSize: 12, opacity: 0.8, marginTop: 2 }}>
+                  {isLocalVal ? "Sourced from a local NM producer" : "Tap if you bought this locally"}
+                </div>
+              </div>
+            </button>
 
             {/* Buttons */}
             <div style={{ display: "flex", gap: 8, justifyContent: "flex-end", paddingTop: 4 }}>
