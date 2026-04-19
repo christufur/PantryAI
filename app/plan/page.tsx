@@ -136,7 +136,7 @@ export default async function PlanPage() {
   const weekRangeLabel = weekStart ? `WEEK OF ${formatShort(weekStart).toUpperCase()}` : "NO ACTIVE PLAN";
 
   return (
-    <main style={{ background: "var(--paper)", minHeight: "100dvh" }}>
+    <main className="plan-page" style={{ background: "var(--paper)", minHeight: "100dvh" }}>
       {/* Black ribbon */}
       <div
         style={{
@@ -235,7 +235,7 @@ export default async function PlanPage() {
         </section>
 
         {/* DYING SOON · THIS WEEK — desktop: sidebar + grid; narrow: flex, calendar first */}
-        <section style={{ display: "grid", gridTemplateColumns: "320px 1fr", gap: 40 }} className="wall-bottom-grid">
+        <section className="plan-page-bottom">
           <div className="plan-dying-panel">
             <div style={{
               fontFamily: "var(--font-ui)", fontSize: 11, fontWeight: 700,
@@ -297,63 +297,6 @@ export default async function PlanPage() {
         <PastPlans plans={pastPlans} />
 
       </div>
-
-      <style>{`
-        @media (max-width: 900px) {
-          .wall-headline { font-size: 40px !important; }
-          .wall-tonight-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
-          .wall-bottom-grid {
-            display: flex !important;
-            flex-direction: column !important;
-            gap: 28px !important;
-          }
-          .plan-week-panel { order: -1; }
-          .plan-dying-panel { order: 1; }
-          .wall-container { padding: 20px 16px !important; }
-          .ribbon { padding: 10px 16px !important; }
-          .plan-week-heading { font-size: 10px !important; letter-spacing: 0.1em !important; }
-          /* Vertical week: one day per row (tablet + phone) */
-          .week-grid {
-            display: flex !important;
-            flex-direction: column !important;
-            overflow-x: visible !important;
-            border: 2px solid #000 !important;
-          }
-          .week-grid > button {
-            border-right: none !important;
-            border-bottom: 1px solid var(--hairline) !important;
-            min-height: 0 !important;
-            padding: 14px 16px !important;
-          }
-          .week-grid > button:last-child {
-            border-bottom: none !important;
-          }
-          /* Compact dying: chip wrap instead of a tall sidebar list */
-          .plan-dying-list {
-            border-top: 2px solid #000 !important;
-            display: flex !important;
-            flex-wrap: wrap !important;
-            gap: 8px !important;
-            padding-top: 12px !important;
-          }
-          .plan-dying-row {
-            flex: 0 1 auto !important;
-            border: 1px solid var(--hairline) !important;
-            border-bottom: 1px solid var(--hairline) !important;
-            padding: 8px 12px !important;
-            margin: 0 !important;
-            min-width: min(100%, 200px);
-            box-sizing: border-box;
-            align-items: center !important;
-          }
-          .plan-dying-row span:first-child {
-            font-size: var(--text-sm) !important;
-          }
-        }
-        @media (max-width: 768px) {
-          .wall-headline { font-size: 34px !important; }
-        }
-      `}</style>
     </main>
   );
 }
