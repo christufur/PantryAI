@@ -3,78 +3,253 @@
     "genericName": "bread",
     "localProducer": "Sage Bakehouse",
     "product": "Artisan sourdough & rustic loaves",
-    "whereToBuy": "La Montañita Co-op, Sage Bakehouse (ABQ)",
+    "whereToBuy": "Sage Bakehouse (ABQ), La Montañita Co-op",
     "notes": "Family-run ABQ bakery"
+  },
+  {
+    "genericName": "bread",
+    "localProducer": "Pueblo Bakery",
+    "product": "Traditional NM breads & pastries",
+    "whereToBuy": "Downtown Growers' Market, Rail Yards Market",
+    "notes": "Verified 2026 ABQ market vendor"
+  },
+  {
+    "genericName": "bread",
+    "localProducer": "Torzy's Bakehouse",
+    "product": "Artisan breads & baked goods",
+    "whereToBuy": "Downtown Growers' Market",
+    "notes": "Verified 2026 DGM vendor"
   },
   {
     "genericName": "tortillas",
     "localProducer": "Bueno Foods",
     "product": "Flour & corn tortillas",
-    "whereToBuy": "Most ABQ grocers",
+    "whereToBuy": "Most ABQ grocers, Bueno Foods store",
     "notes": "Made in Albuquerque since 1951"
   },
   {
+    "genericName": "chile",
+    "localProducer": "Big Jim Farms",
+    "product": "Fresh NM green chile (Big Jim variety)",
+    "whereToBuy": "Downtown Growers' Market, Rail Yards Market",
+    "notes": "Verified 2026 ABQ market vendor — Big Jim is a classic NM cultivar"
+  },
+  {
     "genericName": "chile_green",
-    "localProducer": "Hatch / Lemitar growers",
+    "localProducer": "Big Jim Farms",
     "product": "Fresh & roasted NM green chile",
-    "whereToBuy": "Downtown Growers' Market, Rail Yards Market (seasonal)",
-    "notes": "Keep stat in mind: 98% of ABQ food is out-of-state — chile is the exception"
+    "whereToBuy": "Downtown Growers' Market, Rail Yards Market",
+    "notes": "Seasonal Aug–Oct; freezes well"
+  },
+  {
+    "genericName": "chile_red",
+    "localProducer": "NM ChileJang",
+    "product": "NM red chile products",
+    "whereToBuy": "Downtown Growers' Market, Rail Yards Market",
+    "notes": "Verified 2026 vendor at both markets"
+  },
+  {
+    "genericName": "salsa",
+    "localProducer": "Bueno Foods",
+    "product": "Green & red chile salsa",
+    "whereToBuy": "Most ABQ grocers",
+    "notes": "ABQ-made with NM chile"
+  },
+  {
+    "genericName": "hot_sauce",
+    "localProducer": "NM ChileJang",
+    "product": "NM chile sauces & condiments",
+    "whereToBuy": "Downtown Growers' Market, Rail Yards Market",
+    "notes": "Verified 2026 market vendor"
   },
   {
     "genericName": "tomato",
-    "localProducer": "Skarsgard Farms",
-    "product": "Heirloom tomatoes (seasonal)",
-    "whereToBuy": "Skarsgard Farms CSA, La Montañita Co-op",
-    "notes": "ABQ-based CSA, home delivery available"
+    "localProducer": "Vida Verde Farm",
+    "product": "Seasonal tomatoes & vegetables",
+    "whereToBuy": "Downtown Growers' Market, Rail Yards Market",
+    "notes": "Verified 2026 vendor at both markets"
   },
   {
     "genericName": "lettuce",
-    "localProducer": "Skarsgard Farms",
-    "product": "Mixed greens",
-    "whereToBuy": "Skarsgard Farms CSA, farmers markets",
-    "notes": ""
+    "localProducer": "Living Roots Farm",
+    "product": "Mixed greens & salad crops",
+    "whereToBuy": "Downtown Growers' Market, Rail Yards Market",
+    "notes": "Verified 2026 vendor at both markets"
   },
   {
     "genericName": "leafy_greens",
-    "localProducer": "Skarsgard Farms",
-    "product": "Spinach, kale, chard",
-    "whereToBuy": "Skarsgard Farms CSA",
+    "localProducer": "Living Roots Farm",
+    "product": "Spinach, kale, mixed greens",
+    "whereToBuy": "Downtown Growers' Market, Rail Yards Market",
+    "notes": "Verified 2026 vendor"
+  },
+  {
+    "genericName": "spinach",
+    "localProducer": "Vida Verde Farm",
+    "product": "Seasonal leafy greens",
+    "whereToBuy": "Downtown Growers' Market, Rail Yards Market",
     "notes": ""
+  },
+  {
+    "genericName": "kale",
+    "localProducer": "Living Roots Farm",
+    "product": "Kale & hearty greens",
+    "whereToBuy": "Downtown Growers' Market",
+    "notes": ""
+  },
+  {
+    "genericName": "squash",
+    "localProducer": "EMS Farms",
+    "product": "Summer & winter squash",
+    "whereToBuy": "Downtown Growers' Market, Rail Yards Market",
+    "notes": "Verified 2026 vendor at both markets"
+  },
+  {
+    "genericName": "zucchini",
+    "localProducer": "EMS Farms",
+    "product": "Zucchini & summer squash",
+    "whereToBuy": "Downtown Growers' Market, Rail Yards Market",
+    "notes": ""
+  },
+  {
+    "genericName": "corn",
+    "localProducer": "Big Jim Farms",
+    "product": "NM sweet corn (seasonal)",
+    "whereToBuy": "Downtown Growers' Market, Rail Yards Market",
+    "notes": "Seasonal summer; also Bueno Foods posole corn"
+  },
+  {
+    "genericName": "onion",
+    "localProducer": "Vida Verde Farm",
+    "product": "Yellow & red onions",
+    "whereToBuy": "Downtown Growers' Market",
+    "notes": ""
+  },
+  {
+    "genericName": "garlic",
+    "localProducer": "Living Roots Farm",
+    "product": "NM hardneck garlic",
+    "whereToBuy": "Downtown Growers' Market",
+    "notes": ""
+  },
+  {
+    "genericName": "carrot",
+    "localProducer": "EMS Farms",
+    "product": "Carrots & root vegetables",
+    "whereToBuy": "Downtown Growers' Market, Rail Yards Market",
+    "notes": ""
+  },
+  {
+    "genericName": "potato",
+    "localProducer": "Longcount Farm",
+    "product": "NM potatoes & root vegetables",
+    "whereToBuy": "Downtown Growers' Market, Rail Yards Market",
+    "notes": "Verified 2026 vendor at both markets"
+  },
+  {
+    "genericName": "herbs",
+    "localProducer": "Los Poblanos",
+    "product": "Fresh & dried culinary herbs",
+    "whereToBuy": "Los Poblanos Farm Shop, La Montañita Co-op",
+    "notes": "Los Ranchos de Albuquerque landmark farm"
+  },
+  {
+    "genericName": "basil",
+    "localProducer": "Vida Verde Farm",
+    "product": "Fresh herbs & basil",
+    "whereToBuy": "Downtown Growers' Market",
+    "notes": ""
+  },
+  {
+    "genericName": "cilantro",
+    "localProducer": "Living Roots Farm",
+    "product": "Fresh cilantro & herbs",
+    "whereToBuy": "Downtown Growers' Market",
+    "notes": ""
+  },
+  {
+    "genericName": "mushroom",
+    "localProducer": "Enchanted Farms Mushrooms",
+    "product": "Gourmet & specialty mushrooms",
+    "whereToBuy": "Downtown Growers' Market",
+    "notes": "Verified 2026 DGM vendor"
+  },
+  {
+    "genericName": "mushroom",
+    "localProducer": "Full Circle Mushrooms",
+    "product": "Locally-grown mushrooms",
+    "whereToBuy": "Downtown Growers' Market",
+    "notes": "Verified 2026 DGM vendor"
   },
   {
     "genericName": "eggs",
     "localProducer": "Pollo Real",
     "product": "Pasture-raised eggs",
     "whereToBuy": "La Montañita Co-op, farmers markets",
-    "notes": "NM-raised"
+    "notes": "NM-raised, certified humane — verify current availability at co-op"
   },
   {
     "genericName": "dairy_milk",
     "localProducer": "Rasband Dairy",
     "product": "Local milk (glass bottles)",
     "whereToBuy": "La Montañita Co-op",
+    "notes": "NM dairy — glass returnable bottles"
+  },
+  {
+    "genericName": "milk",
+    "localProducer": "Rasband Dairy",
+    "product": "Local whole & 2% milk",
+    "whereToBuy": "La Montañita Co-op",
     "notes": ""
   },
   {
     "genericName": "dairy_cheese_hard",
-    "localProducer": "Old Windmill Dairy",
-    "product": "Aged goat cheeses",
-    "whereToBuy": "La Montañita Co-op, farmers markets",
-    "notes": "Estancia, NM"
+    "localProducer": "Oliva Cheese Board LLC",
+    "product": "Artisan cheese boards & local cheeses",
+    "whereToBuy": "Downtown Growers' Market, Rail Yards Market",
+    "notes": "Verified 2026 vendor at both markets"
   },
   {
     "genericName": "dairy_cheese_soft",
-    "localProducer": "Old Windmill Dairy",
-    "product": "Fresh goat chèvre",
-    "whereToBuy": "La Montañita Co-op",
-    "notes": ""
+    "localProducer": "Oliva Cheese Board LLC",
+    "product": "Fresh & soft cheeses",
+    "whereToBuy": "Downtown Growers' Market, Rail Yards Market",
+    "notes": "Verified 2026 vendor"
+  },
+  {
+    "genericName": "cheese",
+    "localProducer": "Oliva Cheese Board LLC",
+    "product": "Artisan & local cheeses",
+    "whereToBuy": "Downtown Growers' Market, Rail Yards Market",
+    "notes": "Verified 2026 vendor at both markets"
+  },
+  {
+    "genericName": "honey",
+    "localProducer": "Bee's Honey",
+    "product": "Local NM honey",
+    "whereToBuy": "Downtown Growers' Market, Rail Yards Market",
+    "notes": "Verified 2026 vendor at both markets"
+  },
+  {
+    "genericName": "honey",
+    "localProducer": "Honey Shack New Mexico",
+    "product": "NM raw & infused honey",
+    "whereToBuy": "Downtown Growers' Market, Rail Yards Market",
+    "notes": "Verified 2026 vendor at both markets"
   },
   {
     "genericName": "honey",
     "localProducer": "Los Poblanos",
     "product": "NM wildflower honey",
     "whereToBuy": "Los Poblanos Farm Shop, La Montañita Co-op",
-    "notes": "Los Ranchos de Albuquerque"
+    "notes": "Los Ranchos de ABQ estate bees"
+  },
+  {
+    "genericName": "beans",
+    "localProducer": "NM heirloom growers",
+    "product": "Bolita & Anasazi beans",
+    "whereToBuy": "Downtown Growers' Market, La Montañita Co-op",
+    "notes": "Traditional Rio Grande varieties — ask vendors at DGM"
   },
   {
     "genericName": "beans_dry",
@@ -84,31 +259,164 @@
     "notes": "Traditional Rio Grande varieties"
   },
   {
+    "genericName": "pinto_beans",
+    "localProducer": "NM heirloom growers",
+    "product": "NM pinto beans",
+    "whereToBuy": "La Montañita Co-op, Downtown Growers' Market",
+    "notes": ""
+  },
+  {
     "genericName": "apple",
-    "localProducer": "Dixon / Velarde orchards",
-    "product": "NM apples (seasonal)",
-    "whereToBuy": "Farmers markets (fall)",
-    "notes": "Northern NM orchards"
+    "localProducer": "Corrales Orchards",
+    "product": "NM apples (seasonal fall)",
+    "whereToBuy": "Downtown Growers' Market (Sept–Nov)",
+    "notes": "Verified 2026 DGM vendor"
+  },
+  {
+    "genericName": "apple",
+    "localProducer": "Montoya Orchard",
+    "product": "NM apples & tree fruit",
+    "whereToBuy": "Downtown Growers' Market",
+    "notes": "Verified 2026 DGM vendor"
+  },
+  {
+    "genericName": "peach",
+    "localProducer": "Rancho Chonito Orchards",
+    "product": "NM peaches & stone fruit (seasonal)",
+    "whereToBuy": "Downtown Growers' Market (Aug–Sept)",
+    "notes": "Verified 2026 DGM vendor"
+  },
+  {
+    "genericName": "pear",
+    "localProducer": "Corrales Orchards",
+    "product": "NM pears (seasonal fall)",
+    "whereToBuy": "Downtown Growers' Market (Sept–Oct)",
+    "notes": ""
   },
   {
     "genericName": "meat_raw_beef",
-    "localProducer": "NM ranchers via Talus Wind",
-    "product": "Grass-fed beef",
+    "localProducer": "Talus Wind Ranch",
+    "product": "Grass-fed NM beef",
+    "whereToBuy": "La Montañita Co-op",
+    "notes": "NM grass-fed rancher"
+  },
+  {
+    "genericName": "meat_raw_beef",
+    "localProducer": "Dunhill Ranch",
+    "product": "NM ranch beef",
+    "whereToBuy": "Downtown Growers' Market",
+    "notes": "Verified 2026 DGM vendor"
+  },
+  {
+    "genericName": "beef",
+    "localProducer": "Talus Wind Ranch",
+    "product": "Grass-fed NM beef — ground, roasts, steaks",
     "whereToBuy": "La Montañita Co-op",
     "notes": ""
+  },
+  {
+    "genericName": "beef",
+    "localProducer": "Dunhill Ranch",
+    "product": "NM ranch beef — ground, roasts, steaks",
+    "whereToBuy": "Downtown Growers' Market",
+    "notes": "Verified 2026 DGM vendor"
+  },
+  {
+    "genericName": "lamb",
+    "localProducer": "Milligan Ranch",
+    "product": "NM pasture-raised lamb",
+    "whereToBuy": "Downtown Growers' Market",
+    "notes": "Verified 2026 DGM vendor"
+  },
+  {
+    "genericName": "meat_raw_lamb",
+    "localProducer": "Rancho La Jolla",
+    "product": "NM lamb & small-ranch meats",
+    "whereToBuy": "Downtown Growers' Market",
+    "notes": "Verified 2026 DGM vendor"
+  },
+  {
+    "genericName": "chicken",
+    "localProducer": "Pollo Real",
+    "product": "Pasture-raised chicken",
+    "whereToBuy": "La Montañita Co-op, farmers markets",
+    "notes": "Verify current availability"
   },
   {
     "genericName": "lavender",
     "localProducer": "Los Poblanos",
-    "product": "Culinary lavender",
-    "whereToBuy": "Los Poblanos Farm Shop",
-    "notes": ""
+    "product": "Culinary lavender (dried & fresh)",
+    "whereToBuy": "Los Poblanos Farm Shop, La Montañita Co-op",
+    "notes": "Award-winning lavender farm in Los Ranchos de ABQ"
   },
   {
     "genericName": "flour",
     "localProducer": "Valencia Flour Mill",
-    "product": "Stone-ground NM flour",
+    "product": "Stone-ground NM wheat flour",
     "whereToBuy": "La Montañita Co-op",
     "notes": "Jarales, NM"
+  },
+  {
+    "genericName": "nuts",
+    "localProducer": "Stahmann Farms",
+    "product": "NM pecans",
+    "whereToBuy": "La Montañita Co-op, most ABQ grocers",
+    "notes": "Las Cruces — one of the world's largest pecan orchards; well-established brand"
+  },
+  {
+    "genericName": "pecans",
+    "localProducer": "Stahmann Farms",
+    "product": "NM pecans — halves, pieces & roasted",
+    "whereToBuy": "La Montañita Co-op, most ABQ grocers",
+    "notes": "Las Cruces, NM — widely distributed"
+  },
+  {
+    "genericName": "pine_nuts",
+    "localProducer": "NM piñon harvesters",
+    "product": "Wild-harvested NM piñon nuts",
+    "whereToBuy": "Downtown Growers' Market, La Montañita Co-op (seasonal fall)",
+    "notes": "Harvested from wild piñon forests — ask at markets in Oct–Nov"
+  },
+  {
+    "genericName": "coffee",
+    "localProducer": "Piñon Coffee",
+    "product": "NM-roasted coffee blends",
+    "whereToBuy": "Most ABQ grocers, Piñon Coffee shops",
+    "notes": "Roasted in Albuquerque since 1996 — widely available"
+  },
+  {
+    "genericName": "wine",
+    "localProducer": "Casa Rondeña Winery",
+    "product": "NM estate wines",
+    "whereToBuy": "Casa Rondeña tasting room (Los Ranchos), Total Wine",
+    "notes": "Los Ranchos de ABQ — established NM winery"
+  },
+  {
+    "genericName": "beer",
+    "localProducer": "Marble Brewery",
+    "product": "Craft beers (Red, IPA, Pilsner, Wildflower Wheat)",
+    "whereToBuy": "Marble taprooms, most ABQ grocers",
+    "notes": "ABQ-born craft brewery — widely available"
+  },
+  {
+    "genericName": "jam",
+    "localProducer": "Rancho Chonito Orchards",
+    "product": "NM fruit jams & preserves",
+    "whereToBuy": "Downtown Growers' Market",
+    "notes": "Verified 2026 DGM vendor; peach, apple, seasonal varieties"
+  },
+  {
+    "genericName": "preserves",
+    "localProducer": "San Marco Farm & Lila's Orchard",
+    "product": "NM fruit preserves & orchard products",
+    "whereToBuy": "Rail Yards Market",
+    "notes": "Verified 2026 Rail Yards vendor"
+  },
+  {
+    "genericName": "pepper",
+    "localProducer": "Vida Verde Farm",
+    "product": "Bell & sweet peppers",
+    "whereToBuy": "Downtown Growers' Market",
+    "notes": ""
   }
 ]
