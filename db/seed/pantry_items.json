@@ -1,6 +1,6 @@
 [
   {
-    "name": "NM Green Chile",
+    "name": "Green Chile",
     "category": "chile_green",
     "qty": 6,
     "unit": "each",
@@ -54,7 +54,7 @@
     "isLocal": false
   },
   {
-    "name": "Sourdough Bread",
+    "name": "Bread",
     "category": "bread",
     "qty": 1,
     "unit": "loaf",
@@ -81,7 +81,7 @@
     "isLocal": false
   },
   {
-    "name": "Wildflower Honey",
+    "name": "Honey",
     "category": "honey",
     "qty": 1,
     "unit": "jar",
@@ -90,7 +90,7 @@
     "isLocal": false
   },
   {
-    "name": "Piñon Coffee",
+    "name": "Coffee",
     "category": "coffee",
     "qty": 12,
     "unit": "oz",
@@ -117,7 +117,7 @@
     "isLocal": false
   },
   {
-    "name": "Bolita Beans",
+    "name": "Dry Beans",
     "category": "beans_dry",
     "qty": 1,
     "unit": "lb",
