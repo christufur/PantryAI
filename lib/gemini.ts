@@ -236,6 +236,8 @@ export type Recipe = {
   steps: string[];
   timeMinutes: number;
   saves: string[]; // subset of input ingredients actually used
+  caloriesMin?: number; // rough per-serving estimate
+  caloriesMax?: number;
 };
 
 const recipeSchema = {
@@ -251,6 +253,14 @@ const recipeSchema = {
       description:
         "Subset of the input pantry ingredients that this recipe actually consumes. Names must match the input list exactly.",
     },
+    caloriesMin: {
+      type: Type.INTEGER,
+      description: "Low end of estimated calories per serving (rough estimate, ±30%).",
+    },
+    caloriesMax: {
+      type: Type.INTEGER,
+      description: "High end of estimated calories per serving (rough estimate, ±30%).",
+    },
   },
   required: ["title", "ingredients", "steps", "timeMinutes", "saves"],
 };
@@ -263,7 +273,8 @@ ${ingredients.join(", ")}
 ${profileContext}
 Use AS MANY of the listed pantry ingredients as reasonably possible — they're going bad. In the "saves" field, return the exact subset of the input list that the recipe actually consumes (names must match the input strings exactly).
 
-Keep it achievable in under 45 minutes for a weeknight dinner. Respect any dietary restrictions or allergies listed in the user profile above. Return strict JSON.`;
+Keep it achievable in under 45 minutes for a weeknight dinner. Respect any dietary restrictions or allergies listed in the user profile above.
+Also estimate a rough per-serving calorie range (caloriesMin / caloriesMax). These are approximations — give a realistic spread of ~100–150 cal to signal the uncertainty. Return strict JSON.`;
 
   const response = await ai.models.generateContent({
     model: MODEL,

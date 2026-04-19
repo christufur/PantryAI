@@ -46,6 +46,8 @@ export default function MobileBottomNav() {
       display: "flex",
       zIndex: 150000,
       paddingBottom: "max(12px, env(safe-area-inset-bottom, 0px))",
+      transform: "translateZ(0)",
+      willChange: "transform",
     }} className="mobile-bottom-nav">
       {NAV.map(({ href, label, Icon, match }) => {
         const active =
