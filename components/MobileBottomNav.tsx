@@ -3,14 +3,14 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLayoutEffect, useState } from "react";
-import { Home, ChefHat, CalendarDays, MessageCircle, Settings } from "lucide-react";
+import { Home, Leaf, CalendarDays, MessageCircle, Settings } from "lucide-react";
 
 const NAV = [
-  { href: "/",        label: "HOME",  Icon: Home         },
-  { href: "/recipe",  label: "COOK",  Icon: ChefHat      },
-  { href: "/wall",    label: "PLAN",  Icon: CalendarDays, match: "plan" as const },
-  { href: "/chat",    label: "CHAT",  Icon: MessageCircle },
-  { href: "/settings",label: "ME",   Icon: Settings      },
+  { href: "/",        label: "HOME",   Icon: Home         },
+  { href: "/plan",    label: "PLAN",   Icon: CalendarDays, match: "plan" as const },
+  { href: "/impact",  label: "IMPACT", Icon: Leaf         },
+  { href: "/chat",    label: "CHAT",   Icon: MessageCircle },
+  { href: "/settings",label: "ME",     Icon: Settings      },
 ];
 
 export default function MobileBottomNav() {
@@ -78,7 +78,9 @@ export default function MobileBottomNav() {
             ? pathname === "/wall" || pathname.startsWith("/plan")
             : href === "/"
               ? pathname === "/"
-              : pathname.startsWith(href);
+              : href === "/impact"
+                ? pathname.startsWith("/impact")
+                : pathname.startsWith(href);
         return (
           <Link key={href} href={href} style={{
             flex: 1, display: "flex", flexDirection: "column",

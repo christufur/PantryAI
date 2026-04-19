@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db, ensureSqliteSchema } from "@/lib/db";
-import { pantryItems, shelfLife } from "@/db/schema";
+import { pantryItems, shelfLife, impactEvents } from "@/db/schema";
 import { and, eq } from "drizzle-orm";
 
 const VALID_STORAGE: ReadonlySet<string> = new Set(["fridge", "freezer", "pantry"]);
@@ -72,6 +72,24 @@ export async function DELETE(
   if (!Number.isFinite(itemId)) {
     return NextResponse.json({ error: "Invalid id" }, { status: 400 });
   }
+
+  // Capture rescue event before deleting — only if item hasn't already expired.
+  try {
+    const item = db.select().from(pantryItems).where(eq(pantryItems.id, itemId)).get();
+    if (item) {
+      const expiry = item.expiryDate instanceof Date
+        ? item.expiryDate
+        : new Date((item.expiryDate as unknown as number) * 1000);
+      if (new Date() < expiry) {
+        db.insert(impactEvents).values({
+          itemName: item.name,
+          category: item.category,
+          qty: item.qty,
+          unit: item.unit,
+        }).run();
+      }
+    }
+  } catch { /* non-critical — don't block the delete */ }
 
   const result = db.delete(pantryItems).where(eq(pantryItems.id, itemId)).run();
 
