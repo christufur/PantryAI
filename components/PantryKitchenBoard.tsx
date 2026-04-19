@@ -40,9 +40,11 @@ type ShelfKey = (typeof SHELF_ORDER)[number];
 export default function PantryKitchenBoard({
   items,
   nowMs,
+  impact,
 }: {
   items: PlainItem[];
   nowMs: number;
+  impact: import("@/lib/impact").ImpactTotals;
 }) {
   const router = useRouter();
   const [now, setNow] = useState(nowMs);
