@@ -1,0 +1,30 @@
+[
+  {
+    "name": "POWER UP PREMIUM TRAIL MIX",
+    "category": "cereal",
+    "qty": 1,
+    "unit": "each",
+    "printedDate": "2026-04-26"
+  },
+  {
+    "name": "CELSIUS TROPICAL VIBE",
+    "category": "unknown",
+    "qty": 1,
+    "unit": "each",
+    "printedDate": "2026-04-25"
+  },
+  {
+    "name": "KIRKLAND SIGNATURE PURIFIED WATER",
+    "category": "unknown",
+    "qty": 1,
+    "unit": "each",
+    "printedDate": "2026-04-26"
+  },
+  {
+    "name": "BANANA",
+    "category": "banana",
+    "qty": 1,
+    "unit": "each",
+    "printedDate": "2026-04-25"
+  }
+]

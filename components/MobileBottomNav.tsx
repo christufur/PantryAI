@@ -7,7 +7,8 @@ import { Home, Leaf, CalendarDays, MessageCircle, Settings } from "lucide-react"
 
 const NAV = [
   { href: "/",        label: "HOME",   Icon: Home         },
-  { href: "/plan",    label: "PLAN",   Icon: CalendarDays, match: "plan" as const },
+  /** `/plan` middleware-redirects to `/wall`; linking `/wall` avoids flaky client navigations on mobile. */
+  { href: "/wall",    label: "PLAN",   Icon: CalendarDays, match: "plan" as const },
   { href: "/impact",  label: "IMPACT", Icon: Leaf         },
   { href: "/chat",    label: "CHAT",   Icon: MessageCircle },
   { href: "/settings",label: "ME",     Icon: Settings      },
@@ -50,7 +51,7 @@ export default function MobileBottomNav() {
       bottom: visualBottomGap,
       background: "#000", borderTop: "2px solid #222",
       display: "flex",
-      zIndex: 150000,
+      zIndex: 170000,
       paddingBottom: "max(12px, env(safe-area-inset-bottom, 0px))",
       transform: "translateZ(0)",
       willChange: "transform",
