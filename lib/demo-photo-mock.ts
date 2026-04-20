@@ -3,12 +3,11 @@ import demoItems from "@/data/demo-photo-identified.json";
 
 /**
  * Demo / conference builds: skip Gemini for photo ingest (slow, flaky on venue Wi‑Fi).
- * Default: on. Set env `DEMO_PHOTO_MOCK=false` (or `0`) to use real Gemini vision.
+ * Default: off (real vision). Set `DEMO_PHOTO_MOCK=true` to use the pre-seeded JSON.
  */
 export const DEMO_PHOTO_MOCK_ENABLED = (() => {
   const v = process.env.DEMO_PHOTO_MOCK?.trim().toLowerCase();
-  if (v === "0" || v === "false" || v === "no" || v === "off") return false;
-  return true;
+  return v === "1" || v === "true" || v === "yes" || v === "on";
 })();
 
 function sleep(ms: number) {
