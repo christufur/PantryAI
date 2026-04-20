@@ -99,10 +99,7 @@ export default function WeekGrid({
   return (
     <>
       {/* Week grid tiles */}
-      <div
-        style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", border: "2px solid #000" }}
-        className="week-grid"
-      >
+      <div className="plan-week-grid">
         {DAY_LABELS.map((label, i) => {
           const day = days.find((d) => d.dayIndex === i);
           const isToday = i === todayIndex;
