@@ -7,19 +7,31 @@ type Message = {
   content: string;
 };
 
-const INITIAL_MESSAGES: Message[] = [
-  { role: "assistant", content: "Fridgey online. I've been watching your food. Some of it needs attention. What do you want to know?" },
-];
+const DEFAULT_GREETING = "Fridgey online. I've been watching your food. Some of it needs attention. What do you want to know?";
 
 const ICE_BG = "#e8f4f9";
 const ICE_BORDER = "#7ec8e3";
 const ICE_TEXT = "#1a3a4a";
 
 export default function ChatInterface() {
-  const [messages, setMessages] = useState<Message[]>(INITIAL_MESSAGES);
+  const [messages, setMessages] = useState<Message[]>([
+    { role: "assistant", content: DEFAULT_GREETING },
+  ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
+
+  // Swap default greeting for pre-cached Fridgey roast on mount
+  useEffect(() => {
+    fetch("/api/chat/greeting")
+      .then((r) => r.json())
+      .then((d: { reply?: string }) => {
+        if (d.reply && d.reply !== DEFAULT_GREETING) {
+          setMessages([{ role: "assistant", content: d.reply }]);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });

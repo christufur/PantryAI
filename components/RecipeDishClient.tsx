@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import type { Recipe } from "@/lib/gemini";
 import type { BuyLocalEntry } from "@/lib/recipe-buy-local";
 
@@ -18,9 +19,12 @@ export default function RecipeDishClient({
   ingredientsParam: string;
   bust: boolean;
 }) {
+  const router = useRouter();
   const [data, setData] = useState<ApiPayload | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [cooking, setCooking] = useState(false);
+  const [cooked, setCooked] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -374,6 +378,53 @@ export default function RecipeDishClient({
             flexWrap: "wrap",
           }}
         >
+          {!cooked ? (
+            <button
+              type="button"
+              disabled={cooking}
+              onClick={async () => {
+                setCooking(true);
+                try {
+                  await fetch("/api/items/cook", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ names: savedItems }),
+                  });
+                  setCooked(true);
+                  setTimeout(() => router.push("/impact"), 1200);
+                } catch {
+                  setCooking(false);
+                }
+              }}
+              style={{
+                fontFamily: "var(--font-ui)",
+                fontWeight: 700,
+                fontSize: "var(--text-ribbon)",
+                textTransform: "uppercase",
+                letterSpacing: "0.08em",
+                padding: "10px 18px",
+                border: "2px solid #2d7a2d",
+                background: cooking ? "#eee" : "#2d7a2d",
+                color: cooking ? "#666" : "#fff",
+                cursor: cooking ? "not-allowed" : "pointer",
+              }}
+            >
+              {cooking ? "SAVING…" : cooked ? "DONE!" : "✓ COOKED IT"}
+            </button>
+          ) : (
+            <div style={{
+              fontFamily: "var(--font-ui)",
+              fontWeight: 700,
+              fontSize: "var(--text-ribbon)",
+              textTransform: "uppercase",
+              letterSpacing: "0.08em",
+              padding: "10px 18px",
+              border: "2px solid #2d7a2d",
+              color: "#2d7a2d",
+            }}>
+              ✓ ITEMS RESCUED · UPDATING IMPACT…
+            </div>
+          )}
           <Link
             href="/recipe"
             style={{

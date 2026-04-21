@@ -1,10 +1,13 @@
 // Demo pantry seeder. Run with: `npm run db:seed:demo`
-// Wipes pantry_items and inserts a realistic spread of items with
-// staggered expiries so the dashboard has obvious "DYING", fresh, and
-// expired rows to talk through during the pitch.
+// Wipes pantry_items + impact_events, inserts a realistic spread of items with
+// staggered expiries, pre-caches the recipe for dying items, and pre-generates
+// a Fridgey roast — so the demo is instant end-to-end.
 
 import { db } from "@/lib/db";
-import { pantryItems } from "@/db/schema";
+import { pantryItems, impactEvents, recipesCache } from "@/db/schema";
+import { GoogleGenAI } from "@google/genai";
+import { generateRecipe, ingredientsHash } from "@/lib/gemini";
+import { DEFAULT_PROFILE, profileHash, profilePromptContext } from "@/lib/profile";
 
 const day = 86_400_000;
 const now = Date.now();
@@ -47,8 +50,9 @@ const demoItems: DemoItem[] = [
 ];
 
 async function main() {
-  console.log("Wiping pantry_items…");
+  console.log("Wiping pantry_items and impact_events…");
   await db.delete(pantryItems);
+  await db.delete(impactEvents);
 
   console.log(`Inserting ${demoItems.length} demo pantry items…`);
   await db.insert(pantryItems).values(
@@ -63,7 +67,80 @@ async function main() {
     }))
   );
 
-  console.log("Demo pantry ready.");
+  if (!process.env.GEMINI_API_KEY) {
+    console.warn("GEMINI_API_KEY not set — skipping recipe + roast cache warm-up.");
+    console.log("Demo pantry ready (no cache).");
+    return;
+  }
+
+  // --- Pre-cache recipe for dying / expired items ---
+  const dyingItems = demoItems.filter((i) => {
+    const days = Math.floor((i.expiryDate.getTime() - now) / day);
+    return days <= 3;
+  });
+  const dyingNames = dyingItems.map((i) => i.name);
+
+  console.log(`Pre-caching recipe for: ${dyingNames.join(", ")}`);
+  const profile = DEFAULT_PROFILE;
+  const pHash = profileHash(profile);
+  const recipeHash = ingredientsHash(dyingNames) + (pHash ? `:${pHash}` : "");
+
+  try {
+    const recipe = await generateRecipe(dyingNames, profilePromptContext(profile));
+    db.insert(recipesCache)
+      .values({ ingredientsHash: recipeHash, recipeJson: JSON.stringify(recipe) })
+      .onConflictDoUpdate({ target: recipesCache.ingredientsHash, set: { recipeJson: JSON.stringify(recipe) } })
+      .run();
+    console.log(`Recipe cached: "${recipe.title}"`);
+  } catch (err) {
+    console.error("Recipe cache warm-up failed:", err);
+  }
+
+  // --- Pre-generate Fridgey roast and cache it ---
+  console.log("Generating Fridgey roast…");
+  const pantryContext = demoItems
+    .slice()
+    .sort((a, b) => a.expiryDate.getTime() - b.expiryDate.getTime())
+    .map((item) => {
+      const days = Math.floor((item.expiryDate.getTime() - now) / day);
+      const status =
+        days < 0 ? "EXPIRED" : days <= 3 ? `DYING (${days}d left)` : `${days}d left`;
+      return `- ${item.name}: ${item.qty} ${item.unit}, ${item.storageLocation}, ${status}`;
+    })
+    .join("\n");
+
+  const systemPrompt = `You are Fridgey — a self-aware refrigerator with a dry, slightly cold wit. You've been watching everything inside you for days and you have opinions. You know every item in the fridge and pantry, their expiry status, and you're mildly (but affectionately) judgmental when things are about to go bad.
+
+Personality: sardonic but warm. Like a fridge that's seen too much but still wants to help. Never mean — just honest. You can make the occasional cold/chill/ice pun but don't overdo it.
+
+Keep replies SHORT — 2–3 sentences max unless giving a recipe. When giving a recipe: dish name, numbered steps (max 8 words each), then "Saves: [items]".
+
+Always prioritize DYING items (≤3 days) when suggesting what to cook. If something expired, you can gently roast the user about it.
+${profilePromptContext(profile)}
+Current contents:
+${pantryContext}`;
+
+  try {
+    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+    const response = await ai.models.generateContent({
+      model: "gemini-3.1-flash-lite-preview",
+      contents: [{ role: "user", parts: [{ text: "Roast my pantry." }] }],
+      config: { systemInstruction: systemPrompt },
+    });
+    const roast = response.text ?? "I've seen better fridges. Honestly.";
+    db.insert(recipesCache)
+      .values({ ingredientsHash: "__fridgey_roast__", recipeJson: JSON.stringify({ reply: roast }) })
+      .onConflictDoUpdate({
+        target: recipesCache.ingredientsHash,
+        set: { recipeJson: JSON.stringify({ reply: roast }) },
+      })
+      .run();
+    console.log(`Fridgey roast cached: "${roast.slice(0, 80)}…"`);
+  } catch (err) {
+    console.error("Fridgey roast generation failed:", err);
+  }
+
+  console.log("Demo seed complete.");
 }
 
 main().catch((err) => {

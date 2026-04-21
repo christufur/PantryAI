@@ -4,6 +4,8 @@
 
 import { ApiError, GoogleGenAI, Type } from "@google/genai";
 
+export const GEMINI_MODEL_RESPONSE_HEADER = "x-gemini-model";
+
 function sleep(ms: number) {
   return new Promise((r) => setTimeout(r, ms));
 }
