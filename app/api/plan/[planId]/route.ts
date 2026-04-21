@@ -2,10 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { mealsPlanned, localSwaps, pantryItems } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import { fetchNearbyLocalOutlets } from "@/lib/usda";
+import { fetchNearbyLocalOutlets, ABQ_DEFAULT_ZIP } from "@/lib/usda";
 import { reconcileShoppingList } from "@/lib/shopping";
 
-const DEFAULT_ZIP = "87102";
+
 
 type Ingredient = { name: string; qty: number; unit: string };
 
@@ -27,7 +27,6 @@ export async function GET(
     return NextResponse.json({ error: "Plan not found" }, { status: 404 });
   }
 
-  // Group rows into days → meals structure
   const dayMap = new Map<number, { dayIndex: number; meals: object[] }>();
   const allNeedsToBuy: Ingredient[] = [];
 
@@ -48,7 +47,6 @@ export async function GET(
     });
   }
 
-  // Deduplicate shopping list
   const seen = new Set<string>();
   const dedupedList = allNeedsToBuy.filter((item) => {
     if (seen.has(item.name.toLowerCase())) return false;
@@ -56,14 +54,12 @@ export async function GET(
     return true;
   });
 
-  // Reconcile against current pantry — drop/reduce items the user already has
   const currentPantry = db
     .select({ name: pantryItems.name, qty: pantryItems.qty, unit: pantryItems.unit })
     .from(pantryItems)
     .all();
   const shoppingList = reconcileShoppingList(dedupedList, currentPantry);
 
-  // Enrich with local swaps
   const allSwaps = db.select().from(localSwaps).all();
   const enrichedList = shoppingList.map((item) => {
     const swap = allSwaps.find(
@@ -83,7 +79,7 @@ export async function GET(
       : item;
   });
 
-  const nearbyOutlets = await fetchNearbyLocalOutlets(DEFAULT_ZIP);
+  const nearbyOutlets = await fetchNearbyLocalOutlets(ABQ_DEFAULT_ZIP);
 
   return NextResponse.json({
     planId: id,

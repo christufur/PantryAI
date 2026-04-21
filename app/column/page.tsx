@@ -1,15 +1,11 @@
-import { db } from "@/lib/db";
+import { db, ensureSqliteSchema } from "@/lib/db";
 import { pantryItems } from "@/db/schema";
 import { asc } from "drizzle-orm";
 import ExpiryColumn from "@/components/ExpiryColumn";
 
-// Var 02 — The Expiry Column. Server shell loads pantry, client component
-// renders the timeline + threshold slider.
 export default function ColumnPage() {
-  let items: (typeof pantryItems.$inferSelect)[] = [];
-  try {
-    items = db.select().from(pantryItems).orderBy(asc(pantryItems.expiryDate)).all();
-  } catch {}
+  ensureSqliteSchema();
+  const items = db.select().from(pantryItems).orderBy(asc(pantryItems.expiryDate)).all();
 
   const now = Date.now();
   const data = items.map((i) => ({

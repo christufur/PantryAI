@@ -1,7 +1,3 @@
-// Single Gemini client + three task-specific functions.
-// Uses @google/genai (the current SDK; @google/generative-ai is deprecated).
-// Model: gemini-3.1-flash-lite-preview — low-cost multimodal model with higher rate limits.
-
 import { ApiError, GoogleGenAI, Type } from "@google/genai";
 
 function sleep(ms: number) {
@@ -74,7 +70,6 @@ function client() {
   return new GoogleGenAI({ apiKey });
 }
 
-// ---------- 1. Vision: pantry photo → structured items ----------
 
 export type IdentifiedItem = {
   name: string;
@@ -147,7 +142,6 @@ Ignore non-food items.`;
   }, { maxAttempts: 3, baseDelayMs: 400 });
 }
 
-// ---------- 2. Weekly plan: calorie target + pantry → B/L/D for N days ----------
 
 export type PantrySnapshot = {
   name: string;
@@ -272,7 +266,6 @@ Return strict JSON matching the schema.`;
   }, { maxAttempts: 3, baseDelayMs: 500 });
 }
 
-// ---------- 2b. Fill specific day(s): pantry + calorie target → meals for given dayIndices ----------
 
 const fillDaysSchema = {
   type: Type.OBJECT,
@@ -359,7 +352,6 @@ Return strict JSON matching the schema.`;
   }, { maxAttempts: 3, baseDelayMs: 400 });
 }
 
-// ---------- 3. Recipe for a single item / ingredient set ----------
 
 export type Recipe = {
   title: string;
