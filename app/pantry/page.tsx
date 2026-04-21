@@ -1,32 +1,27 @@
-import { db } from "@/lib/db";
+import { db, ensureSqliteSchema } from "@/lib/db";
 import { pantryItems, impactEvents } from "@/db/schema";
 import { asc } from "drizzle-orm";
 import PantryViewSwitcher, { type PlainItem } from "@/components/PantryViewSwitcher";
 import { computeImpact, type ImpactTotals } from "@/lib/impact";
 
 export default function PantryPage() {
-  let items: PlainItem[] = [];
-  let impact: ImpactTotals = { itemsRescued: 0, dollarsSaved: 0, lbsSaved: 0, co2Lbs: 0, gallonsSaved: 0 };
-  try {
-    const events = db.select().from(impactEvents).all();
-    impact = computeImpact(events.map(e => ({ category: e.category, qty: e.qty, unit: e.unit })));
-  } catch {}
-  try {
-    const rows = db.select().from(pantryItems).orderBy(asc(pantryItems.expiryDate)).all();
-    items = rows.map((r) => ({
-      id: r.id,
-      name: r.name,
-      category: r.category,
-      qty: r.qty,
-      unit: r.unit,
-      storageLocation: r.storageLocation,
-      expiryDate:
-        r.expiryDate instanceof Date
-          ? Math.floor(r.expiryDate.getTime() / 1000)
-          : Number(r.expiryDate),
-      isLocal: r.isLocal,
-    }));
-  } catch {}
+  ensureSqliteSchema();
+  const events = db.select().from(impactEvents).all();
+  const impact: ImpactTotals = computeImpact(events.map(e => ({ category: e.category, qty: e.qty, unit: e.unit })));
+  const rows = db.select().from(pantryItems).orderBy(asc(pantryItems.expiryDate)).all();
+  const items: PlainItem[] = rows.map((r) => ({
+    id: r.id,
+    name: r.name,
+    category: r.category,
+    qty: r.qty,
+    unit: r.unit,
+    storageLocation: r.storageLocation,
+    expiryDate:
+      r.expiryDate instanceof Date
+        ? Math.floor(r.expiryDate.getTime() / 1000)
+        : Number(r.expiryDate),
+    isLocal: r.isLocal,
+  }));
 
   const serverNow = Date.now();
   const dying = items.filter(

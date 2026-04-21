@@ -1,6 +1,6 @@
 import { ApiError } from "@google/genai";
 import { NextRequest, NextResponse } from "next/server";
-import { db, ensureSqliteSchema, getSqlitePath } from "@/lib/db";
+import { db, ensureSqliteSchema, getSqlitePath, sqliteMissingTableHint } from "@/lib/db";
 import { pantryItems, shelfLife, localSwaps } from "@/db/schema";
 import { and, eq } from "drizzle-orm";
 import {
@@ -9,20 +9,9 @@ import {
   getDemoPhotoIdentifiedItems,
 } from "@/lib/demo-photo-mock";
 import { GEMINI_MODEL_RESPONSE_HEADER, identifyPantryItems } from "@/lib/gemini";
+import { type StorageLocation, VALID_LOCATIONS } from "@/lib/storage";
 
 export const runtime = "nodejs";
-
-type StorageLocation = "fridge" | "freezer" | "pantry";
-
-function sqliteMissingTableHint(e: unknown): boolean {
-  return e instanceof Error && e.message.includes("no such table");
-}
-
-const VALID_LOCATIONS: ReadonlySet<StorageLocation> = new Set([
-  "fridge",
-  "freezer",
-  "pantry",
-]);
 
 // Fallback when the user doesn't specify (e.g. if the form field is dropped).
 function inferStorageLocation(category: string): StorageLocation {
@@ -88,7 +77,6 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    // Pre-fetch for matching (avoids N+1 queries in the loop)
     const allSwaps = db.select().from(localSwaps).all();
     const existingItems = db
       .select({ id: pantryItems.id, name: pantryItems.name, qty: pantryItems.qty, expiryDate: pantryItems.expiryDate })
@@ -103,14 +91,12 @@ export async function POST(request: NextRequest) {
 
       const itemNameLower = item.name.toLowerCase();
 
-      // Match against NM local producer list (contains check both ways)
       const matchedSwap = allSwaps.find(
         (s) =>
           itemNameLower.includes(s.genericName.toLowerCase()) ||
           s.genericName.toLowerCase().includes(itemNameLower)
       );
 
-      // Deduplicate: if an item with the same name already exists, increment qty
       const duplicate = existingItems.find((e) => e.name.toLowerCase() === itemNameLower);
 
       if (duplicate) {

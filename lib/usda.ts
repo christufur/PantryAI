@@ -1,5 +1,4 @@
 // USDA Local Food Portal API wrapper.
-// Mirror of lib/gemini.ts in style.
 // API key: USDA_LOCALFOOD_API_KEY in .env.local
 // Docs: https://www.usdalocalfoodportal.com/
 
@@ -96,10 +95,7 @@ export async function fetchNearbyLocalOutlets(
 
   const cacheKey = `${zip}:${radiusMi}`;
   const hit = cache.get(cacheKey);
-  if (hit && hit.expiresAt > Date.now()) {
-    console.log("[usda] cache hit");
-    return hit.data;
-  }
+  if (hit && hit.expiresAt > Date.now()) return hit.data;
 
   const settled = await Promise.allSettled(
     DIRECTORIES.map(({ endpoint, kind }) =>

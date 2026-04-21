@@ -1,22 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db, ensureSqliteSchema, getSqlitePath } from "@/lib/db";
+import { db, ensureSqliteSchema, getSqlitePath, sqliteMissingTableHint } from "@/lib/db";
 import { pantryItems, shelfLife } from "@/db/schema";
 import { and, eq } from "drizzle-orm";
 import { fetchOpenFoodFactsProduct } from "@/lib/openfoodfacts";
+import { type StorageLocation, VALID_LOCATIONS } from "@/lib/storage";
 
 export const runtime = "nodejs";
-
-type StorageLocation = "fridge" | "freezer" | "pantry";
-
-function sqliteMissingTableHint(e: unknown): boolean {
-  return e instanceof Error && e.message.includes("no such table");
-}
-
-const VALID_LOCATIONS: ReadonlySet<StorageLocation> = new Set([
-  "fridge",
-  "freezer",
-  "pantry",
-]);
 
 function normalizeBarcode(raw: string): string | null {
   const digits = raw.replace(/\D/g, "");

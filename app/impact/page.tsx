@@ -1,13 +1,11 @@
-import { db } from "@/lib/db";
+import { db, ensureSqliteSchema } from "@/lib/db";
 import { impactEvents } from "@/db/schema";
 import { computeImpact } from "@/lib/impact";
 
 export default function ImpactPage() {
-  let totals = { itemsRescued: 0, dollarsSaved: 0, lbsSaved: 0, co2Lbs: 0, gallonsSaved: 0 };
-  try {
-    const events = db.select().from(impactEvents).all();
-    totals = computeImpact(events.map(e => ({ category: e.category, qty: e.qty, unit: e.unit })));
-  } catch {}
+  ensureSqliteSchema();
+  const events = db.select().from(impactEvents).all();
+  const totals = computeImpact(events.map(e => ({ category: e.category, qty: e.qty, unit: e.unit })));
 
   const fmt = (n: number, decimals = 0) =>
     n.toLocaleString("en-US", { maximumFractionDigits: decimals });

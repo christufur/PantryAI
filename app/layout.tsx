@@ -70,7 +70,6 @@ export default function RootLayout({
             {`if(typeof navigator!=='undefined'&&'serviceWorker'in navigator&&location.protocol==='https:'){navigator.serviceWorker.register('/sw.js',{scope:'/'}).catch(function(){})}`}
           </Script>
         ) : null}
-        {/* Utility bar */}
         <div className="utility-bar" style={{
           background: '#000', color: '#fff',
           padding: '14px 40px',
@@ -108,7 +107,6 @@ export default function RootLayout({
           </div>
         </div>
 
-        {/* Masthead — desktop only */}
         <div className="masthead" style={{
           padding: '48px 40px 36px',
           borderBottom: '2px solid #000',
@@ -148,7 +146,6 @@ export default function RootLayout({
           </div>
         </div>
 
-        {/* Page content — add bottom padding on mobile for the tab bar */}
         <div className="page-content">
           {children}
         </div>

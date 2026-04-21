@@ -3,10 +3,10 @@ import { db } from "@/lib/db";
 import { pantryItems, localSwaps, mealsPlanned } from "@/db/schema";
 import { GEMINI_MODEL_RESPONSE_HEADER, generateWeeklyPlan, type PantrySnapshot } from "@/lib/gemini";
 import { desc, sql } from "drizzle-orm";
-import { fetchNearbyLocalOutlets } from "@/lib/usda";
+import { fetchNearbyLocalOutlets, ABQ_DEFAULT_ZIP } from "@/lib/usda";
 import { loadProfile, profilePromptContext } from "@/lib/profile";
 
-const DEFAULT_ZIP = "87102";
+
 
 export async function POST(request: NextRequest) {
   const { numDays, calorieTarget, weekStart, mealIdeas } = await request.json();
@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
 
   const [{ plan, model: geminiModel }, nearbyOutlets] = await Promise.all([
     generateWeeklyPlan(numDays ?? 7, calorieTarget ?? 2000, pantry, mealIdeas ?? [], profileCtx),
-    fetchNearbyLocalOutlets(DEFAULT_ZIP),
+    fetchNearbyLocalOutlets(ABQ_DEFAULT_ZIP),
   ]);
 
   const allSwaps = db.select().from(localSwaps).all();

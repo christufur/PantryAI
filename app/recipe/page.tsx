@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { db } from "@/lib/db";
+import { db, ensureSqliteSchema } from "@/lib/db";
 import { pantryItems } from "@/db/schema";
 import { asc } from "drizzle-orm";
 import IngredientPicker, { type PickerItem } from "@/components/IngredientPicker";
@@ -10,10 +10,8 @@ import IngredientPicker, { type PickerItem } from "@/components/IngredientPicker
  * this component name for the heavy AI branch (avoids dev `Performance.measure` glitch).
  */
 export default async function RecipePage() {
-  let pantry: (typeof pantryItems.$inferSelect)[] = [];
-  try {
-    pantry = db.select().from(pantryItems).orderBy(asc(pantryItems.expiryDate)).all();
-  } catch {}
+  ensureSqliteSchema();
+  const pantry = db.select().from(pantryItems).orderBy(asc(pantryItems.expiryDate)).all();
 
   const now = Date.now();
   const pickerItems: PickerItem[] = pantry.map((p) => ({

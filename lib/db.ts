@@ -100,9 +100,9 @@ export function ensureSqliteSchema() {
   applyBaselineSchema(openOrReuseSqlite());
 }
 
-/** @deprecated alias for ensureSqliteSchema */
-export function ensureShelfLifeTable() {
-  ensureSqliteSchema();
+/** Returns true when a SQLite error is caused by a missing table (schema not yet applied). */
+export function sqliteMissingTableHint(e: unknown): boolean {
+  return e instanceof Error && e.message.includes("no such table");
 }
 
 /** Path of the DB file actually opened (not only what resolve would pick). */

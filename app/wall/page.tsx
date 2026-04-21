@@ -1,4 +1,4 @@
-import { db } from "@/lib/db";
+import { db, ensureSqliteSchema } from "@/lib/db";
 import { pantryItems, mealsPlanned, recipesCache } from "@/db/schema";
 import { asc, desc, eq, sql } from "drizzle-orm";
 import Link from "next/link";
@@ -13,11 +13,9 @@ function formatShort(value: unknown): string {
 }
 
 export default async function WallPage() {
+  ensureSqliteSchema();
   // ---- Pantry + dying ----
-  let items: (typeof pantryItems.$inferSelect)[] = [];
-  try {
-    items = db.select().from(pantryItems).orderBy(asc(pantryItems.expiryDate)).all();
-  } catch {}
+  const items = db.select().from(pantryItems).orderBy(asc(pantryItems.expiryDate)).all();
   const now = Date.now();
   const daysUntil = (d: Date) => Math.floor((d.getTime() - now) / 86_400_000);
   const dying = items.filter((i) => daysUntil(i.expiryDate) <= 3);
@@ -25,22 +23,20 @@ export default async function WallPage() {
   // ---- Active plan = most recent planId ----
   let activePlanId: number | null = null;
   let activeRows: (typeof mealsPlanned.$inferSelect)[] = [];
-  try {
-    const latest = db
-      .select({ planId: mealsPlanned.planId })
+  const latest = db
+    .select({ planId: mealsPlanned.planId })
+    .from(mealsPlanned)
+    .orderBy(desc(mealsPlanned.planId))
+    .limit(1)
+    .get();
+  if (latest) {
+    activePlanId = latest.planId;
+    activeRows = db
+      .select()
       .from(mealsPlanned)
-      .orderBy(desc(mealsPlanned.planId))
-      .limit(1)
-      .get();
-    if (latest) {
-      activePlanId = latest.planId;
-      activeRows = db
-        .select()
-        .from(mealsPlanned)
-        .where(eq(mealsPlanned.planId, latest.planId))
-        .all();
-    }
-  } catch {}
+      .where(eq(mealsPlanned.planId, latest.planId))
+      .all();
+  }
 
   const weekStart = activeRows[0]?.weekStart ?? null;
   const dayMap = new Map<number, DayData>();
@@ -116,16 +112,13 @@ export default async function WallPage() {
   }
 
   // ---- Past plans (exclude active) ----
-  let pastPlans: { planId: number; weekStart: unknown; mealCount: number }[] = [];
-  try {
-    const allPlans = db
-      .select({ planId: mealsPlanned.planId, weekStart: mealsPlanned.weekStart, mealCount: sql<number>`count(*)` })
-      .from(mealsPlanned)
-      .groupBy(mealsPlanned.planId)
-      .orderBy(sql`${mealsPlanned.planId} DESC`)
-      .all();
-    pastPlans = allPlans.filter((p) => p.planId !== activePlanId).slice(0, 3);
-  } catch {}
+  const allPlans = db
+    .select({ planId: mealsPlanned.planId, weekStart: mealsPlanned.weekStart, mealCount: sql<number>`count(*)` })
+    .from(mealsPlanned)
+    .groupBy(mealsPlanned.planId)
+    .orderBy(sql`${mealsPlanned.planId} DESC`)
+    .all();
+  const pastPlans = allPlans.filter((p) => p.planId !== activePlanId).slice(0, 3);
 
   const ctaHref = todayDinner
     ? `/plan/${activePlanId}/shopping`
@@ -161,8 +154,6 @@ export default async function WallPage() {
           {new Date().toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric" })}
         </span>
       </div>
-
-
 
       <div style={{ maxWidth: 1400, margin: "0 auto", padding: "32px" }} className="wall-container">
         {/* Action bar */}
