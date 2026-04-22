@@ -263,3 +263,102 @@ body {
     font-size: 34px !important;
   }
 }
+
+/* —— Root layout shell (layout.tsx)
+   Keep chrome styles in CSS instead of large inline `style` objects. Browser extensions
+   (e.g. Dark Reader) that rewrite inline styles / inject data attributes can desync
+   server HTML with React’s client pass and trigger hydration warnings. */
+.utility-bar {
+  background: #000;
+  color: #fff;
+  padding: 14px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.utility-bar .util-nav {
+  display: flex;
+  gap: 28px;
+}
+.utility-bar-logo {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.utility-bar-logo .brand-tld {
+  color: #888;
+  font-weight: 400;
+}
+.utility-bar-navlink {
+  color: #fff;
+  text-decoration: none;
+}
+.utility-bar-navlink--impact {
+  color: #c8102e;
+  font-weight: 700;
+}
+.utility-bar-navlink--settings {
+  color: #888;
+  text-decoration: none;
+}
+.fridge-ico--bar {
+  flex-shrink: 0;
+}
+.fridge-ico--bar .ico-body {
+  fill: currentColor;
+}
+.fridge-ico--bar .ico-cut {
+  fill: #000;
+}
+.masthead {
+  padding: 48px 40px 36px;
+  border-bottom: 2px solid #000;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+.masthead-brand {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.fridge-ico--masthead {
+  flex-shrink: 0;
+}
+.fridge-ico--masthead .ico-body {
+  fill: #0a0a0a;
+}
+.fridge-ico--masthead .ico-cut {
+  fill: #fafaf7;
+}
+.masthead-name {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 72px;
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  color: #000;
+}
+.masthead-name .brand-tld {
+  color: var(--caption);
+  font-weight: 400;
+}
+.masthead-tagline {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--caption);
+  line-height: 1.9;
+  text-align: right;
+}
