@@ -58,7 +58,7 @@ export default async function RecipePage() {
             fontFamily: "var(--font-body)", fontSize: "var(--text-md)",
             color: 'var(--caption)', margin: 0,
           }}>
-            Pick the ingredients you want to use. Dying items are pre-selected.
+            Pick the ingredients you want to use. Expiring items are pre-selected.
           </p>
         </div>
 

@@ -63,7 +63,7 @@ export default function ShelvesPage() {
         <span>
           PANTRY · {shelfSectionCount} SHELVES · {items.length} ITEMS
         </span>
-        {dyingCount > 0 && <span style={{ color: "#c8102e" }}>⚠ {dyingCount} DYING</span>}
+        {dyingCount > 0 && <span style={{ color: "#c8102e" }}>⚠ {dyingCount} EXPIRING</span>}
       </div>
 
       <div style={{ maxWidth: 1200, margin: "0 auto", padding: "32px" }} className="shelves-container">

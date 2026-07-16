@@ -72,7 +72,7 @@ export default function IngredientPicker({
             onClick={selectDying}
             style={chipStyle(true)}
           >
-            ⚠ USE WHAT&apos;S DYING ({dyingCount})
+            ⚠ USE WHAT&apos;S EXPIRING ({dyingCount})
           </button>
         )}
         <button onClick={selectAll} style={chipStyle(false)}>

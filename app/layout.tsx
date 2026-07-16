@@ -21,11 +21,11 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: "pantry.ai",
-  description: "Vision-model pantry tracker. Sort: dying first. Zero waste.",
+  description: "Vision-model pantry tracker. Sort: expiring first. Zero waste.",
   applicationName: "pantry.ai",
   openGraph: {
     title: "pantry.ai",
-    description: "Vision-model pantry tracker. Sort: dying first. Zero waste.",
+    description: "Vision-model pantry tracker. Sort: expiring first. Zero waste.",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
   },
   twitter: {
@@ -123,7 +123,7 @@ export default function RootLayout({
           </Link>
           <div className="masthead-tagline">
             VISION-MODEL PANTRY TRACKER<br />
-            SORT: DYING FIRST · ZERO WASTE
+            SORT: EXPIRING FIRST · ZERO WASTE
           </div>
         </div>
 

@@ -65,7 +65,7 @@ export default function NotifyButton({ compact = false }: { compact?: boolean })
       const res = await fetch("/api/notify");
       const data: { dyingCount: number; names: string[] } = await res.json();
       if (data.dyingCount > 0) {
-        const title = `🧊 Fridgey: ${data.dyingCount} item${data.dyingCount > 1 ? "s" : ""} dying soon`;
+        const title = `🧊 Fridgey: ${data.dyingCount} item${data.dyingCount > 1 ? "s" : ""} expiring soon`;
         const body = data.names.join(", ") + " — cook or donate before it's too late.";
         await showNotification(title, body);
         localStorage.setItem(LAST_NOTIFIED_KEY, String(Date.now()));

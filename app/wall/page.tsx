@@ -191,10 +191,10 @@ export default async function WallPage() {
             {tonight
               ? tonight.fromPlan
                 ? tonight.saves && tonight.saves.length > 0
-                  ? `TONIGHT · FROM YOUR PLAN · RESCUES ${tonight.saves.length} DYING`
+                  ? `TONIGHT · FROM YOUR PLAN · RESCUES ${tonight.saves.length} EXPIRING`
                   : "TONIGHT · FROM YOUR PLAN"
-                : `TONIGHT · SAVES ${tonight.saves?.length ?? dying.length} DYING · ${tonight.timeMinutes ?? 25} MIN`
-              : "TONIGHT · NOTHING DYING"}
+                : `TONIGHT · SAVES ${tonight.saves?.length ?? dying.length} EXPIRING · ${tonight.timeMinutes ?? 25} MIN`
+              : "TONIGHT · NOTHING EXPIRING"}
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "1fr 240px", gap: 32, alignItems: "end" }} className="wall-tonight-grid">
@@ -236,7 +236,7 @@ export default async function WallPage() {
               fontFamily: "var(--font-ui)", fontSize: 11, fontWeight: 700,
               textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--caption)", marginBottom: 12,
             }} className="plan-dying-heading">
-              DYING SOON
+              EXPIRING SOON
               {dying.length > 0 && (
                 <span className="plan-dying-count" style={{ marginLeft: 8, color: "#c8102e", fontWeight: 700 }}>
                   ({dying.length})

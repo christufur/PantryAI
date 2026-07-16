@@ -248,7 +248,7 @@ export default function ExpiryColumn({ items }: { items: ColumnItem[] }) {
             textTransform: "uppercase", letterSpacing: "0.12em",
             color: "var(--caption)", marginBottom: 8,
           }}>
-            COOK USING · THINGS DYING IN
+            COOK USING · THINGS EXPIRING IN
           </div>
           <div style={{
             fontFamily: "var(--font-display)",
@@ -309,7 +309,7 @@ export default function ExpiryColumn({ items }: { items: ColumnItem[] }) {
 
           {above.length === 0 ? (
             <div style={{ fontFamily: "var(--font-body)", fontSize: 14, color: "var(--caption)" }}>
-              Nothing dying within {aboveLabel}. Slide the rule up.
+              Nothing expiring within {aboveLabel}. Slide the rule up.
             </div>
           ) : (
             <>

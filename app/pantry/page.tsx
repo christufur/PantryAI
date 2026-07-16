@@ -50,7 +50,7 @@ export default function PantryPage() {
       >
         <span>PANTRY · {items.length} ITEMS</span>
         {dying.length > 0 && (
-          <span style={{ color: "#c8102e" }}>⚠ {dying.length} DYING</span>
+          <span style={{ color: "#c8102e" }}>⚠ {dying.length} EXPIRING</span>
         )}
       </div>
 

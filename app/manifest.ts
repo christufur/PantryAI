@@ -10,7 +10,7 @@ export default function manifest(): MetadataRoute.Manifest {
     id: "/",
     name: "pantry.ai",
     short_name: "pantry.ai",
-    description: "Vision-model pantry tracker. Sort: dying first. Zero waste.",
+    description: "Vision-model pantry tracker. Sort: expiring first. Zero waste.",
     start_url: "/",
     scope: "/",
     display: "standalone",

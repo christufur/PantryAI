@@ -382,7 +382,7 @@ export default function PantryKitchenBoard({
                   </div>
                 </div>
                 <div style={{ borderBottom: "1px solid var(--hairline)", paddingBottom: 8 }}>
-                  <span style={{ color: "var(--caption)" }}>Dying ≤3d</span>
+                  <span style={{ color: "var(--caption)" }}>Expiring ≤3d</span>
                   <div
                     style={{
                       fontSize: "var(--text-step)",

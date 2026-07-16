@@ -54,7 +54,7 @@ export default function Home() {
         flexWrap: "wrap", gap: 8,
       }} className="ribbon">
         <span>PANTRY · {items.length} ITEMS</span>
-        {dying.length > 0 && <span style={{ color: "#c8102e" }}>⚠ {dying.length} DYING</span>}
+        {dying.length > 0 && <span style={{ color: "#c8102e" }}>⚠ {dying.length} EXPIRING</span>}
       </div>
 
       <div className="pantry-main-below-ribbon">

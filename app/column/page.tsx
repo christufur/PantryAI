@@ -39,7 +39,7 @@ export default function ColumnPage() {
         className="ribbon"
       >
         <span>EXPIRY COLUMN · {data.length} ITEMS PLOTTED BY DAYS-LEFT</span>
-        {dyingCount > 0 && <span style={{ color: "#c8102e" }}>⚠ {dyingCount} DYING</span>}
+        {dyingCount > 0 && <span style={{ color: "#c8102e" }}>⚠ {dyingCount} EXPIRING</span>}
       </div>
 
       <div style={{ maxWidth: 1200, margin: "0 auto", padding: "32px" }} className="column-container">
@@ -78,7 +78,7 @@ export default function ColumnPage() {
             maxWidth: 560,
           }}
         >
-          Today at top, safe at the bottom. Slide the threshold to define <em>dying</em>, then ask
+          Today at top, safe at the bottom. Slide the threshold to define <em>expiring</em>, then ask
           Pepper for one recipe that uses everything above the line.
         </div>
 
