@@ -27,8 +27,8 @@ Snap a photo of your fridge → Gemini vision identifies every item → the app 
 **Prerequisites:** Node 20+, npm
 
 ```bash
-git clone https://github.com/christufur/DesertDevHackathon.git
-cd DesertDevHackathon
+git clone https://github.com/christufur/PantryAI.git
+cd PantryAI
 npm install
 ```
 
