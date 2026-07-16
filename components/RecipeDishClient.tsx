@@ -8,10 +8,6 @@ import type { BuyLocalEntry } from "@/lib/recipe-buy-local";
 
 type ApiPayload = Recipe & { buyLocal: BuyLocalEntry[] };
 
-/**
- * Loads the recipe via `/api/recipe` on the client so the RSC shell returns immediately.
- * Long Gemini calls no longer block the server component (avoids dev Performance.measure glitches).
- */
 export default function RecipeDishClient({
   ingredientsParam,
   bust,

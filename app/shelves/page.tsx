@@ -1,22 +1,16 @@
-import { db } from "@/lib/db";
+import { db, ensureSqliteSchema } from "@/lib/db";
 import { pantryItems } from "@/db/schema";
 import { asc } from "drizzle-orm";
 import Link from "next/link";
 import ShelvesDragGrid from "@/components/ShelvesDragGrid";
 
-// Var 03 — Shelves. Group inventory by storage_location and render each
-// item as a labeled rectangle on a literal shelf. Dying items shift to red.
-// Tap an item → recipe scoped to that ingredient.
 export default function ShelvesPage() {
-  let items: (typeof pantryItems.$inferSelect)[] = [];
-  try {
-    items = db.select().from(pantryItems).orderBy(asc(pantryItems.expiryDate)).all();
-  } catch {}
+  ensureSqliteSchema();
+  const items = db.select().from(pantryItems).orderBy(asc(pantryItems.expiryDate)).all();
 
   const now = Date.now();
   const daysUntil = (d: Date) => Math.floor((d.getTime() - now) / 86_400_000);
 
-  // Stable shelf order. Anything else gets bucketed under "OTHER".
   const order = ["fridge", "freezer", "pantry"] as const;
   const labels: Record<string, string> = {
     fridge: "TOP SHELF · FRIDGE",

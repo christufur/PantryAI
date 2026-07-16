@@ -70,85 +70,63 @@ export default function RootLayout({
             {`if(typeof navigator!=='undefined'&&'serviceWorker'in navigator&&location.protocol==='https:'){navigator.serviceWorker.register('/sw.js',{scope:'/'}).catch(function(){})}`}
           </Script>
         ) : null}
-        {/* Utility bar */}
-        <div className="utility-bar" style={{
-          background: '#000', color: '#fff',
-          padding: '14px 40px',
-          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-          fontFamily: "var(--font-ui)",
-          fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.10em'
-        }}>
-          <Link
-            href="/"
-            style={{
-              color: '#fff',
-              textDecoration: 'none',
-              fontWeight: 700,
-              display: 'flex',
-              alignItems: 'center',
-              gap: 10,
-            }}
-          >
-            {/* Bare fridge mark — no tile bg, body inherits white, cutouts match black nav */}
-            <svg width="22" height="22" viewBox="0 0 120 120" aria-hidden="true" style={{ flexShrink: 0 }}>
-              <rect x="30" y="12" width="60" height="96" rx="12" fill="currentColor"/>
-              <rect x="30" y="46" width="60" height="2" fill="#000"/>
-              <rect x="38" y="20" width="2.5" height="22" rx="1.25" fill="#000"/>
-              <rect x="38" y="52" width="2.5" height="48" rx="1.25" fill="#000"/>
+        {/*
+          suppressHydrationWarning: some browser extensions (e.g. Dark Reader) mutate
+          inline styles / attributes before React hydrates; class-based chrome reduces mismatch.
+        */}
+        <div className="utility-bar" suppressHydrationWarning>
+          <Link className="utility-bar-logo" href="/">
+            {/* Bare fridge mark — cutouts #000 (see .fridge-ico--bar in globals.css) */}
+            <svg
+              className="fridge-ico--bar"
+              width="22"
+              height="22"
+              viewBox="0 0 120 120"
+              aria-hidden="true"
+              suppressHydrationWarning
+            >
+              <rect className="ico-body" x="30" y="12" width="60" height="96" rx="12" />
+              <rect className="ico-cut" x="30" y="46" width="60" height="2" />
+              <rect className="ico-cut" x="38" y="20" width="2.5" height="22" rx="1.25" />
+              <rect className="ico-cut" x="38" y="52" width="2.5" height="48" rx="1.25" />
             </svg>
-            pantry<span style={{ color: '#888', fontWeight: 400 }}>.ai</span>
+            pantry<span className="brand-tld">.ai</span>
           </Link>
-          <div className="util-nav" style={{ display: 'flex', gap: 28 }}>
-            <Link href="/" style={{ color: '#fff', textDecoration: 'none' }}>HOME</Link>
-            <Link href="/wall" style={{ color: '#fff', textDecoration: 'none' }}>PLAN</Link>
-            <Link href="/recipe" style={{ color: '#fff', textDecoration: 'none' }}>COOK</Link>
-            <Link href="/impact" style={{ color: '#c8102e', textDecoration: 'none', fontWeight: 700 }}>IMPACT</Link>
-            <Link href="/chat" style={{ color: '#fff', textDecoration: 'none' }}>ASK THE FRIDGE</Link>
-            <Link href="/settings" style={{ color: '#888', textDecoration: 'none' }}>SETTINGS</Link>
+          <div className="util-nav">
+            <Link className="utility-bar-navlink" href="/">HOME</Link>
+            <Link className="utility-bar-navlink" href="/wall">PLAN</Link>
+            <Link className="utility-bar-navlink" href="/recipe">COOK</Link>
+            <Link className="utility-bar-navlink utility-bar-navlink--impact" href="/impact">IMPACT</Link>
+            <Link className="utility-bar-navlink" href="/chat">ASK THE FRIDGE</Link>
+            <Link className="utility-bar-navlink utility-bar-navlink--settings" href="/settings">SETTINGS</Link>
           </div>
         </div>
 
-        {/* Masthead — desktop only */}
-        <div className="masthead" style={{
-          padding: '48px 40px 36px',
-          borderBottom: '2px solid #000',
-          display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end',
-          gap: 40, flexWrap: 'wrap'
-        }}>
-          <Link
-            href="/"
-            style={{
-              textDecoration: 'none',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 20,
-            }}
-          >
-            <svg width="64" height="64" viewBox="0 0 120 120" aria-hidden="true" style={{ flexShrink: 0 }}>
-              <rect x="30" y="12" width="60" height="96" rx="12" fill="#0a0a0a"/>
-              <rect x="30" y="46" width="60" height="2" fill="#fafaf7"/>
-              <rect x="38" y="20" width="2.5" height="22" rx="1.25" fill="#fafaf7"/>
-              <rect x="38" y="52" width="2.5" height="48" rx="1.25" fill="#fafaf7"/>
+        <div className="masthead" suppressHydrationWarning>
+          <Link className="masthead-brand" href="/">
+            <svg
+              className="fridge-ico--masthead"
+              width="64"
+              height="64"
+              viewBox="0 0 120 120"
+              aria-hidden="true"
+              suppressHydrationWarning
+            >
+              <rect className="ico-body" x="30" y="12" width="60" height="96" rx="12" />
+              <rect className="ico-cut" x="30" y="46" width="60" height="2" />
+              <rect className="ico-cut" x="38" y="20" width="2.5" height="22" rx="1.25" />
+              <rect className="ico-cut" x="38" y="52" width="2.5" height="48" rx="1.25" />
             </svg>
-            <div className="masthead-name" style={{
-              fontFamily: "var(--font-ui)",
-              fontWeight: 700, fontSize: 72, lineHeight: 0.9,
-              letterSpacing: '-0.03em', color: '#000'
-            }}>
-              pantry<span style={{ color: 'var(--caption)', fontWeight: 400 }}>.ai</span>
+            <div className="masthead-name">
+              pantry<span className="brand-tld">.ai</span>
             </div>
           </Link>
-          <div className="masthead-tagline" style={{
-            fontFamily: "var(--font-ui)",
-            fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.12em',
-            color: 'var(--caption)', lineHeight: 1.9, textAlign: 'right'
-          }}>
-            VISION-MODEL PANTRY TRACKER<br/>
+          <div className="masthead-tagline">
+            VISION-MODEL PANTRY TRACKER<br />
             SORT: DYING FIRST · ZERO WASTE
           </div>
         </div>
 
-        {/* Page content — add bottom padding on mobile for the tab bar */}
         <div className="page-content">
           {children}
         </div>
