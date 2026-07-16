@@ -10,7 +10,7 @@ This bundle is the **data + AI layer** for **pantry.ai**, a Next.js 15 + TypeScr
 3. **Donation matching** to ABQ food banks (Roadrunner, Storehouse, Joy Junction, etc.)
 4. **Weekly plan**: user inputs planned meals → LLM sequences them to use expiring pantry items first → generates a shopping list with **local NM producer alternatives** flagged (ties to the judges' "98% of ABQ food is out-of-state" problem statement)
 
-**What this bundle provides:** the Drizzle schema (6 tables), seed JSON for shelf-life / local swaps / donation orgs, the seed runner, and the Gemini wrapper with three functions (`identifyPantryItems`, `generateWeeklyPlan`, `generateRecipe`). API routes and UI pages are **not** included — build those on top per CLAUDE.md's guidelines (simplicity first, surgical changes, goal-driven).
+**What this bundle provides:** the Drizzle schema (6 tables), seed JSON for shelf-life / local swaps / donation orgs, the seed runner, and the Gemini wrapper with three functions (`identifyPantryItems`, `generateWeeklyPlan`, `generateRecipe`). API routes and UI pages are **not** included — build those on top per [CLAUDE.md](../../CLAUDE.md)'s guidelines (simplicity first, surgical changes, goal-driven).
 
 Drop each section into the file path noted in its header.
 

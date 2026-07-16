@@ -157,6 +157,15 @@ lib/
 
 ---
 
+## Project notes
+
+- [Hackathon handoff](docs/hackathon-notes/handoff.md)
+- [Data and AI layer bundle](docs/hackathon-notes/PantryBundle.md)
+- [Circular dependency assessment](docs/hackathon-notes/ASSESSMENT.md)
+- [WSL2 port-proxy guide](docs/development/wsl-port-proxy.md)
+
+---
+
 ## Demo tips
 
 Pre-warm the cache before going on stage — live Gemini on conference Wi-Fi is slow:

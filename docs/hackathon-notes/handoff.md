@@ -11,11 +11,11 @@
 ```bash
 npm install
 npm run db:migrate    # if schema changed: db:generate then migrate
-npm run dev           # http://0.0.0.0:3000 — see CLAUDE.md for WSL/phone/HTTPS
+npm run dev           # http://0.0.0.0:3000 — see ../../CLAUDE.md for WSL/phone/HTTPS
 npm run build && npm start
 ```
 
-Detail (WSL, LAN, HTTPS camera): `**CLAUDE.md**`
+Detail (WSL, LAN, HTTPS camera): [CLAUDE.md](../../CLAUDE.md)
 
 ## Data
 

@@ -9,24 +9,34 @@
 /build
 
 # env files
-.env
-.env.local
-.env.*.local
+.env*
+!.env.example
 
 # database
-sqlite.db
-sqlite.db-shm
-sqlite.db-wal
+*.db
+*.db-*
+*.sqlite
+*.sqlite-*
+*.sqlite3
+*.sqlite3-*
+
+# local certificates and private keys
+certificates/
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
 
 # debug
-npm-debug.log*
+*.log
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
 
+# local tools and notes
 todo.txt
-certificates
+.claude/
 .gstack/
-
-*.md

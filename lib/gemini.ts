@@ -35,9 +35,6 @@ async function withRetry<T>(
 
 const MODEL = "gemini-3.1-flash-lite-preview";
 
-/** HTTP header name for which Gemini model handled the request (used by API routes). */
-export const GEMINI_MODEL_RESPONSE_HEADER = "X-Gemini-Model";
-
 const GEMINI_MODEL_FALLBACKS = [MODEL, "gemini-2.0-flash", "gemini-2.0-flash-lite"] as const;
 
 /**

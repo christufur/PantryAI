@@ -1,6 +1,6 @@
 import { ApiError } from "@google/genai";
 import { NextRequest, NextResponse } from "next/server";
-import { db, ensureSqliteSchema, getSqlitePath, sqliteMissingTableHint } from "@/lib/db";
+import { db, ensureSqliteSchema, sqliteMissingTableHint } from "@/lib/db";
 import { pantryItems, shelfLife, localSwaps } from "@/db/schema";
 import { and, eq } from "drizzle-orm";
 import {
@@ -170,8 +170,7 @@ export async function POST(request: NextRequest) {
     if (sqliteMissingTableHint(e)) {
       return NextResponse.json(
         {
-          error: (e as Error).message,
-          sqlitePath: getSqlitePath(),
+          error: "The pantry database is not initialized.",
           hint: "Stop the dev server, run from project root: npm run db:seed (optional data). If this persists: rm sqlite.db && restart npm run dev (schema is auto-created from db/migrations/0000_*.sql).",
         },
         { status: 500 }
