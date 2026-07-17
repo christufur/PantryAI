@@ -232,7 +232,7 @@ Data model highlights (`db/schema.ts`): `pantry_items`, `shelf_life`, `local_swa
 
 Built at **DesertDev 2026** (Food & Agriculture) by:
 
-**Antonio** · **christufur** · **cmeraz** · **Rupak Dey**
+**Antonio** · **cmeraz** · **Rupak Dey**
 
 ---
 
