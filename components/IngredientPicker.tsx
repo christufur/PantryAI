@@ -20,7 +20,7 @@ export default function IngredientPicker({
 }) {
   const router = useRouter();
 
-  // Pre-select dying items (≤3d) by default if no explicit initial selection.
+  // Pre-select expiring items (≤3d) by default if no explicit initial selection.
   const defaultSelected = useMemo(() => {
     if (initialSelected.length > 0) return new Set(initialSelected);
     return new Set(items.filter((i) => i.daysUntilExpiry <= 3).map((i) => i.name));
@@ -37,7 +37,7 @@ export default function IngredientPicker({
     });
   }
 
-  function selectDying() {
+  function selectExpiring() {
     setSelected(new Set(items.filter((i) => i.daysUntilExpiry <= 3).map((i) => i.name)));
   }
 
@@ -55,24 +55,24 @@ export default function IngredientPicker({
     router.push(`/recipe?ingredients=${encodeURIComponent(param)}`);
   }
 
-  // Sort: dying first (most urgent first), then everything else by expiry.
+  // Sort: expiring first (most urgent first), then everything else by expiry.
   const sorted = useMemo(
     () => [...items].sort((a, b) => a.daysUntilExpiry - b.daysUntilExpiry),
     [items]
   );
 
-  const dyingCount = items.filter((i) => i.daysUntilExpiry <= 3).length;
+  const expiringCount = items.filter((i) => i.daysUntilExpiry <= 3).length;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
       {/* Quick actions */}
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-        {dyingCount > 0 && (
+        {expiringCount > 0 && (
           <button
-            onClick={selectDying}
+            onClick={selectExpiring}
             style={chipStyle(true)}
           >
-            ⚠ USE WHAT&apos;S EXPIRING ({dyingCount})
+            ⚠ USE WHAT&apos;S EXPIRING ({expiringCount})
           </button>
         )}
         <button onClick={selectAll} style={chipStyle(false)}>
@@ -103,7 +103,7 @@ export default function IngredientPicker({
       <div style={{ display: "flex", flexDirection: "column" }}>
         {sorted.map((item) => {
           const isSelected = selected.has(item.name);
-          const isDying = item.daysUntilExpiry <= 3;
+          const isExpiring = item.daysUntilExpiry <= 3;
           const isExpired = item.daysUntilExpiry < 0;
           const dLabel = isExpired
             ? "EXPIRED"
@@ -144,7 +144,7 @@ export default function IngredientPicker({
                     fontWeight: 700,
                     textTransform: "uppercase",
                     letterSpacing: "0.12em",
-                    color: isDying ? "#c8102e" : "var(--caption)",
+                    color: isExpiring ? "#c8102e" : "var(--caption)",
                     marginBottom: 2,
                   }}
                 >
@@ -154,7 +154,7 @@ export default function IngredientPicker({
                   style={{
                     fontFamily: "var(--font-display)",
                     fontSize: "var(--text-md)",
-                    fontWeight: isDying ? 600 : 400,
+                    fontWeight: isExpiring ? 600 : 400,
                     color: "#000",
                     lineHeight: 1.2,
                     display: "flex",

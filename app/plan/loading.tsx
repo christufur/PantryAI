@@ -39,7 +39,7 @@ export default function PlanLoading() {
 
         {/* Bottom grid skeleton */}
         <section className="plan-page-bottom">
-          {/* Dying soon */}
+          {/* Expiring soon */}
           <div>
             <div className="skel" style={{ width: 100, height: 11, marginBottom: 16 }} />
             {[1, 2, 3].map((i) => (

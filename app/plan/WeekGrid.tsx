@@ -74,7 +74,8 @@ export default function WeekGrid({
   function toggleCompleted(mealId: number) {
     setCompleted((prev) => {
       const next = new Set(prev);
-      next.has(mealId) ? next.delete(mealId) : next.add(mealId);
+      if (next.has(mealId)) next.delete(mealId);
+      else next.add(mealId);
       saveCompleted(next);
       return next;
     });

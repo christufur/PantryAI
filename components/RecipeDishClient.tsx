@@ -200,7 +200,7 @@ export default function RecipeDishClient({
             fontWeight: 700,
             textTransform: "uppercase",
             letterSpacing: "0.12em",
-            color: itemsSaved > 0 ? "var(--dying)" : "var(--caption)",
+            color: itemsSaved > 0 ? "var(--expiring)" : "var(--caption)",
             marginBottom: 12,
           }}
         >
@@ -311,7 +311,7 @@ export default function RecipeDishClient({
                   fontFamily: "var(--font-ui)",
                   fontSize: 11,
                   letterSpacing: "0.08em",
-                  color: "var(--dying)",
+                  color: "var(--expiring)",
                 }}
               >
                 SAVES: {savedItems.join(", ")}

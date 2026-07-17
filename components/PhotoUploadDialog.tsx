@@ -701,19 +701,19 @@ export default function PhotoUploadDialog({
 
                 {identifiedItems.map((item, idx) => {
                   const d = getExpiryDays(item);
-                  const dying = d <= 3;
+                  const expiring = d <= 3;
                   return (
                     <div
                       key={item.id ?? `${item.name}-${idx}`}
                       style={{
                         display: "flex",
                         justifyContent: "space-between",
-                        color: dying ? "#c8102e" : "#1a1a1a",
-                        fontWeight: dying ? 700 : 400,
+                        color: expiring ? "#c8102e" : "#1a1a1a",
+                        fontWeight: expiring ? 700 : 400,
                       }}
                     >
                       <span>{item.name.toUpperCase().padEnd(18, ".")}</span>
-                      <span>{d < 0 ? "EXP" : `${d}D`}{dying ? " ⚠" : ""}</span>
+                      <span>{d < 0 ? "EXP" : `${d}D`}{expiring ? " ⚠" : ""}</span>
                     </div>
                   );
                 })}

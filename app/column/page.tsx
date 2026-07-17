@@ -15,7 +15,7 @@ export default function ColumnPage() {
     daysLeft: Math.floor((i.expiryDate.getTime() - now) / 86_400_000),
   }));
 
-  const dyingCount = data.filter((i) => i.daysLeft <= 3).length;
+  const expiringCount = data.filter((i) => i.daysLeft <= 3).length;
 
   return (
     <main style={{ background: "var(--paper)", minHeight: "100vh" }}>
@@ -39,7 +39,7 @@ export default function ColumnPage() {
         className="ribbon"
       >
         <span>EXPIRY COLUMN · {data.length} ITEMS PLOTTED BY DAYS-LEFT</span>
-        {dyingCount > 0 && <span style={{ color: "#c8102e" }}>⚠ {dyingCount} EXPIRING</span>}
+        {expiringCount > 0 && <span style={{ color: "#c8102e" }}>⚠ {expiringCount} EXPIRING</span>}
       </div>
 
       <div style={{ maxWidth: 1200, margin: "0 auto", padding: "32px" }} className="column-container">

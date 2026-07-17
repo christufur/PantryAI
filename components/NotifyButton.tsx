@@ -46,15 +46,15 @@ export default function NotifyButton({ compact = false }: { compact?: boolean })
             body,
             icon: "/icons/icon-192.png",
             badge: "/icons/icon-192.png",
-            tag: "fridgey-dying",
+            tag: "fridgey-expiring",
           });
           return;
         }
       }
       // Fallback: direct Notification API (works in dev / no SW)
-      new Notification(title, { body, icon: "/icons/icon-192.png", tag: "fridgey-dying" });
+      new Notification(title, { body, icon: "/icons/icon-192.png", tag: "fridgey-expiring" });
     } catch {
-      new Notification(title, { body, tag: "fridgey-dying" });
+      new Notification(title, { body, tag: "fridgey-expiring" });
     }
   }
 
@@ -63,9 +63,9 @@ export default function NotifyButton({ compact = false }: { compact?: boolean })
     setChecking(true);
     try {
       const res = await fetch("/api/notify");
-      const data: { dyingCount: number; names: string[] } = await res.json();
-      if (data.dyingCount > 0) {
-        const title = `🧊 Fridgey: ${data.dyingCount} item${data.dyingCount > 1 ? "s" : ""} expiring soon`;
+      const data: { expiringCount: number; names: string[] } = await res.json();
+      if (data.expiringCount > 0) {
+        const title = `🧊 Fridgey: ${data.expiringCount} item${data.expiringCount > 1 ? "s" : ""} expiring soon`;
         const body = data.names.join(", ") + " — cook or donate before it's too late.";
         await showNotification(title, body);
         localStorage.setItem(LAST_NOTIFIED_KEY, String(Date.now()));

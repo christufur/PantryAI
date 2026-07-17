@@ -14,11 +14,11 @@ function formatShort(value: unknown): string {
 
 export default async function WallPage() {
   ensureSqliteSchema();
-  // ---- Pantry + dying ----
+  // ---- Pantry + expiring ----
   const items = db.select().from(pantryItems).orderBy(asc(pantryItems.expiryDate)).all();
   const now = Date.now();
   const daysUntil = (d: Date) => Math.floor((d.getTime() - now) / 86_400_000);
-  const dying = items.filter((i) => daysUntil(i.expiryDate) <= 3);
+  const expiring = items.filter((i) => daysUntil(i.expiryDate) <= 3);
 
   // ---- Active plan = most recent planId ----
   let activePlanId: number | null = null;
@@ -93,12 +93,12 @@ export default async function WallPage() {
 
   if (todayDinner) {
     const pantryNames = todayDinner.usesFromPantry.map((i) => i.name.toLowerCase());
-    const savedDying = dying.filter((d) =>
+    const savedExpiring = expiring.filter((d) =>
       pantryNames.some((n) => d.name.toLowerCase().includes(n) || n.includes(d.name.toLowerCase()))
     );
-    tonight = { title: todayDinner.mealName, saves: savedDying.map((d) => d.name), fromPlan: true };
-  } else if (dying.length > 0) {
-    const seed = dying.slice(0, 4).map((i) => i.name);
+    tonight = { title: todayDinner.mealName, saves: savedExpiring.map((d) => d.name), fromPlan: true };
+  } else if (expiring.length > 0) {
+    const seed = expiring.slice(0, 4).map((i) => i.name);
     try {
       const hash = ingredientsHash(seed);
       const cached = db.select().from(recipesCache).where(eq(recipesCache.ingredientsHash, hash)).get();
@@ -122,10 +122,10 @@ export default async function WallPage() {
 
   const ctaHref = todayDinner
     ? `/plan/${activePlanId}/shopping`
-    : dying.length > 0
-    ? `/recipe?ingredients=${encodeURIComponent(dying.slice(0, 4).map((i) => i.name).join(","))}`
+    : expiring.length > 0
+    ? `/recipe?ingredients=${encodeURIComponent(expiring.slice(0, 4).map((i) => i.name).join(","))}`
     : "/plan/new";
-  const ctaLabel = todayDinner ? "SHOPPING LIST →" : dying.length > 0 ? "START COOKING →" : "GENERATE PLAN →";
+  const ctaLabel = todayDinner ? "SHOPPING LIST →" : expiring.length > 0 ? "START COOKING →" : "GENERATE PLAN →";
   const weekRangeLabel = weekStart ? `WEEK OF ${formatShort(weekStart).toUpperCase()}` : "NO ACTIVE PLAN";
 
   return (
@@ -193,7 +193,7 @@ export default async function WallPage() {
                 ? tonight.saves && tonight.saves.length > 0
                   ? `TONIGHT · FROM YOUR PLAN · RESCUES ${tonight.saves.length} EXPIRING`
                   : "TONIGHT · FROM YOUR PLAN"
-                : `TONIGHT · SAVES ${tonight.saves?.length ?? dying.length} EXPIRING · ${tonight.timeMinutes ?? 25} MIN`
+                : `TONIGHT · SAVES ${tonight.saves?.length ?? expiring.length} EXPIRING · ${tonight.timeMinutes ?? 25} MIN`
               : "TONIGHT · NOTHING EXPIRING"}
           </div>
 
@@ -229,28 +229,28 @@ export default async function WallPage() {
           </div>
         </section>
 
-        {/* DYING SOON · THIS WEEK — same layout as /plan (globals.css .plan-page) */}
+        {/* EXPIRING SOON · THIS WEEK — same layout as /plan (globals.css .plan-page) */}
         <section className="plan-page-bottom">
-          <div className="plan-dying-panel">
+          <div className="plan-expiring-panel">
             <div style={{
               fontFamily: "var(--font-ui)", fontSize: 11, fontWeight: 700,
               textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--caption)", marginBottom: 12,
-            }} className="plan-dying-heading">
+            }} className="plan-expiring-heading">
               EXPIRING SOON
-              {dying.length > 0 && (
-                <span className="plan-dying-count" style={{ marginLeft: 8, color: "#c8102e", fontWeight: 700 }}>
-                  ({dying.length})
+              {expiring.length > 0 && (
+                <span className="plan-expiring-count" style={{ marginLeft: 8, color: "#c8102e", fontWeight: 700 }}>
+                  ({expiring.length})
                 </span>
               )}
             </div>
-            {dying.length === 0 ? (
+            {expiring.length === 0 ? (
               <div style={{ fontFamily: "var(--font-body)", fontSize: "var(--text-md)", color: "var(--caption)" }}>Nothing within 3 days.</div>
             ) : (
-              <div className="plan-dying-list" style={{ borderTop: "2px solid #000" }}>
-                {dying.slice(0, 8).map((it) => {
+              <div className="plan-expiring-list" style={{ borderTop: "2px solid #000" }}>
+                {expiring.slice(0, 8).map((it) => {
                   const d = daysUntil(it.expiryDate);
                   return (
-                    <div key={it.id} className="plan-dying-row" style={{
+                    <div key={it.id} className="plan-expiring-row" style={{
                       borderBottom: "1px solid var(--hairline)", padding: "12px 0",
                       display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 12,
                     }}>

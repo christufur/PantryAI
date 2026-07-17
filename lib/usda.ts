@@ -41,7 +41,6 @@ const DIRECTORIES: { endpoint: string; kind: Kind; key: keyof NearbyOutlets }[] 
   { endpoint: "agritourism",   kind: "agritourism",     key: "agritourism" },
 ];
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function normalize(raw: Record<string, any>, kind: Kind): LocalOutlet {
   return {
     name:    String(raw.listing_name ?? raw.name ?? "Unknown"),
@@ -65,7 +64,6 @@ async function fetchDirectory(
   try {
     const res = await fetch(url, { signal: controller.signal });
     if (!res.ok) return [];
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const data: any = await res.json();
     const items: Record<string, unknown>[] = Array.isArray(data)
       ? data

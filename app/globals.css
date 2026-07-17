@@ -78,7 +78,7 @@
   --disabled: #999999;
   --hairline: #e2e8f0;
   --link: #057dbc;
-  --dying: #c8102e;
+  --expiring: #c8102e;
   --background: oklch(1 0 0);
     --foreground: oklch(0.145 0 0);
     --card: oklch(1 0 0);
@@ -177,7 +177,7 @@ body {
     }
 }
 
-/* /plan + /wall weekly views — mobile: stacked week + chip “dying soon” (scoped so generic .week-grid rules don’t override) */
+/* /plan + /wall weekly views — mobile: stacked week + chip “expiring soon” (scoped so generic .week-grid rules don’t override) */
 .plan-page .plan-page-bottom {
   display: grid;
   grid-template-columns: 320px 1fr;
@@ -209,7 +209,7 @@ body {
   .plan-page .plan-week-panel {
     order: -1;
   }
-  .plan-page .plan-dying-panel {
+  .plan-page .plan-expiring-panel {
     order: 1;
   }
   .plan-page .wall-container {
@@ -237,14 +237,14 @@ body {
   .plan-page .plan-week-grid > button:last-child {
     border-bottom: none !important;
   }
-  .plan-page .plan-dying-list {
+  .plan-page .plan-expiring-list {
     border-top: 2px solid #000 !important;
     display: flex !important;
     flex-wrap: wrap !important;
     gap: 8px !important;
     padding-top: 12px !important;
   }
-  .plan-page .plan-dying-row {
+  .plan-page .plan-expiring-row {
     flex: 0 1 auto !important;
     border: 1px solid var(--hairline) !important;
     padding: 8px 12px !important;
@@ -253,7 +253,7 @@ body {
     box-sizing: border-box;
     align-items: center !important;
   }
-  .plan-page .plan-dying-row span:first-child {
+  .plan-page .plan-expiring-row span:first-child {
     font-size: var(--text-sm) !important;
   }
 }

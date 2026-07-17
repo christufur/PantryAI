@@ -167,7 +167,7 @@ export default function ShelvesDragGrid({
             >
               {buckets[key].map((item) => {
                 const d = days(item.expiryDate);
-                const isDying = d <= 3;
+                const isExpiring = d <= 3;
                 const dLabel = d < 0 ? "EXP" : `${d}D`;
                 const w = Math.min(180, Math.max(88, item.name.length * 11 + 28));
                 return (
@@ -203,8 +203,8 @@ export default function ShelvesDragGrid({
                       width: w,
                       height: 88,
                       border: "2px solid #000",
-                      background: isDying ? "#c8102e" : "#fff",
-                      color: isDying ? "#fff" : "#000",
+                      background: isExpiring ? "#c8102e" : "#fff",
+                      color: isExpiring ? "#fff" : "#000",
                       padding: "8px 10px",
                       display: "flex",
                       flexDirection: "column",
@@ -220,7 +220,7 @@ export default function ShelvesDragGrid({
                         fontWeight: 700,
                         textTransform: "uppercase",
                         letterSpacing: "0.05em",
-                        opacity: isDying ? 0.95 : 0.6,
+                        opacity: isExpiring ? 0.95 : 0.6,
                       }}
                     >
                       {item.category.replace(/_/g, " ")}

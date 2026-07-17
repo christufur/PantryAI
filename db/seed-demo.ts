@@ -1,6 +1,6 @@
 // Demo pantry seeder. Run with: `npm run db:seed:demo`
 // Wipes pantry_items + impact_events, inserts a realistic spread of items with
-// staggered expiries, pre-caches the recipe for dying items, and pre-generates
+// staggered expiries, pre-caches the recipe for expiring items, and pre-generates
 // a Fridgey roast — so the demo is instant end-to-end.
 
 import { db } from "@/lib/db";
@@ -23,12 +23,12 @@ type DemoItem = {
   isLocal?: boolean;
 };
 
-// Mix: a few EXPIRED, several DYING (≤3d), a chunk fresh, a few long-shelf.
+// Mix: a few EXPIRED, several EXPIRING (≤3d), a chunk fresh, a few long-shelf.
 const demoItems: DemoItem[] = [
   // Expired (urgency theatre)
   { name: "Spinach", category: "leafy_greens", qty: 1, unit: "each", storageLocation: "fridge", expiryDate: inDays(-2) },
 
-  // Dying (≤3 days) — the headline of the demo
+  // Expiring (≤3 days) — the headline of the demo
   { name: "Strawberries", category: "berries", qty: 1, unit: "lb", storageLocation: "fridge", expiryDate: inDays(1) },
   { name: "Whole Milk", category: "dairy_milk", qty: 1, unit: "each", storageLocation: "fridge", expiryDate: inDays(2), isLocal: true },
   { name: "Ground Beef", category: "meat_ground", qty: 1, unit: "lb", storageLocation: "fridge", expiryDate: inDays(1) },
@@ -73,20 +73,20 @@ async function main() {
     return;
   }
 
-  // --- Pre-cache recipe for dying / expired items ---
-  const dyingItems = demoItems.filter((i) => {
+  // --- Pre-cache recipe for expiring / expired items ---
+  const expiringItems = demoItems.filter((i) => {
     const days = Math.floor((i.expiryDate.getTime() - now) / day);
     return days <= 3;
   });
-  const dyingNames = dyingItems.map((i) => i.name);
+  const expiringNames = expiringItems.map((i) => i.name);
 
-  console.log(`Pre-caching recipe for: ${dyingNames.join(", ")}`);
+  console.log(`Pre-caching recipe for: ${expiringNames.join(", ")}`);
   const profile = DEFAULT_PROFILE;
   const pHash = profileHash(profile);
-  const recipeHash = ingredientsHash(dyingNames) + (pHash ? `:${pHash}` : "");
+  const recipeHash = ingredientsHash(expiringNames) + (pHash ? `:${pHash}` : "");
 
   try {
-    const recipe = await generateRecipe(dyingNames, profilePromptContext(profile));
+    const recipe = await generateRecipe(expiringNames, profilePromptContext(profile));
     db.insert(recipesCache)
       .values({ ingredientsHash: recipeHash, recipeJson: JSON.stringify(recipe) })
       .onConflictDoUpdate({ target: recipesCache.ingredientsHash, set: { recipeJson: JSON.stringify(recipe) } })
@@ -104,7 +104,7 @@ async function main() {
     .map((item) => {
       const days = Math.floor((item.expiryDate.getTime() - now) / day);
       const status =
-        days < 0 ? "EXPIRED" : days <= 3 ? `DYING (${days}d left)` : `${days}d left`;
+        days < 0 ? "EXPIRED" : days <= 3 ? `EXPIRING (${days}d left)` : `${days}d left`;
       return `- ${item.name}: ${item.qty} ${item.unit}, ${item.storageLocation}, ${status}`;
     })
     .join("\n");
@@ -115,7 +115,7 @@ Personality: sardonic but warm. Like a fridge that's seen too much but still wan
 
 Keep replies SHORT — 2–3 sentences max unless giving a recipe. When giving a recipe: dish name, numbered steps (max 8 words each), then "Saves: [items]".
 
-Always prioritize DYING items (≤3 days) when suggesting what to cook. If something expired, you can gently roast the user about it.
+Always prioritize EXPIRING items (≤3 days) when suggesting what to cook. If something expired, you can gently roast the user about it.
 ${profilePromptContext(profile)}
 Current contents:
 ${pantryContext}`;

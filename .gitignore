@@ -36,7 +36,12 @@ certificates/
 *.tsbuildinfo
 next-env.d.ts
 
-# local tools and notes
+# Local-only notes (not published to GitHub). Team: keep shared product docs
+# tracked; put personal/agent/hackathon dump material under docs/local/.
 todo.txt
 .claude/
+.cursor/
 .gstack/
+CLAUDE.md
+AGENTS.md
+docs/local/

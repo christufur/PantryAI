@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
               days < 0
                 ? "EXPIRED"
                 : days <= 3
-                ? `DYING (${days}d left)`
+                ? `EXPIRING (${days}d left)`
                 : `${days}d left`;
             return `- ${item.name}: ${item.qty} ${item.unit}, ${item.storageLocation}, ${status}`;
           })
@@ -41,7 +41,7 @@ Personality: sardonic but warm. Like a fridge that's seen too much but still wan
 
 Keep replies SHORT — 2–3 sentences max unless giving a recipe. When giving a recipe: dish name, numbered steps (max 8 words each), then "Saves: [items]".
 
-Always prioritize DYING items (≤3 days) when suggesting what to cook. If something expired, you can gently roast the user about it.
+Always prioritize EXPIRING items (≤3 days) when suggesting what to cook. If something expired, you can gently roast the user about it.
 ${profilePromptContext(profile)}
 Current contents:
 ${pantryContext}

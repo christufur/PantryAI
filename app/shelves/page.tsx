@@ -23,7 +23,7 @@ export default function ShelvesPage() {
     (it) => !(order as readonly string[]).includes(it.storageLocation)
   );
   const shelfSectionCount = items.length === 0 ? 0 : hasOtherShelf ? 4 : 3;
-  const dyingCount = items.filter((i) => daysUntil(i.expiryDate) <= 3).length;
+  const expiringCount = items.filter((i) => daysUntil(i.expiryDate) <= 3).length;
 
   const dragItems = items.map((r) => ({
     id: r.id,
@@ -63,7 +63,7 @@ export default function ShelvesPage() {
         <span>
           PANTRY · {shelfSectionCount} SHELVES · {items.length} ITEMS
         </span>
-        {dyingCount > 0 && <span style={{ color: "#c8102e" }}>⚠ {dyingCount} EXPIRING</span>}
+        {expiringCount > 0 && <span style={{ color: "#c8102e" }}>⚠ {expiringCount} EXPIRING</span>}
       </div>
 
       <div style={{ maxWidth: 1200, margin: "0 auto", padding: "32px" }} className="shelves-container">
@@ -164,7 +164,7 @@ export default function ShelvesPage() {
             >
               + SNAP
             </Link>
-            {dyingCount > 0 && (
+            {expiringCount > 0 && (
               <Link
                 href={`/recipe?ingredients=${encodeURIComponent(
                   items
@@ -185,7 +185,7 @@ export default function ShelvesPage() {
                   textDecoration: "none",
                 }}
               >
-                COOK → SAVE {dyingCount}
+                COOK → SAVE {expiringCount}
               </Link>
             )}
           </div>

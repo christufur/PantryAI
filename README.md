@@ -28,7 +28,7 @@ pantry.ai closes that loop:
 |------|----------------|
 | **Vision ingest** | Upload a fridge/pantry photo → Gemini multimodal extracts name, category, qty, and printed “best by” dates when visible |
 | **Barcode ingest** | Camera scan via ZXing → Open Food Facts product lookup → shelf-life estimate → pantry insert |
-| **Expiry-first pantry** | Sorted dying-first; List · Column · Shelves views; edit qty/location; cook or donate flows |
+| **Expiry-first pantry** | Sorted expiring-first; List · Column · Shelves views; edit qty/location; cook or donate flows |
 | **Kitchen Wall** (`/wall`) | Fridge-door mode: tonight’s meal, items expiring ≤3 days, editable 7-day grid |
 | **Weekly planner** | Gemini plans breakfast/lunch/dinner for N days against a calorie target; prioritizes expiring pantry stock; profile constraints injected into every prompt |
 | **Shopping list** | Aggregated buy list for a plan, reconciled against pantry quantities, with local NM alternatives |
@@ -122,7 +122,7 @@ npm run dev:https     # HTTPS (self-signed) — needed for iPhone camera / barco
 | Route | Purpose |
 |-------|---------|
 | `/` | Pantry home — kitchen board, photo upload, barcode, list/column/shelves |
-| `/wall` | Kitchen Wall — tonight + dying list + week grid (primary PLAN surface) |
+| `/wall` | Kitchen Wall — tonight + expiring list + week grid (primary PLAN surface) |
 | `/plan/new` | Multi-step weekly plan wizard → Gemini generation |
 | `/plan/[id]/shopping` | Shopping list for a plan |
 | `/recipe` | Ingredient picker |
@@ -174,8 +174,9 @@ lib/
   impact.ts             # Rescue → $ / lbs / CO₂e / water
   profile.ts shopping.ts recipe-buy-local.ts usda.ts
 docs/
-  hackathon-notes/      # Historical handoff + original data/AI bundle
-  development/          # WSL2 / LAN port-proxy notes
+  development/          # Shared WSL2 / LAN setup notes
+  README.md             # What is tracked vs local-only
+  local/                # Gitignored: wireframes, hackathon dumps, personal notes
 ```
 
 ---
@@ -199,7 +200,7 @@ npm run db:clear-pantry  # Wipe pantry_items (stop dev server first)
 npm run icons:pwa        # Regenerate PWA PNGs from public/icons/icon.svg
 ```
 
-WSL2 users exposing the app to a phone: see [docs/development/wsl-port-proxy.md](docs/development/wsl-port-proxy.md) and `CLAUDE.md` (mirrored networking / HTTPS notes).
+WSL2 users exposing the app to a phone: see [docs/development/wsl-port-proxy.md](docs/development/wsl-port-proxy.md). Agent/personal notes stay local — see [docs/README.md](docs/README.md).
 
 ---
 

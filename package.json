@@ -1,5 +1,5 @@
 {
-  "name": "desert-dev-hackathon",
+  "name": "pantry-ai",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,7 +9,7 @@
     "wsl:portproxy-diagnose-path": "wslpath -w scripts/wsl-portproxy-diagnose.ps1",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint app components lib db --max-warnings 200",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit up:sqlite",
     "db:studio": "drizzle-kit studio",
@@ -43,8 +43,11 @@
     "typescript": "^6.0.3"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.5",
     "@types/better-sqlite3": "^7.6.13",
     "drizzle-kit": "^0.18.1",
+    "eslint": "^9.39.4",
+    "eslint-config-next": "^16.2.4",
     "sharp": "^0.34.5",
     "tsx": "^4.19.4"
   }

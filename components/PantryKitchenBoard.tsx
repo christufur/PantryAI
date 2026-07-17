@@ -183,7 +183,7 @@ export default function PantryKitchenBoard({
     router.refresh();
   }
 
-  const dyingCount = useMemo(
+  const expiringCount = useMemo(
     () => localItems.filter((i) => daysLeft(i.expiryDate, now) <= 3).length,
     [localItems, now]
   );
@@ -387,11 +387,11 @@ export default function PantryKitchenBoard({
                     style={{
                       fontSize: "var(--text-step)",
                       fontWeight: 700,
-                      color: dyingCount ? "#c8102e" : "#000",
+                      color: expiringCount ? "#c8102e" : "#000",
                       marginTop: 4,
                     }}
                   >
-                    {dyingCount}
+                    {expiringCount}
                   </div>
                 </div>
                 <div style={{ borderBottom: "1px solid var(--hairline)", paddingBottom: 8 }}>
@@ -996,7 +996,7 @@ function KitchenTile({
   const blockRecipeNavRef = useRef(false);
   const d = daysLeft(item.expiryDate, now);
   const inWindow = d <= threshold;
-  const isDying = d <= 3;
+  const isExpiring = d <= 3;
   const dLabel = d < 0 ? "EXP" : `${d}d`;
 
   function goRecipe(e: React.MouseEvent) {
@@ -1078,7 +1078,7 @@ function KitchenTile({
         style={{
           width: 5,
           flexShrink: 0,
-          background: inWindow ? "#c8102e" : isDying ? "#c8102e" : "#000",
+          background: inWindow ? "#c8102e" : isExpiring ? "#c8102e" : "#000",
           opacity: inWindow ? 1 : 0.25,
         }}
         aria-hidden

@@ -38,7 +38,7 @@ export default function Home() {
     });
 
   const serverNow = Date.now();
-  const dying = items.filter(
+  const expiring = items.filter(
     i => Math.floor((i.expiryDate * 1000 - serverNow) / 86_400_000) <= 3
   );
 
@@ -54,7 +54,7 @@ export default function Home() {
         flexWrap: "wrap", gap: 8,
       }} className="ribbon">
         <span>PANTRY · {items.length} ITEMS</span>
-        {dying.length > 0 && <span style={{ color: "#c8102e" }}>⚠ {dying.length} EXPIRING</span>}
+        {expiring.length > 0 && <span style={{ color: "#c8102e" }}>⚠ {expiring.length} EXPIRING</span>}
       </div>
 
       <div className="pantry-main-below-ribbon">
