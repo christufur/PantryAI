@@ -10,7 +10,7 @@ Built as a full-stack Next.js product in a 36-hour hackathon by a team of three 
 
 ## Why it exists
 
-Most grocery food waste happens at home: people forget what they bought, miss use-by dates, and throw away food that could have been cooked or donated. In Albuquerque, roughly **98% of food is shipped in from out of state**, so every wasted item carries extra cost and carbon.
+Most grocery food waste happens at home: people forget what they bought, miss use-by dates, and throw away food that could have been cooked or donated. In Albuquerque, roughly **98% of food is shipped in from out of state**, so every wasted item means money lost and a larger shipping-related carbon footprint.
 
 pantry.ai closes that loop:
 
